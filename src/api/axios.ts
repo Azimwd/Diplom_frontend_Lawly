@@ -11,6 +11,7 @@ const api = axios.create({
 });
 
 // http://localhost:8000
+// https://lawly.up.railway.app
 
 api.interceptors.request.use((config) => {
 	const csrfToken = Cookies.get("csrftoken");

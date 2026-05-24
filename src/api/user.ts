@@ -14,22 +14,21 @@ export interface LoginProps {
 }
 
 export const registerUser = async (data: RegisterProps) => {
-	const response = await api.post("/users/registrations/", data);
+	const response = await api.post("/users/registrations/", {data},{withCredentials: true});
 	console.log("Успешная регистрация:");
 	return response.data;
 };
 
 export const loginUser = async (data: LoginProps) => {
 	const response = await api.post("/users/login/", 
-		data
+		{data}, {withCredentials: true}
 	);
 	return response.data;
 };
 
 export const refreshToken = async (refresh: string) => {
-	const response = await api.post("/users/token/refresh/", {
-		refresh,
-	});
+	const response = await api.post("/users/token/refresh/", 
+		{refresh},{withCredentials: true});
 
 	return response.data.token;
 };
