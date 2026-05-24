@@ -67,6 +67,8 @@ export const getMyProfile = async (profileId: number, accessToken?: string | und
 		const response = await api.get<UserProfileResponse>(`/profile/${profileId}/`, {
 			headers: {},
 			withCredentials: true,
+			xsrfCookieName: "csrftoken",
+			xsrfHeaderName: "X-CSRFToken",
 		});
 
 		return response.data.data;
@@ -95,6 +97,8 @@ export const updateProfile = async (profileId: number, data: UserProfileUpdate, 
 				"Content-Type": undefined,
 			},
 			withCredentials: true,
+			xsrfCookieName: "csrftoken",
+				xsrfHeaderName: "X-CSRFToken",
 		});
 
 		return response.data.data;

@@ -21,7 +21,7 @@ export const registerUser = async (data: RegisterProps) => {
 
 export const loginUser = async (data: LoginProps) => {
 	const response = await api.post("/users/login/", 
-		data, {withCredentials: true}
+		data, {withCredentials: true, }
 	);
 	return response.data;
 };

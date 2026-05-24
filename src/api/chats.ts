@@ -28,7 +28,11 @@ export interface ChatsResponse {
 
 export const getListOfChat = async (): Promise<ChatSession[] | null> => {
 	try {
-		const response = await api.get<ChatsResponse>(`/chats/sessions/`, {withCredentials: true});
+		const response = await api.get<ChatsResponse>(`/chats/sessions/`, {
+			withCredentials: true,
+			xsrfCookieName: "csrftoken",
+				xsrfHeaderName: "X-CSRFToken",
+		});
 
 		return response.data.data.results;
 	} catch (error: any) {
@@ -39,7 +43,8 @@ export const getListOfChat = async (): Promise<ChatSession[] | null> => {
 
 export const deleteChat = async (id: number) => {
 	try {
-		await api.delete(`/chats/sessions/${id}/`, {withCredentials: true});
+		await api.delete(`/chats/sessions/${id}/`, {withCredentials: true, xsrfCookieName: "csrftoken",
+			xsrfHeaderName: "X-CSRFToken",});
 		return true;
 	} catch (error) {
 		console.log(error);
@@ -49,7 +54,8 @@ export const deleteChat = async (id: number) => {
 
 export const editChatName = async (id: number, title: string) => {
 	try {
-		await api.patch(`/chats/sessions/${id}/`, { title }, {withCredentials: true});
+		await api.patch(`/chats/sessions/${id}/`, { title }, {withCredentials: true, xsrfCookieName: "csrftoken",
+			xsrfHeaderName: "X-CSRFToken",});
 		return true;
 	} catch (error) {
 		console.log(error);
@@ -72,6 +78,8 @@ export const sendMessage = async (
 		},
 		{
 		  withCredentials: true,
+		  xsrfCookieName: "csrftoken",
+				xsrfHeaderName: "X-CSRFToken",
 		}
 	  );
   
@@ -110,6 +118,8 @@ export const createDocument = async (chatId: string, action: string, question: s
 			},
 			{
 				withCredentials: true,
+				xsrfCookieName: "csrftoken",
+				xsrfHeaderName: "X-CSRFToken",
 			},
 		);
 
@@ -132,6 +142,8 @@ export const generateDocument = async (chatId: string, templateName: string, val
 			},
 			{
 				withCredentials: true,
+				xsrfCookieName: "csrftoken",
+				xsrfHeaderName: "X-CSRFToken",
 			},
 		);
 
@@ -150,7 +162,11 @@ export const attorneyPrice = async (chatId: string, question: string, language:s
 				question,
 				language
 			},
-			{ withCredentials: true },
+			{ 
+				withCredentials: true,
+				xsrfCookieName: "csrftoken",
+				xsrfHeaderName: "X-CSRFToken",
+			},
 		);
 
 		return response.data;
@@ -168,7 +184,11 @@ export const articleWinChance = async (chatId: string, question: string, languag
 				question,
 				language
 			},
-			{ withCredentials: true },
+			{ 
+				withCredentials: true,
+				xsrfCookieName: "csrftoken",
+				xsrfHeaderName: "X-CSRFToken",
+			},
 		);
 		return response.data;
 	} catch (error) {
@@ -187,7 +207,8 @@ export const topLawyers = async (chatId: string, question: string, top_l: number
 				language
 			},
 			{
-				withCredentials: true,
+				withCredentials: true,xsrfCookieName: "csrftoken",
+				xsrfHeaderName: "X-CSRFToken",
 			},
 		);
 
@@ -204,7 +225,9 @@ export const postChat = async (title: string) => {
 			title
 		},
 		{
-			withCredentials: true
+			withCredentials: true,
+			xsrfCookieName: "csrftoken",
+				xsrfHeaderName: "X-CSRFToken",
 		}
 	);
 
@@ -220,7 +243,8 @@ export const getChatMessages = async (chatId: string) => {
 	try {
 		const response = await api.get(`/chats/sessions/${chatId}/`,
 			{
-				withCredentials: true
+				withCredentials: true,xsrfCookieName: "csrftoken",
+				xsrfHeaderName: "X-CSRFToken",
 			}
 		);
 		console.log(response.data.data.results.data.messages);
