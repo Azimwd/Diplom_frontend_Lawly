@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Pencil, Trash } from "lucide-react";
 import { createPortal } from "react-dom";
 import { deleteChat, editChatName } from "../api/chats";
@@ -14,19 +13,25 @@ type EditNameProps = {
 	onRename: (id: number, title: string) => void;
 };
 
-export default function EditName({ chatId, top, left, onClose, onDelete }: EditNameProps) {
+export default function EditName({
+	chatId,
+	top,
+	left,
+	onClose,
+	onDelete,
+	onRename,
+}: EditNameProps) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
 	const [isEditing, setIsEditing] = useState(false);
 	const [title, setTitle] = useState("");
-	
-	const handleDelete = async (e: any) => {
+
+	const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.stopPropagation();
 
 		try {
 			await deleteChat(chatId);
-
 			onDelete(chatId);
 
 			if (location.pathname === `/chat/${chatId}`) {
@@ -37,13 +42,19 @@ export default function EditName({ chatId, top, left, onClose, onDelete }: EditN
 		}
 	};
 
-	const handleRename = async (e: any) => {
+	const handleRename = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.stopPropagation();
 
-		if (!title.trim()) return;
+		const newTitle = title.trim();
+
+		if (!newTitle) return;
 
 		try {
-			await editChatName(chatId, title);
+			const success = await editChatName(chatId, newTitle);
+
+			if (success) {
+				onRename(chatId, newTitle);
+			}
 		} finally {
 			onClose();
 		}
@@ -101,6 +112,6 @@ export default function EditName({ chatId, top, left, onClose, onDelete }: EditN
 				</div>
 			)}
 		</div>,
-		document.body,
+		document.body
 	);
 }
