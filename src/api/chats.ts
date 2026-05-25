@@ -1,5 +1,21 @@
 import api from "./axios";
+import axios from "axios";
+const logApiError = (label: string, error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    console.error(label, error.response?.data || error.message);
+    return;
+  }
 
+  console.error(label, error);
+};
+
+const getApiErrorStatus = (error: unknown): number | undefined => {
+  if (axios.isAxiosError(error)) {
+    return error.response?.status;
+  }
+
+  return undefined;
+};
 export interface ChatSession {
 	id: number;
 	title: string;
@@ -35,9 +51,9 @@ export const getListOfChat = async (): Promise<ChatSession[] | null> => {
 		});
 
 		return response.data.data.results;
-	} catch (error: any) {
-		console.log("catched error: ", error);
-		return null;
+	} catch (error: unknown) {
+	logApiError("catched error:", error);
+	return null;
 	}
 };
 
@@ -84,25 +100,24 @@ export const sendMessage = async (
 	  );
   
 	  return response.data;
-	} catch (error: any) {
-	  const status = error.response?.status;
+	} catch (error: unknown) {
+	const status = getApiErrorStatus(error);
 
-	  if (status === 502) {
-		console.error("Backend unavailable:", error);
-		console.log(error)
-  
+	if (status === 502) {
+		logApiError("Backend unavailable:", error);
+
 		return {
-		  success: false,
-		  message: "Сервер временно недоступен",
+		success: false,
+		message: "Сервер временно недоступен",
 		};
-	  }
-  
-	  console.error("Send message error:", error);
-  
-	  return {
+	}
+
+	logApiError("Send message error:", error);
+
+	return {
 		success: false,
 		message: "Произошла ошибка",
-	  };
+	};
 	}
 };
 
@@ -124,8 +139,8 @@ export const createDocument = async (chatId: string, action: string, question: s
 		);
 
 		return response.data;
-	} catch (error: any) {
-		console.log("Action error", error);
+	} catch (error: unknown) {
+	logApiError("Action error:", error);
 	}
 };
 
@@ -232,9 +247,9 @@ export const postChat = async (title: string) => {
 	);
 
 		return response.data.data;
-	} catch (error: any) {
-		console.log("catched error: ", error);
-		return null;
+	} catch (error: unknown) {
+	logApiError("catched error:", error);
+	return null;
 	}
 };
 

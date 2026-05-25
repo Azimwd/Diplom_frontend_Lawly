@@ -1,34 +1,36 @@
 import api from "./axios";
 
 export interface RegisterProps {
-	email: String;
-	password: String;
-	confirmPassword: String;
-	agreementAccepted: Boolean;
-	privacyPolicyAccepted: Boolean;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  agreementAccepted: boolean;
+  privacyPolicyAccepted: boolean;
 }
 
 export interface LoginProps {
-	email: String;
-	password: String;
+  email: string;
+  password: string;
 }
 
 export const registerUser = async (data: RegisterProps) => {
-	const response = await api.post("/users/registrations/", data, {withCredentials: true});
-	
-	return response.data;
+  const response = await api.post("/users/registrations/", data);
+  return response.data;
 };
 
 export const loginUser = async (data: LoginProps) => {
-	const response = await api.post("/users/login/", 
-		data, {withCredentials: true, }
-	);
-	return response.data;
+  const response = await api.post("/users/login/", data);
+
+  const csrfToken = response.data?.data?.csrf_token;
+
+  if (csrfToken) {
+    sessionStorage.setItem("csrf_token", csrfToken);
+  }
+
+  return response.data;
 };
 
-export const refreshToken = async (refresh: string) => {
-	const response = await api.post("/users/token/refresh/", 
-		refresh, {withCredentials: true});
-
-	return response.data.token;
+export const refreshToken = async () => {
+  const response = await api.post("/users/token/refresh/", {});
+  return response.data;
 };

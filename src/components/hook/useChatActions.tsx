@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import { postChat, sendMessage, createDocument, articleWinChance, attorneyPrice, topLawyers } from "../../api/chats";
@@ -187,7 +188,7 @@ export const useChatActions = ({
 			const activeId = await ensureChatId(currentPrompt);
 			const res = await attorneyPrice(activeId, currentPrompt, userLanguage);
 			updateAiMessage({ text: res?.data?.answer || "На данный момент Lawly не доступна.", type: "calculator" });
-		} catch (error) {
+		} catch {
 			updateAiMessage({ text: "Ошибка расчета.", type: "error" });
 		} finally {
 			setIsAiLoading(false);
@@ -206,14 +207,16 @@ export const useChatActions = ({
 			const activeId = await ensureChatId(currentPrompt);
 			const res = await topLawyers(activeId, currentPrompt, 5, userLanguage);
 
-			let parsed = typeof res?.data?.content === "string" ? JSON.parse(res.data.content) : res?.data;
+			const parsed = typeof res?.data?.content === "string"
+			? JSON.parse(res.data.content)
+			: res?.data;
 
 			updateAiMessage({
 				text: parsed?.answer || parsed?.reply || res?.data?.answer || "Результаты поиска:",
 				type: parsed?.type || "top_lawyers",
 				lawyers: parsed?.lawyers || [],
 			});
-		} catch (error) {
+		} catch {
 			updateAiMessage({ text: "На данный момент Lawly не доступна.", type: "error" });
 		} finally {
 			setIsAiLoading(false);

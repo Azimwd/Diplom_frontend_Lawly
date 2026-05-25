@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Pencil, Trash } from "lucide-react";
 import { createPortal } from "react-dom";
 import { deleteChat, editChatName } from "../api/chats";
@@ -19,7 +20,7 @@ export default function EditName({ chatId, top, left, onClose, onDelete }: EditN
 
 	const [isEditing, setIsEditing] = useState(false);
 	const [title, setTitle] = useState("");
-
+	
 	const handleDelete = async (e: any) => {
 		e.stopPropagation();
 

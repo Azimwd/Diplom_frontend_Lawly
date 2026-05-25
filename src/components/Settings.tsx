@@ -1,7 +1,7 @@
 import { useUser } from "../context/UserContext";
 import { CreditCard, Palette, Globe, LogOut, User as UserIcon } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { translations, type Language } from "../utils/translations";
 import MenuItem from "./MenuItem";
 import Profile from "./Profile";

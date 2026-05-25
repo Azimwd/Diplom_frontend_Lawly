@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
 import { updateProfile, type UserProfileUpdate } from "../api/chat";
 import { Camera, UserIcon, X } from "lucide-react";
-import Cookies from "js-cookie";
 import Portal from "./Portal";
 
 interface ProfileProps {
@@ -50,7 +49,6 @@ function Profile({ onClose }: ProfileProps) {
 		e.preventDefault();
 		if (!user) return;
 
-		const token = Cookies.get("access_token");
 		setLoading(true);
 		setError("");
 
@@ -61,7 +59,7 @@ function Profile({ onClose }: ProfileProps) {
 			avatar: selectedFile,
 		};
 
-		const updatedProfile = await updateProfile(user.id, data, token);
+		const updatedProfile = await updateProfile(user.id, data);
 
 		if (updatedProfile) {
 			setProfile(updatedProfile);

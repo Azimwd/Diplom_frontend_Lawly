@@ -1,16 +1,14 @@
-import React from 'react';
-import { 
 
-  Sparkles, 
-  MessageSquare, 
-  Image as ImageIcon, 
-  Zap, 
-  Cpu, 
+import {
+  Sparkles,
+  MessageSquare,
+  Zap,
+  Cpu,
   BrainCircuit,
   Search,
   Layers,
-  X
-} from 'lucide-react';
+  X,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Subscription = () => {

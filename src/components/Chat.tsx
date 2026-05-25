@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Dialog from "./Dialog";
 import "../styles/scrollArea.css";
 import "../styles/dialogScroll.css";
-import { ArrowUp, Paperclip, Plus, SquareStop } from "lucide-react";
+import { ArrowUp, Plus, SquareStop } from "lucide-react";
 import { generateDocument, getChatMessages } from "../api/chats";
 import { useParams, useNavigate } from "react-router-dom";
 import ServiceSelector from "./ServiceSelector";
@@ -16,6 +16,56 @@ interface ChatProps {
 	onChatCreated: () => void;
 }
 
+interface ChatHistoryMessage {
+	role: "user" | "ai" | "assistant" | string;
+	content: string;
+}
+
+interface DocumentItem {
+	template_name: string;
+	title: string;
+}
+
+interface DocumentField {
+	key: string;
+	label: string;
+	hint: string;
+	required: boolean;
+}
+
+interface Lawyer {
+	id?: number;
+	name: string;
+	specialization?: string;
+	rating?: number;
+	price?: number;
+	experience?: number;
+	city?: string;
+	description?: string;
+}
+
+interface ParsedAiMessage {
+	type?: string;
+	answer?: string;
+	reply?: string;
+	text?: string;
+
+	documents?: DocumentItem[];
+	fields?: DocumentField[];
+
+	document_title?: string;
+	documentTitle?: string;
+	template_name?: string;
+	templateName?: string;
+
+	win_rate?: number;
+	loss_rate?: number;
+	article?: string;
+	file_url?: string;
+
+	lawyers?: Lawyer[];
+}
+
 export default function Chat({ onChatCreated }: ChatProps) {
 	const [mode, setMode] = useState<"chat" | "service" | "calculator" | "winChance" | "topLawyer">("chat");
 	const [prompt, setPrompt] = useState("");
@@ -23,9 +73,9 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [loadingMessages, setLoadingMessages] = useState(false);
 	const [isAiLoading, setIsAiLoading] = useState(false);
-	const [isTrialExpired, setIsTrialExpired] = useState(false);
+	const [isTrialExpired] = useState(false);
 	const [visibleServices, setVisibleServices] = useState(false);
-	const [isDocCreating, setIsDocCreating] = useState(false);
+	const [, setIsDocCreating] = useState(false);
 	const [isStopped, setIsStopped] = useState(false);
 	const [servicePlaceholder, setServicePlaceholder] = useState("");
 
@@ -77,16 +127,16 @@ export default function Chat({ onChatCreated }: ChatProps) {
 			const startTime = Date.now();
 
 			try {
-				const session = await getChatMessages(id);
+				const session = (await getChatMessages(id)) as ChatHistoryMessage[];
 
 				const formattedMessages = session
-					.map((msg: any) => {
+					.map((msg: ChatHistoryMessage): Message | null => {
 						if (msg.role === "user") {
 							return { role: "user", text: msg.content };
 						}
 
 						try {
-							const parsed = JSON.parse(msg.content);
+							const parsed = JSON.parse(msg.content) as ParsedAiMessage;
 
 							if (parsed?.type === "document_values") return null;
 
@@ -106,14 +156,13 @@ export default function Chat({ onChatCreated }: ChatProps) {
 									lawyers: parsed.lawyers,
 								};
 							}
-						} catch (error: any) {
-							if (error.response?.status === 405 || error.status === 405) {
-								setIsTrialExpired(true);
-							}
+						} catch (error: unknown) {
+							console.warn("Message content is not JSON:", error);
 						}
+
 						return { role: "ai", text: msg.content };
 					})
-					.filter(Boolean);
+					.filter((msg): msg is Message => msg !== null);
 
 				setMessages(formattedMessages.reverse());
 				setIsMoved(true);
@@ -128,7 +177,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 		};
 
 		loadHistory();
-	}, [id]);
+	}, [id, t.loadingDoc]);
 
 	useEffect(() => {
 		const el = textareaRef.current;

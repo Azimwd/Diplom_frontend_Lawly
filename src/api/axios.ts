@@ -1,72 +1,62 @@
 import axios from "axios";
-import Cookies from "js-cookie";
-import { refreshToken } from "./user";
 
 const api = axios.create({
-	baseURL: "https://lawly.up.railway.app",
-	headers: {
-		"Content-Type": "application/json",
-	},
-	withCredentials: true,
+  baseURL: "https://lawly.up.railway.app",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-// http://localhost:8000
-// https://lawly.up.railway.app
-
 api.interceptors.request.use((config) => {
-	const csrfToken = Cookies.get("csrftoken");
-	const accessToken = Cookies.get("access_token");
+  const method = config.method?.toLowerCase();
 
-	if (csrfToken) {
-		config.headers["X-CSRFToken"] = csrfToken;
-	}
+  if (["post", "put", "patch", "delete"].includes(method || "")) {
+    const csrfToken = sessionStorage.getItem("csrf_token");
 
-	if (accessToken) {
-		config.headers["Authorization"] = `Bearer ${accessToken}`;
-	}
+    if (csrfToken) {
+      config.headers["X-CSRFToken"] = csrfToken;
+    }
+  }
 
-	return config;
+  return config;
 });
 
 api.interceptors.response.use(
-	(response) => response,
-	async (error) => {
-		const originalRequest = error.config;
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-		if (error.response?.status === 401 && !originalRequest._retry) {
-			console.log("Access token истёк. Пробуем refresh...");
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url?.includes("/users/token/refresh/") &&
+      !originalRequest.url?.includes("/users/login/")
+    ) {
+      originalRequest._retry = true;
 
-			originalRequest._retry = true;
+      try {
+        await axios.post(
+          "https://lawly.up.railway.app/users/token/refresh/",
+          {},
+          {
+            withCredentials: true,
+            headers: {
+              "X-CSRFToken": sessionStorage.getItem("csrf_token") || "",
+            },
+          }
+        );
 
-			try {
-				const refresh = Cookies.get("refreshToken");
+        return api(originalRequest);
+      } catch (err) {
+        sessionStorage.removeItem("csrf_token");
+        window.location.href = "/login";
+        return Promise.reject(err);
+      }
+    }
 
-				if (!refresh) {
-					console.log("Refresh token отсутствует");
-					Cookies.remove("access_token");
-					Cookies.remove("refreshToken");
-					window.location.href = "/login";
-					return Promise.reject(error);
-				}
-
-				const newAccess = await refreshToken(refresh);
-
-				Cookies.set("accessToken", newAccess);
-
-				originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
-
-				return api(originalRequest);
-			} catch (err) {
-
-				Cookies.remove("accessToken");
-				Cookies.remove("refreshToken");
-				window.location.href = "/login";
-				return Promise.reject(err);
-			}
-		}
-
-		return Promise.reject(error);
-	},
+    return Promise.reject(error);
+  }
 );
 
 export default api;

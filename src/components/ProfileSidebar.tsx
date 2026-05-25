@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "../context/UserContext";
 import Settings from "./Settings";
 import Portal from "./Portal";
 import { UserIcon } from "lucide-react";
-import { updateProfile, type UserProfile } from "../api/chat";
 
 interface ProfileProps {
 	isOpen: boolean;

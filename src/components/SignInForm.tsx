@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NavLink, useNavigate } from "react-router-dom";
 import { getMyProfile } from "../api/chat";
 import { loginUser } from "../api/user";
@@ -45,7 +46,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 			if (data?.success) {
 				setUser(data.data);
 
-				const profileData = await getMyProfile(data.data.id, data.access_token);
+				const profileData = await getMyProfile(data.data.id);
 				setProfile(profileData);
 
 				navigate("/chat");
