@@ -121,7 +121,6 @@ export default function ListOfChats({ isOpen, refreshChats, onChatSelect }: Side
 						<div
 							key={chat.id}
 							onClick={() => {
-								
 								navigate(`/chat/${chat.id}`);
 								onChatSelect?.();
 							}}

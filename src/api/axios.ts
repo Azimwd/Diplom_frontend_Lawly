@@ -6,7 +6,7 @@ interface RetryAxiosRequestConfig extends InternalAxiosRequestConfig {
 }
 
 const api = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://lawly.up.railway.app",
   withCredentials: true,
 });
 
