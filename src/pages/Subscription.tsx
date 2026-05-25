@@ -84,7 +84,7 @@ const Subscription = () => {
 				const urlData = await invoiceUrl(invoiceData.id);
 
 				if (urlData && urlData.url) {
-					window.location.href = urlData.url;
+					navigate(`/${urlData.url}`);
 				}
 			}
 		} catch (error) {
@@ -106,7 +106,7 @@ const Subscription = () => {
 			<div className="max-w-5xl mx-auto flex flex-col items-center">
 				<h1 className="text-3xl font-medium mb-10 text-black">Обновите свой план</h1>
 
-				<div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-4xl">
+				<div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-full">
 					{plans.map((plan, index) => (
 						<div
 							key={index}
