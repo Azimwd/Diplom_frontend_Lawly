@@ -47,7 +47,7 @@ export const getListOfChat = async (): Promise<ChatSession[] | null> => {
 		const response = await api.get<ChatsResponse>(`/chats/sessions/`, {
 			withCredentials: true,
 			xsrfCookieName: "csrftoken",
-				xsrfHeaderName: "X-CSRFToken",
+			xsrfHeaderName: "X-CSRFToken",
 		});
 
 		return response.data.data.results;
