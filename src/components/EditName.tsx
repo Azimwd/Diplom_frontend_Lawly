@@ -3,6 +3,8 @@ import { createPortal } from "react-dom";
 import { deleteChat, editChatName } from "../api/chats";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { translations, type Language } from "../utils/translations";
+import { useUser } from "../context/UserContext";
 
 type EditNameProps = {
 	chatId: number;
@@ -13,14 +15,7 @@ type EditNameProps = {
 	onRename: (id: number, title: string) => void;
 };
 
-export default function EditName({
-	chatId,
-	top,
-	left,
-	onClose,
-	onDelete,
-	onRename,
-}: EditNameProps) {
+export default function EditName({ chatId, top, left, onClose, onDelete, onRename }: EditNameProps) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -60,9 +55,13 @@ export default function EditName({
 		}
 	};
 
+	const { profile } = useUser();
+	const lang = (profile?.language as Language) || "ru";
+	const t = translations[lang].EditNameComponent;
+
 	return createPortal(
 		<div
-			className="fixed z-[9999] w-40 border border-[#444] flex flex-col bg-[#1f1f1f] text-white rounded-[12px] text-[14px]"
+			className="fixed z-[9999] min-w-max max-w-[90vw] border border-[#444] flex flex-col bg-[#1f1f1f] text-white rounded-[12px] text-[14px]"
 			style={{ top, left }}
 			onClick={(e) => e.stopPropagation()}
 		>
@@ -73,7 +72,7 @@ export default function EditName({
 						className="w-full flex items-center text-left hover:bg-[#3F3F3F] gap-2 rounded-[10px] px-2.5 py-2"
 					>
 						<Pencil size={14} />
-						Rename
+						{t.rename}
 					</button>
 
 					<button
@@ -81,37 +80,37 @@ export default function EditName({
 						onClick={handleDelete}
 					>
 						<Trash size={14} color="#EF5350" />
-						Delete
+						{t.delete}
 					</button>
 				</>
 			) : (
-				<div className="p-2 flex flex-col gap-2">
+				<div className="p-2 flex flex-col gap-2 w-fit min-w-[120px]">
 					<input
 						autoFocus
 						value={title}
 						onChange={(e) => setTitle(e.target.value)}
 						placeholder="New name"
-						className="bg-[#2a2a2a] px-2 py-1 rounded text-sm outline-none"
+						className="bg-[#2a2a2a] px-2 py-1 rounded text-sm outline-none w-fit min-w-[100px]"
 					/>
 
-					<div className="flex gap-2">
+					<div className="flex gap-2 w-fit justify-center items-center">
 						<button
 							onClick={handleRename}
-							className="flex-1 bg-blue-500 hover:bg-blue-600 rounded px-2 py-1 text-sm"
+							className="bg-blue-500 hover:bg-blue-600 rounded px-3 py-1 text-sm whitespace-nowrap"
 						>
-							Save
+							{t.save}
 						</button>
 
 						<button
 							onClick={() => setIsEditing(false)}
-							className="flex-1 bg-gray-700 hover:bg-gray-400 rounded px-2 py-1 text-sm"
+							className="bg-gray-700 hover:bg-gray-400 rounded px-3 py-1 text-sm whitespace-nowrap"
 						>
-							Cancel
+							{t.cancel}
 						</button>
 					</div>
 				</div>
 			)}
 		</div>,
-		document.body
+		document.body,
 	);
 }

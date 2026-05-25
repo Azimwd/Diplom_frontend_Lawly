@@ -4,6 +4,7 @@ import { useUser } from "../context/UserContext";
 import Settings from "./Settings";
 import Portal from "./Portal";
 import { UserIcon } from "lucide-react";
+import { translations, type Language } from "../utils/translations";
 
 interface ProfileProps {
 	isOpen: boolean;
@@ -12,6 +13,9 @@ interface ProfileProps {
 function ProfileSidebar({ isOpen }: ProfileProps) {
 	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 	const { user, loading, profile } = useUser();
+
+	const lang = (profile?.language as Language) || "ru";
+	const t = translations[lang].settings;
 
 	const buttonRef = useRef<HTMLButtonElement | null>(null);
 	const [coords, setCoords] = useState({ top: 0, left: 0 });
@@ -83,7 +87,7 @@ function ProfileSidebar({ isOpen }: ProfileProps) {
 						<div className="text-[12px]  truncate">
 							{profile?.first_name || profile?.last_name
 								? `${profile.first_name || ""} ${profile.last_name || ""}`.trim()
-								: "Не установлено"}
+								: `${t.notSet}`}
 						</div>
 						<div className="text-[12px] text-gray-400 truncate">{user?.email}</div>
 					</div>

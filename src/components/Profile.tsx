@@ -3,6 +3,7 @@ import { useUser } from "../context/UserContext";
 import { updateProfile, type UserProfileUpdate } from "../api/chat";
 import { Camera, UserIcon, X } from "lucide-react";
 import Portal from "./Portal";
+import { translations, type Language } from "../utils/translations";
 
 interface ProfileProps {
 	onClose?: () => void;
@@ -78,6 +79,9 @@ function Profile({ onClose }: ProfileProps) {
 		}
 	};
 
+	const lang = (profile?.language as Language) || "ru";
+	const t = translations[lang].profilefield;
+
 	const formContent = (
 		<form
 			onSubmit={handleSubmit}
@@ -89,7 +93,7 @@ function Profile({ onClose }: ProfileProps) {
 			}`}
 		>
 			<div className="flex justify-between items-center border-b border-[#444] pb-2 mb-1">
-				<h3 className="text-lg font-semibold">Редактировать профиль</h3>
+				<h3 className="text-lg font-semibold">{t.ChangeAvatar}</h3>
 
 				{isMobile && onClose && (
 					<button
@@ -106,7 +110,9 @@ function Profile({ onClose }: ProfileProps) {
 			</div>
 
 			<div className="flex flex-col gap-2 items-center mb-2">
-				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider self-start">Аватар</label>
+				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider self-start">
+					{t.Avatar}
+				</label>
 				<div className="relative group cursor-pointer" onClick={handleAvatarClick}>
 					<div className="h-[90px] w-[90px] rounded-full overflow-hidden border-2 border-[#444] group-hover:border-blue-500 transition-all bg-[#2a2a2a] flex items-center justify-center">
 						{avatarPreview ? (
@@ -128,33 +134,33 @@ function Profile({ onClose }: ProfileProps) {
 						accept="image/*"
 					/>
 				</div>
-				<p className="text-[10px] text-gray-500">Нажмите, чтобы изменить</p>
+				<p className="text-[10px] text-gray-500">{t.EditProfile}</p>
 			</div>
 
 			<div className="flex flex-col gap-1">
-				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider">Имя</label>
+				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider">{t.NameField}</label>
 				<input
 					type="text"
 					value={firstName}
 					onChange={(e) => setFirstName(e.target.value)}
 					className="bg-[#2a2a2a] border border-[#444] rounded p-2 text-sm focus:outline-none focus:border-blue-500 transition-colors"
-					placeholder="Ваше имя"
+					placeholder={t.Pname}
 				/>
 			</div>
 
 			<div className="flex flex-col gap-1">
-				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider">Фамилия</label>
+				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider">{t.LastNameField}</label>
 				<input
 					type="text"
 					value={lastName}
 					onChange={(e) => setLastName(e.target.value)}
 					className="bg-[#2a2a2a] border border-[#444] rounded p-2 text-sm focus:outline-none focus:border-blue-500 transition-colors"
-					placeholder="Ваша фамилия"
+					placeholder={t.Lname}
 				/>
 			</div>
 
 			<div className="flex flex-col gap-1">
-				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider">Телефон</label>
+				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider">{t.NumberField}</label>
 				<input
 					type="text"
 					value={phone}
