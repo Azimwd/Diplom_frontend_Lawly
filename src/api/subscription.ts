@@ -6,7 +6,7 @@ export type PlanType = "1m" | "6m" | "1y";
 
 export const createInvoice = async (plan: PlanType) => {
     try {
-        const response = await api.post(`/subscription/create-invoice/`, {
+        const response = await api.post(`/payments/subscription/create-invoice/`, {
             plan 
         });
 
