@@ -20,7 +20,7 @@ export const createInvoice = async (plan: PlanType) => {
 export const invoiceUrl = async (invoice_id: number) => {
     try {
         const response = await api.post(`/payments/invoice/url/`, {
-            invoice_id
+            invoice_id: invoice_id
         });
 
         return response.data;
