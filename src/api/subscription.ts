@@ -1,5 +1,7 @@
 import api from "./axios";
 
+
+
 export type PlanType = "1m" | "6m" | "1y";
 
 export const createInvoice = async (plan: PlanType) => {

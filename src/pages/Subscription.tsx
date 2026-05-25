@@ -1,5 +1,6 @@
 import { Sparkles, MessageSquare, Zap, Cpu, BrainCircuit, Search, Layers, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { createInvoice, invoiceUrl, type PlanType } from "../api/subscription";
 
 const Subscription = () => {
 	const plans = [
@@ -19,6 +20,7 @@ const Subscription = () => {
 		{
 			name: "Plus",
 			price: "9 990",
+			code: "1m",
 			tagline: "Откройте все возможности",
 			buttonText: "Перейти на Plus",
 			buttonVariant: "primary",
@@ -36,7 +38,8 @@ const Subscription = () => {
 		},
 		{
 			name: "Pidor",
-			price: "1 490",
+			price: "14 490",
+			code: "6m",
 			tagline: "Откройте все возможности",
 			buttonText: "Перейти на Plus",
 			buttonVariant: "primary",
@@ -55,6 +58,7 @@ const Subscription = () => {
 		{
 			name: "SUPER PIDOR",
 			price: "19 990",
+			code: "1y",
 			tagline: "Откройте все возможности",
 			buttonText: "Перейти на Plus",
 			buttonVariant: "primary",
@@ -71,6 +75,22 @@ const Subscription = () => {
 			isPaid: true,
 		},
 	];
+
+	const handleClick = async (planCode: PlanType) => {
+		try {
+			const invoiceData = await createInvoice(planCode);
+
+			if (invoiceData && invoiceData.id) {
+				const urlData = await invoiceUrl(invoiceData.id);
+
+				if (urlData && urlData.url) {
+					window.location.href = urlData.url;
+				}
+			}
+		} catch (error) {
+			console.error("Ошибка при переходе к оплате:", error);
+		}
+	};
 
 	const navigate = useNavigate();
 
@@ -99,7 +119,7 @@ const Subscription = () => {
 							className="relative rounded-[24px] p-10 flex flex-col min-h-[800px] shadow-sm"
 						>
 							{plan.badge && (
-								<div className="absolute top-8 right-8 bg-[#3d3d7a]/20 text-[#5c5cff] text-[10px] uppercase tracking-wider px-2 py-1 rounded-md font-bold">
+								<div className="absolute top-8 right-8 bg-[#3d3d7a]/20 text-[#5c5cff] text-[10px] uppercase trac	king-wider px-2 py-1 rounded-md font-bold">
 									{plan.badge}
 								</div>
 							)}
@@ -136,9 +156,10 @@ const Subscription = () => {
 
 							{/* Кнопка */}
 							<button
+								onClick={() => plan.isPaid && handleClick(plan.code as PlanType)}
 								className={`w-full py-4 px-6 rounded-full font-bold text-sm mb-12 transition-all ${
 									plan.buttonVariant === "primary"
-										? "bg-[#5c5cff] text-white hover:bg-[#4a4aff] shadow-lg"
+										? "bg-[#5c5cff] text-white hover:bg-[#4a4aff] shadow-lg cursor-pointer"
 										: "bg-transparent text-gray-400 border border-gray-200 cursor-default"
 								}`}
 							>
