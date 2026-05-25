@@ -23,7 +23,7 @@ function App() {
 					<Route path="/test" element={<ChatWindow />} />
 					<Route path="/subscription" element={<Subscription />} />
 					<Route path="/payment/success" element={<SubscriptionConfirmed />} />
-					<Route path="/payment/failed" element={<SubscriptionFailed />} />
+					<Route path="/payment/fail" element={<SubscriptionFailed />} />
 				</Routes>
 			</BrowserRouter>
 		</UserProvider>
