@@ -23,7 +23,7 @@ export const invoiceUrl = async (invoice_id: number) => {
             invoice_id: invoice_id
         });
 
-        return response.data;
+        return response.data.data;
     } catch (error: any) {
         console.error("Ошибка при получении URL инвойса:", error);
         throw error;

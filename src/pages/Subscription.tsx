@@ -82,19 +82,20 @@ const Subscription = () => {
 			const invoiceData = await createInvoice(planCode);
 			console.log("2. Ответ от сервера (invoiceData):", invoiceData);
 
-			const currentInvoiceId = invoiceData?.id || invoiceData?.invoice_id;
+			const currentInvoiceId = invoiceData?.data?.invoice_id;
 
 			if (currentInvoiceId) {
 				console.log("3. Отправляем запрос на получение URL для ID:", currentInvoiceId);
 				const urlData = await invoiceUrl(currentInvoiceId);
 				console.log("4. Ответ от сервера (urlData):", urlData);
 
-				if (urlData && urlData.url) {
-					console.log("5. Перенаправляем на оплату:", urlData.url);
+				const paymentUrl = typeof urlData === "string" ? urlData : urlData?.url;
 
-					window.location.href = urlData.url;
+				if (paymentUrl) {
+					console.log("5. Перенаправляем на оплату:", paymentUrl);
+					window.location.href = paymentUrl;
 				} else {
-					console.error("URL для оплаты не найден в ответе сервера!");
+					console.error("URL для оплаты не найден в ответе сервера! Вот что пришло:", urlData);
 				}
 			} else {
 				console.error("ID инвойса не найден. Проверьте формат invoiceData в консоли!");
@@ -115,7 +116,7 @@ const Subscription = () => {
 				<X size={24} />
 			</div>
 
-			<div className="max-w-5xl mx-auto flex flex-col items-center">
+			<div className="max-w-7xl mx-auto flex flex-col items-center">
 				<h1 className="text-3xl font-medium mb-10 text-black">Обновите свой план</h1>
 
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-full">
