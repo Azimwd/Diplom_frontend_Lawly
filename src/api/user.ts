@@ -21,7 +21,9 @@ export const registerUser = async (data: RegisterProps) => {
 export const loginUser = async (data: LoginProps) => {
   const response = await api.post("/users/login/", data);
 
-  const csrfToken = response.data?.data?.csrf_token;
+  const csrfToken =
+    response.data?.data?.csrf_token ||
+    response.data?.data?.data?.csrf_token;
 
   if (csrfToken) {
     sessionStorage.setItem("csrf_token", csrfToken);
