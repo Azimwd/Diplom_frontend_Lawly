@@ -1,4 +1,8 @@
 import axios from "axios";
+import type { AxiosError, InternalAxiosRequestConfig } from "axios";
+interface RetryAxiosRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
 
 const api = axios.create({
   baseURL: "https://lawly.up.railway.app",
@@ -24,11 +28,12 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+  async (error: AxiosError) => {
+    const originalRequest = error.config as RetryAxiosRequestConfig | undefined;
 
     if (
       error.response?.status === 401 &&
+      originalRequest &&
       !originalRequest._retry &&
       !originalRequest.url?.includes("/users/token/refresh/") &&
       !originalRequest.url?.includes("/users/login/")
