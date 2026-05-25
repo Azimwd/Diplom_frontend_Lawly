@@ -1,7 +1,16 @@
 import axios from "axios";
 import type { AxiosError, InternalAxiosRequestConfig } from "axios";
+
 interface RetryAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
+}
+
+interface ApiErrorResponse {
+  statusCode?: number;
+  success?: boolean;
+  data?: unknown;
+  message?: string;
+  detail?: string;
 }
 
 const api = axios.create({
@@ -26,36 +35,77 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+let isRefreshing = false;
+let refreshPromise: Promise<void> | null = null;
+
 api.interceptors.response.use(
   (response) => response,
-  async (error: AxiosError) => {
+  async (error: AxiosError<ApiErrorResponse>) => {
     const originalRequest = error.config as RetryAxiosRequestConfig | undefined;
+    const message = error.response?.data?.message || error.response?.data?.detail || "";
+
+    const isAuthEndpoint =
+      originalRequest?.url?.includes("/users/login/") ||
+      originalRequest?.url?.includes("/users/token/refresh/") ||
+      originalRequest?.url?.includes("/users/registrations/");
+
+    const isCsrfError =
+      message.toLowerCase().includes("csrf") ||
+      message.toLowerCase().includes("CSRF".toLowerCase());
+
+    if (isCsrfError) {
+      console.error("CSRF error. Refresh will not help:", error.response?.data);
+      return Promise.reject(error);
+    }
 
     if (
       error.response?.status === 401 &&
       originalRequest &&
       !originalRequest._retry &&
-      !originalRequest.url?.includes("/users/token/refresh/") &&
-      !originalRequest.url?.includes("/users/login/")
+      !isAuthEndpoint
     ) {
       originalRequest._retry = true;
 
       try {
-        await axios.post(
-          "https://lawly.up.railway.app/users/token/refresh/",
-          {},
-          {
-            withCredentials: true,
-            headers: {
-              "X-CSRFToken": sessionStorage.getItem("csrf_token") || "",
-            },
-          }
-        );
+        if (!isRefreshing) {
+          isRefreshing = true;
+
+          refreshPromise = axios
+            .post(
+              "https://lawly.up.railway.app/users/token/refresh/",
+              {},
+              {
+                withCredentials: true,
+                headers: {
+                  "X-CSRFToken": sessionStorage.getItem("csrf_token") || "",
+                },
+              }
+            )
+            .then((res) => {
+              const newCsrfToken =
+                res.data?.data?.csrf_token ||
+                res.data?.data?.data?.csrf_token;
+
+              if (newCsrfToken) {
+                sessionStorage.setItem("csrf_token", newCsrfToken);
+              }
+            })
+            .finally(() => {
+              isRefreshing = false;
+              refreshPromise = null;
+            });
+        }
+
+        await refreshPromise;
 
         return api(originalRequest);
-      } catch (err) {
+      } catch (err: unknown) {
         sessionStorage.removeItem("csrf_token");
-        window.location.href = "/login";
+
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login";
+        }
+
         return Promise.reject(err);
       }
     }
