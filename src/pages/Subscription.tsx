@@ -78,14 +78,26 @@ const Subscription = () => {
 
 	const handleClick = async (planCode: PlanType) => {
 		try {
+			console.log("1. Отправляем запрос на создание инвойса:", planCode);
 			const invoiceData = await createInvoice(planCode);
+			console.log("2. Ответ от сервера (invoiceData):", invoiceData);
 
-			if (invoiceData && invoiceData.id) {
-				const urlData = await invoiceUrl(invoiceData.id);
+			const currentInvoiceId = invoiceData?.id || invoiceData?.invoice_id;
+
+			if (currentInvoiceId) {
+				console.log("3. Отправляем запрос на получение URL для ID:", currentInvoiceId);
+				const urlData = await invoiceUrl(currentInvoiceId);
+				console.log("4. Ответ от сервера (urlData):", urlData);
 
 				if (urlData && urlData.url) {
-					navigate(`/${urlData.url}`);
+					console.log("5. Перенаправляем на оплату:", urlData.url);
+
+					window.location.href = urlData.url;
+				} else {
+					console.error("URL для оплаты не найден в ответе сервера!");
 				}
+			} else {
+				console.error("ID инвойса не найден. Проверьте формат invoiceData в консоли!");
 			}
 		} catch (error) {
 			console.error("Ошибка при переходе к оплате:", error);

@@ -17,10 +17,10 @@ export const createInvoice = async (plan: PlanType) => {
     }
 };
 
-export const invoiceUrl = async (invoiceId: number) => {
+export const invoiceUrl = async (invoice_id: number) => {
     try {
         const response = await api.post(`/payments/invoice/url/`, {
-            invoiceId
+            invoice_id
         });
 
         return response.data;
