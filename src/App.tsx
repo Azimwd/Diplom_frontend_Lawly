@@ -5,6 +5,7 @@ import Home from "./pages/Home/Home";
 import ChatAI from "./pages/ChatAI";
 import Subscription from "./pages/Subscription";
 import SubscriptionConfirmed from "./pages/SubscriptionConfirmed";
+import SubscriptionFailed from "./pages/SubscriptionFailed";
 
 import ChatWindow from "./test/ChatWindow";
 import "./App.css";
@@ -22,6 +23,7 @@ function App() {
 					<Route path="/test" element={<ChatWindow />} />
 					<Route path="/subscription" element={<Subscription />} />
 					<Route path="/payment/success" element={<SubscriptionConfirmed />} />
+					<Route path="/payment/failed" element={<SubscriptionFailed />} />
 				</Routes>
 			</BrowserRouter>
 		</UserProvider>
