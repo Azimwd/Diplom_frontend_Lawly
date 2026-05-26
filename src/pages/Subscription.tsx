@@ -22,6 +22,7 @@ const Subscription = () => {
 			tagline: "Посмотрите, на что способен ИИ",
 			buttonText: "Ваш текущий план",
 			buttonVariant: "secondary",
+			period: "месяц",
 			features: [
 				{ icon: <Sparkles size={18} />, text: "Базовая модель" },
 				{ icon: <MessageSquare size={18} />, text: "Ограниченное количество сообщений и загрузок" },
@@ -37,6 +38,7 @@ const Subscription = () => {
 			buttonText: "Перейти на Plus",
 			buttonVariant: "primary",
 			badge: "популярный",
+			period: "полгода",
 			features: [
 				{ icon: <Cpu size={18} />, text: "Расширенные модели" },
 				{ icon: <MessageSquare size={18} />, text: "Еще больше сообщений и загрузок" },
@@ -56,6 +58,7 @@ const Subscription = () => {
 			buttonText: "Перейти на Plus",
 			buttonVariant: "primary",
 			badge: "популярный",
+			period: "год",
 			features: [
 				{ icon: <Cpu size={18} />, text: "Расширенные модели" },
 				{ icon: <MessageSquare size={18} />, text: "Еще больше сообщений и загрузок" },
@@ -123,7 +126,7 @@ const Subscription = () => {
 				<X size={24} />
 			</div>
 
-			<div className="max-w-9xl mx-auto flex flex-col items-center">
+			<div className="max-w-8xl mx-auto flex flex-col items-center">
 				<h1 className="text-3xl font-medium mb-10 text-black">Обновите свой план</h1>
 
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-full">
@@ -132,7 +135,7 @@ const Subscription = () => {
 							key={index}
 							style={{
 								background: plan.isPaid
-									? "linear-gradient(to bottom, #001A41 0%, #ffffff 100%)"
+									? "linear-gradient(to bottom, #001A41 0%, #0d0f12 100%)"
 									: "#ffffff",
 								border: "1px solid #001A41",
 							}}
@@ -164,7 +167,7 @@ const Subscription = () => {
 									<span
 										className={`ml-2 text-[10px] uppercase font-medium ${plan.isPaid ? "text-gray-200" : "text-gray-500"}`}
 									>
-										KZT /месяц
+										KZT/{plan.period}
 									</span>
 								</div>
 								<p
