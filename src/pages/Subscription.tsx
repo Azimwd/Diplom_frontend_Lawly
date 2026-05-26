@@ -38,7 +38,7 @@ const Subscription = () => {
 			buttonText: "Перейти на Plus",
 			buttonVariant: "primary",
 			badge: "популярный",
-			period: "полгода",
+			period: "месяц",
 			features: [
 				{ icon: <Cpu size={18} />, text: "Расширенные модели" },
 				{ icon: <MessageSquare size={18} />, text: "Еще больше сообщений и загрузок" },
@@ -58,7 +58,7 @@ const Subscription = () => {
 			buttonText: "Перейти на Plus",
 			buttonVariant: "primary",
 			badge: "популярный",
-			period: "год",
+			period: "полгода",
 			features: [
 				{ icon: <Cpu size={18} />, text: "Расширенные модели" },
 				{ icon: <MessageSquare size={18} />, text: "Еще больше сообщений и загрузок" },
@@ -78,6 +78,7 @@ const Subscription = () => {
 			buttonText: "Перейти на Plus",
 			buttonVariant: "primary",
 			badge: "популярный",
+			period: "год",
 			features: [
 				{ icon: <Cpu size={18} />, text: "Расширенные модели" },
 				{ icon: <MessageSquare size={18} />, text: "Еще больше сообщений и загрузок" },
