@@ -1,4 +1,16 @@
-import { Sparkles, MessageSquare, Zap, Cpu, BrainCircuit, Search, Layers, X } from "lucide-react";
+import {
+	Sparkles,
+	MessageSquare,
+	Zap,
+	Cpu,
+	BrainCircuit,
+	Search,
+	Layers,
+	X,
+	Calendar1,
+	CalendarDays,
+	Calendar,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createInvoice, invoiceUrl, type PlanType } from "../api/subscription";
 
@@ -32,13 +44,13 @@ const Subscription = () => {
 				{ icon: <Zap size={18} />, text: "Расширенная память для чатов" },
 				{ icon: <Search size={18} />, text: "Агент для написания кода Codex" },
 				{ icon: <Layers size={18} />, text: "Проекты и пользовательские GPT" },
-				{ text: "1 month" },
+				{ icon: <Calendar size={18} />, text: "1 month" },
 			],
 			isPaid: true,
 		},
 		{
-			name: "Pidor",
-			price: "14 490",
+			name: "Pro",
+			price: "49 990",
 			code: "6m",
 			tagline: "Откройте все возможности",
 			buttonText: "Перейти на Plus",
@@ -51,13 +63,13 @@ const Subscription = () => {
 				{ icon: <Zap size={18} />, text: "Расширенная память для чатов" },
 				{ icon: <Search size={18} />, text: "Агент для написания кода Codex" },
 				{ icon: <Layers size={18} />, text: "Проекты и пользовательские GPT" },
-				{ text: "6 month" },
+				{ icon: <CalendarDays size={18} />, text: "6 month" },
 			],
 			isPaid: true,
 		},
 		{
-			name: "SUPER PIDOR",
-			price: "19 990",
+			name: "Premium",
+			price: "89 990",
 			code: "1y",
 			tagline: "Откройте все возможности",
 			buttonText: "Перейти на Plus",
@@ -70,7 +82,7 @@ const Subscription = () => {
 				{ icon: <Zap size={18} />, text: "Расширенная память для чатов" },
 				{ icon: <Search size={18} />, text: "Агент для написания кода Codex" },
 				{ icon: <Layers size={18} />, text: "Проекты и пользовательские GPT" },
-				{ text: "1 year" },
+				{ icon: <Calendar1 size={18} />, text: "1 year" },
 			],
 			isPaid: true,
 		},
@@ -78,21 +90,16 @@ const Subscription = () => {
 
 	const handleClick = async (planCode: PlanType) => {
 		try {
-			console.log("1. Отправляем запрос на создание инвойса:", planCode);
 			const invoiceData = await createInvoice(planCode);
-			console.log("2. Ответ от сервера (invoiceData):", invoiceData);
 
 			const currentInvoiceId = invoiceData?.data?.invoice_id;
 
 			if (currentInvoiceId) {
-				console.log("3. Отправляем запрос на получение URL для ID:", currentInvoiceId);
 				const urlData = await invoiceUrl(currentInvoiceId);
-				console.log("4. Ответ от сервера (urlData):", urlData);
 
 				const paymentUrl = typeof urlData === "string" ? urlData : urlData?.url;
 
 				if (paymentUrl) {
-					console.log("5. Перенаправляем на оплату:", paymentUrl);
 					window.location.href = paymentUrl;
 				} else {
 					console.error("URL для оплаты не найден в ответе сервера! Вот что пришло:", urlData);
@@ -116,7 +123,7 @@ const Subscription = () => {
 				<X size={24} />
 			</div>
 
-			<div className="max-w-7xl mx-auto flex flex-col items-center">
+			<div className="max-w-9xl mx-auto flex flex-col items-center">
 				<h1 className="text-3xl font-medium mb-10 text-black">Обновите свой план</h1>
 
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-full">
