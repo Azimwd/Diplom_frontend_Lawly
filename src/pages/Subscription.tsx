@@ -57,7 +57,6 @@ const Subscription = () => {
 			tagline: "Откройте все возможности",
 			buttonText: "Перейти на Plus",
 			buttonVariant: "primary",
-			badge: "популярный",
 			period: "полгода",
 			features: [
 				{ icon: <Cpu size={18} />, text: "Расширенные модели" },
@@ -77,7 +76,6 @@ const Subscription = () => {
 			tagline: "Откройте все возможности",
 			buttonText: "Перейти на Plus",
 			buttonVariant: "primary",
-			badge: "популярный",
 			period: "год",
 			features: [
 				{ icon: <Cpu size={18} />, text: "Расширенные модели" },
@@ -195,7 +193,7 @@ const Subscription = () => {
 								{plan.features.map((feature, fIndex) => (
 									<div key={fIndex} className="flex items-start gap-4">
 										<div
-											className={`${plan.isPaid && fIndex < 3 ? "text-white" : "text-gray-400"} mt-0.5 flex-shrink-0`}
+											className={`${plan.isPaid && fIndex < 9 ? "text-white" : "text-gray-400"} mt-0.5 flex-shrink-0`}
 										>
 											{feature.icon}
 										</div>
