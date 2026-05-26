@@ -136,7 +136,7 @@ const Subscription = () => {
 								background: plan.isPaid
 									? "linear-gradient(to bottom, #001A41 0%, #0d0f12 100%)"
 									: "#ffffff",
-								border: plan.isPaid ? "1px solid #1f1f5a" : "1px solid #001A41",
+								border: plan.isPaid ? "1px solid #001A41 " : "1px solid #1f1f5a",
 							}}
 							className="relative rounded-[24px] p-10 flex flex-col min-h-[800px] shadow-sm"
 						>
