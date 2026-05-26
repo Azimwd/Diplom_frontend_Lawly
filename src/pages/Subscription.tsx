@@ -134,9 +134,9 @@ const Subscription = () => {
 							key={index}
 							style={{
 								background: plan.isPaid
-									? "linear-gradient(to bottom, #001A41 0%, #0d0f12 100%) border border-[#2f2f86]"
+									? "linear-gradient(to bottom, #001A41 0%, #0d0f12 100%)"
 									: "#ffffff",
-								border: "1px solid #001A41",
+								border: plan.isPaid ? "1px solid #1f1f5a" : "1px solid #001A41",
 							}}
 							className="relative rounded-[24px] p-10 flex flex-col min-h-[800px] shadow-sm"
 						>
