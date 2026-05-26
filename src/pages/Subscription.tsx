@@ -80,7 +80,7 @@ const Subscription = () => {
 				{ icon: <BrainCircuit size={18} />, text: "Продвинутая генерация документов" },
 				{ icon: <Zap size={18} />, text: "Расширенная память для чатов" },
 				{ icon: <Layers size={18} />, text: "Проекты и пользовательские GPT" },
-				{ icon: <Calendar1 size={18} />, text: "1 лет" },
+				{ icon: <Calendar1 size={18} />, text: "1 год" },
 			],
 			isPaid: true,
 		},
