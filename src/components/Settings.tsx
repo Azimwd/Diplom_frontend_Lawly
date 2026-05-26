@@ -1,7 +1,7 @@
 import { useUser } from "../context/UserContext";
 import { CreditCard, Palette, Globe, LogOut, User as UserIcon } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { translations, type Language } from "../utils/translations";
 import MenuItem from "./MenuItem";
 import Profile from "./Profile";
@@ -79,12 +79,34 @@ export default function Settings() {
 
 	const currentAvatar = profile?.avatar || null;
 
-	const currentPlanSub = async () => {
-		const responseStatus = await getStatusSubscription();
-		console.log(responseStatus);
+	const [subBadge, setSubBadge] = useState<string>("Basic");
+
+	const PLAN_BADGES: Record<string, string> = {
+		"1m": "Plus",
+		"6m": "Pro",
+		"1y": "Premium",
 	};
 
-	currentPlanSub();
+	useEffect(() => {
+		const fetchSubscription = async () => {
+			try {
+				const response = await getStatusSubscription();
+
+				if (response?.success && response?.data?.is_active) {
+					const planCode = response.data.subscription.plan;
+					setSubBadge(PLAN_BADGES[planCode] || "Basic");
+				} else {
+					setSubBadge("Basic");
+				}
+			} catch (error) {
+				console.error("Ошибка при получении статуса подписки:", error);
+				setSubBadge("Basic");
+			}
+		};
+
+		fetchSubscription();
+	}, []);
+
 	const getInitials = () => {
 		const firstName = profile?.first_name || "";
 		const lastName = profile?.last_name || "";
@@ -126,7 +148,7 @@ export default function Settings() {
 
 					<div className="flex flex-col px-1.5 py-1 gap-0.5">
 						<Link to="/subscription">
-							<MenuItem icon={<CreditCard size={18} />} text={t.subscription} badge="Basic" />
+							<MenuItem icon={<CreditCard size={18} />} text={t.subscription} badge={subBadge} />
 						</Link>
 
 						{/* Меню Темы */}
