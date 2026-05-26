@@ -46,7 +46,7 @@ const Subscription = () => {
 				{ icon: <Zap size={18} />, text: "Расширенная память для чатов" },
 				{ icon: <Search size={18} />, text: "Агент для написания кода Codex" },
 				{ icon: <Layers size={18} />, text: "Проекты и пользовательские GPT" },
-				{ icon: <Calendar size={18} />, text: "1 month" },
+				{ icon: <Calendar size={18} />, text: "1 месяц" },
 			],
 			isPaid: true,
 		},
@@ -66,7 +66,7 @@ const Subscription = () => {
 				{ icon: <Zap size={18} />, text: "Расширенная память для чатов" },
 				{ icon: <Search size={18} />, text: "Агент для написания кода Codex" },
 				{ icon: <Layers size={18} />, text: "Проекты и пользовательские GPT" },
-				{ icon: <CalendarDays size={18} />, text: "6 month" },
+				{ icon: <CalendarDays size={18} />, text: "6 месяц" },
 			],
 			isPaid: true,
 		},
@@ -86,7 +86,7 @@ const Subscription = () => {
 				{ icon: <Zap size={18} />, text: "Расширенная память для чатов" },
 				{ icon: <Search size={18} />, text: "Агент для написания кода Codex" },
 				{ icon: <Layers size={18} />, text: "Проекты и пользовательские GPT" },
-				{ icon: <Calendar1 size={18} />, text: "1 year" },
+				{ icon: <Calendar1 size={18} />, text: "1 лет" },
 			],
 			isPaid: true,
 		},
@@ -200,7 +200,7 @@ const Subscription = () => {
 											{feature.icon}
 										</div>
 										<span
-											className={`text-[14px] font-medium leading-snug ${plan.isPaid && fIndex < 3 ? "text-white" : "text-gray-700"}`}
+											className={`text-[14px] font-medium leading-snug ${plan.isPaid && fIndex < 9 ? "text-white" : "text-gray-700"}`}
 										>
 											{feature.text}
 										</span>
