@@ -53,7 +53,7 @@ const Subscription = () => {
 			price: "49 990",
 			code: "6m",
 			tagline: "Откройте все возможности",
-			buttonText: "Перейти на Plus",
+			buttonText: "Перейти на Pro",
 			buttonVariant: "primary",
 			period: "полгода",
 			features: [
@@ -71,7 +71,7 @@ const Subscription = () => {
 			price: "89 990",
 			code: "1y",
 			tagline: "Откройте все возможности",
-			buttonText: "Перейти на Plus",
+			buttonText: "Перейти на Premium",
 			buttonVariant: "primary",
 			period: "год",
 			features: [
