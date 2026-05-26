@@ -1,7 +1,5 @@
 import api from "./axios";
 
-
-
 export type PlanType = "1m" | "6m" | "1y";
 
 export const createInvoice = async (plan: PlanType) => {
@@ -29,3 +27,14 @@ export const invoiceUrl = async (invoice_id: number) => {
         throw error;
     }
 };
+
+export const getStatusSubscription = async () =>{
+    try{
+        const response = await api.get(`/subscriptions/status/`)
+
+        return response.data
+    }catch(error:any){
+        console.error(error)
+        throw error
+    }
+}

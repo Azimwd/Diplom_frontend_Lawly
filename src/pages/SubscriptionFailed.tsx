@@ -41,16 +41,14 @@ function SubscriptionFailed() {
 					</div>
 				</div>
 
-				{/* Главная кнопка (попробовать снова) */}
 				<button
-					onClick={() => navigate("/subscription")} // Укажите тут правильный путь к странице тарифов
+					onClick={() => navigate("/subscription")}
 					className="w-full bg-[#5c5cff] hover:bg-[#4a4aff] text-white py-4 px-6 rounded-full font-bold text-sm transition-all shadow-lg shadow-[#5c5cff]/25 hover:shadow-[#5c5cff]/40 flex items-center justify-center gap-2 group mb-3"
 				>
 					Попробовать снова
 					<ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
 				</button>
 
-				{/* Второстепенная кнопка (отмена) */}
 				<button
 					onClick={() => navigate("/chat")}
 					className="w-full bg-transparent hover:bg-gray-50 text-gray-500 py-3 px-6 rounded-full font-bold text-sm transition-colors"

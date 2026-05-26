@@ -7,6 +7,7 @@ import MenuItem from "./MenuItem";
 import Profile from "./Profile";
 import Cookies from "js-cookie";
 import { switchLanguage, switchTheme } from "../api/settings";
+import { getStatusSubscription } from "../api/subscription";
 
 const LANGUAGES = [
 	{ code: "ru", label: "Русский" },
@@ -77,6 +78,13 @@ export default function Settings() {
 	};
 
 	const currentAvatar = profile?.avatar || null;
+
+	const currentPlanSub = async () => {
+		const responseStatus = await getStatusSubscription();
+		console.log(responseStatus);
+	};
+
+	currentPlanSub();
 	const getInitials = () => {
 		const firstName = profile?.first_name || "";
 		const lastName = profile?.last_name || "";
