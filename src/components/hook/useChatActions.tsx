@@ -41,7 +41,7 @@ export const useChatActions = ({
 
 	const ensureChatId = async (currentPrompt: string) => {
 		if (!id) {
-			const title = currentPrompt.split(" ").slice(0, 5).join(" ");
+			const title = currentPrompt.split(" ").join(" ");
 			const newChat = await postChat(title);
 			const newId = newChat.id.toString();
 			setJustCreatedChat(true);
