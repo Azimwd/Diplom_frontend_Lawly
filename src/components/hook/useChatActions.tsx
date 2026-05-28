@@ -18,6 +18,7 @@ interface UseChatActionsProps {
 	setIsDocCreating: (val: boolean) => void;
 	onChatCreated: () => void;
 	aiMessageIndexRef: React.MutableRefObject<number | null>;
+	setIsTrialExpired: (value: boolean) => void;
 }
 
 export const useChatActions = ({
@@ -35,6 +36,7 @@ export const useChatActions = ({
 	setIsDocCreating,
 	onChatCreated,
 	aiMessageIndexRef,
+	setIsTrialExpired,
 }: UseChatActionsProps) => {
 	const navigate = useNavigate();
 	const { profile } = useUser();
@@ -85,6 +87,20 @@ export const useChatActions = ({
 		} catch (error) {
 			console.error(error);
 			updateAiMessage({ text: "Ошибка при отправке.", type: "error" });
+
+			const err = error as any;
+
+			const statusCode = err?.response?.status || err?.status;
+
+			if (statusCode === 405 || statusCode === 402) {
+				setIsTrialExpired(true);
+				updateAiMessage({
+					text: "У вас закончился лимит сообщений. Пожалуйста, оформите подписку.",
+					type: "error",
+				});
+			} else {
+				updateAiMessage({ text: "Ошибка при отправке.", type: "error" });
+			}
 		} finally {
 			setIsAiLoading(false);
 		}

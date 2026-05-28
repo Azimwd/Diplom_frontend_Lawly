@@ -73,7 +73,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [loadingMessages, setLoadingMessages] = useState(false);
 	const [isAiLoading, setIsAiLoading] = useState(false);
-	const [isTrialExpired] = useState(false);
+	const [isTrialExpired, setIsTrialExpired] = useState(false);
 	const [visibleServices, setVisibleServices] = useState(false);
 	const [, setIsDocCreating] = useState(false);
 	const [isStopped, setIsStopped] = useState(false);
@@ -203,6 +203,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 		setIsDocCreating,
 		onChatCreated,
 		aiMessageIndexRef,
+		setIsTrialExpired,
 	});
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
