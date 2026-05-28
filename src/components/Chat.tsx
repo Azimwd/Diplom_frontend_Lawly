@@ -282,6 +282,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 						isTyping={isAiLoading}
 						isStoped={isStopped}
 						onChooseDoc={(doc) => {
+							setMessages((prev) => prev.filter((msg) => msg.type !== "documents_list"));
 							setPrompt(`Создай ${doc.title}`);
 							textareaRef.current?.focus();
 						}}
