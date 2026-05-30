@@ -274,7 +274,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	};
 
 	return (
-		<div className="relative flex flex-col items-center h-[100dvh] w-full bg-[#0D0D0D] text-[#FFFFFF] overflow-hidden">
+		<div className="relative flex flex-col items-center h-[100dvh] w-full bg-[#cbcbcb] dark:bg-[#0D0D0D] text-[#FFFFFF] overflow-hidden">
 			<div className="flex items-center justify-center bg-[#0D0D0D] text-[#FFFFFF] w-full transition-all duration-500">
 				<div className="flex-1 overflow-y-auto mt-10 pt-6 pb-[150px] dialog-scroll w-full ">
 					<Dialog
