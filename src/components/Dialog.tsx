@@ -228,10 +228,14 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 											<div className="flex flex-col gap-4">
 												<div className="w-full">
 													<div className="flex justify-between text-sm mb-1">
-														<span className="text-[#3966ed]">{t.wc}</span>
-														<span className="text-white font-bold">{msg.winRate}%</span>
+														<span className="text-[#2f52b8] dark:text-[#3966ed]">
+															{t.wc}
+														</span>
+														<span className="text-[#000] dark:text-white font-bold">
+															{msg.winRate}%
+														</span>
 													</div>
-													<div className="w-full bg-[#2A2A2A] rounded-full h-2.5">
+													<div className="w-full bg-[#e2f3ff] dark:bg-[#2A2A2A] rounded-full h-2.5">
 														<div
 															className="bg-[#1E4FE0] h-2.5 rounded-full transition-all duration-1000"
 															style={{ width: `${msg.winRate}%` }}
