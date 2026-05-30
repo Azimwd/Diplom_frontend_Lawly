@@ -48,7 +48,7 @@ function ProfileSidebar({ isOpen }: ProfileProps) {
 		<section
 			className={`
 				relative mt-auto h-[60px] flex items-center justify-start
-				p-2 border-[#333] bg-white dark:bg-[#1A1A1A] text-white
+				p-2 border-[#333] bg-[#f9f9f9] dark:bg-[#1A1A1A] text-white
 				transition-all duration-200
 				${isOpen ? "w-full max-w-[340px]" : "w-[59px]"}
 			`}
@@ -91,7 +91,7 @@ function ProfileSidebar({ isOpen }: ProfileProps) {
 								? `${profile.first_name || ""} ${profile.last_name || ""}`.trim()
 								: `${t.notSet}`}
 						</div>
-						<div className="text-[12px] text-gray-400 truncate">{user?.email}</div>
+						<div className="text-[12px] text-gray-700 dark:text-gray-400 truncate">{user?.email}</div>
 					</div>
 				)}
 			</button>
