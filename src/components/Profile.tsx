@@ -88,11 +88,13 @@ function Profile({ onClose }: ProfileProps) {
 			onClick={stopPropagation}
 			onMouseDown={stopPropagation}
 			onTouchStart={stopPropagation}
-			className={`flex flex-col gap-4 text-white bg-[#1f1f1f] ${
+			// Изменены цвета фона и текста: bg-white/dark:bg-[#1f1f1f] и text-gray-900/dark:text-white
+			className={`flex flex-col gap-4 text-gray-900 dark:text-white bg-white dark:bg-[#1f1f1f] ${
 				isMobile ? "p-6 rounded-xl w-full max-w-sm shadow-2xl relative z-10 mb-20" : ""
 			}`}
 		>
-			<div className="flex justify-between items-center border-b border-[#444] pb-2 mb-1">
+			{/* Изменен цвет бордера снизу */}
+			<div className="flex justify-between items-center border-b border-gray-200 dark:border-[#444] pb-2 mb-1">
 				<h3 className="text-lg font-semibold">{t.ChangeAvatar}</h3>
 
 				{isMobile && onClose && (
@@ -102,7 +104,8 @@ function Profile({ onClose }: ProfileProps) {
 							stopPropagation(e);
 							onClose();
 						}}
-						className="text-gray-400 hover:text-white transition-colors"
+						// Изменены цвета крестика
+						className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
 					>
 						<X size={20} />
 					</button>
@@ -110,15 +113,17 @@ function Profile({ onClose }: ProfileProps) {
 			</div>
 
 			<div className="flex flex-col gap-2 items-center mb-2">
-				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider self-start">
+				{/* Изменен цвет label */}
+				<label className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider self-start">
 					{t.Avatar}
 				</label>
 				<div className="relative group cursor-pointer" onClick={handleAvatarClick}>
-					<div className="h-[90px] w-[90px] rounded-full overflow-hidden border-2 border-[#444] group-hover:border-blue-500 transition-all bg-[#2a2a2a] flex items-center justify-center">
+					{/* Изменен фон и бордер аватарки */}
+					<div className="h-[90px] w-[90px] rounded-full overflow-hidden border-2 border-gray-200 dark:border-[#444] group-hover:border-blue-500 transition-all bg-gray-100 dark:bg-[#2a2a2a] flex items-center justify-center">
 						{avatarPreview ? (
 							<img src={avatarPreview} alt="avatar" className="h-full w-full object-cover" />
 						) : (
-							<UserIcon size={40} className="text-gray-500" />
+							<UserIcon size={40} className="text-gray-400 dark:text-gray-500" />
 						)}
 					</div>
 
@@ -134,55 +139,67 @@ function Profile({ onClose }: ProfileProps) {
 						accept="image/*"
 					/>
 				</div>
-				<p className="text-[10px] text-gray-500">{t.EditProfile}</p>
+				{/* Изменен цвет подписи под фото */}
+				<p className="text-[10px] text-gray-500 dark:text-gray-400">{t.EditProfile}</p>
 			</div>
 
 			<div className="flex flex-col gap-1">
-				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider">{t.NameField}</label>
+				<label className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">
+					{t.NameField}
+				</label>
+				{/* Изменены стили input (фон, текст, бордер, placeholder) */}
 				<input
 					type="text"
 					value={firstName}
 					onChange={(e) => setFirstName(e.target.value)}
-					className="bg-[#2a2a2a] border border-[#444] rounded p-2 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+					className="bg-gray-50 dark:bg-[#2a2a2a] text-gray-900 dark:text-white border border-gray-300 dark:border-[#444] placeholder-gray-400 dark:placeholder-gray-500 rounded p-2 text-sm focus:outline-none focus:border-blue-500 transition-colors"
 					placeholder={t.Pname}
 				/>
 			</div>
 
 			<div className="flex flex-col gap-1">
-				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider">{t.LastNameField}</label>
+				<label className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">
+					{t.LastNameField}
+				</label>
 				<input
 					type="text"
 					value={lastName}
 					onChange={(e) => setLastName(e.target.value)}
-					className="bg-[#2a2a2a] border border-[#444] rounded p-2 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+					className="bg-gray-50 dark:bg-[#2a2a2a] text-gray-900 dark:text-white border border-gray-300 dark:border-[#444] placeholder-gray-400 dark:placeholder-gray-500 rounded p-2 text-sm focus:outline-none focus:border-blue-500 transition-colors"
 					placeholder={t.Lname}
 				/>
 			</div>
 
 			<div className="flex flex-col gap-1">
-				<label className="text-xs text-gray-400 uppercase font-bold tracking-wider">{t.NumberField}</label>
+				<label className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">
+					{t.NumberField}
+				</label>
 				<input
 					type="text"
 					value={phone}
 					onChange={(e) => setPhone(e.target.value)}
-					className="bg-[#2a2a2a] border border-[#444] rounded p-2 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+					className="bg-gray-50 dark:bg-[#2a2a2a] text-gray-900 dark:text-white border border-gray-300 dark:border-[#444] placeholder-gray-400 dark:placeholder-gray-500 rounded p-2 text-sm focus:outline-none focus:border-blue-500 transition-colors"
 					placeholder="+7 (___) ___ __ __"
 				/>
 			</div>
 
+			{/* Адаптированы цвета сообщений об ошибке и успехе */}
 			{error && (
-				<div className="text-red-400 text-sm bg-red-900/20 p-2 rounded border border-red-900/50">{error}</div>
+				<div className="text-red-600 dark:text-red-400 text-sm bg-red-50 dark:bg-red-900/20 p-2 rounded border border-red-200 dark:border-red-900/50">
+					{error}
+				</div>
 			)}
 			{success && (
-				<div className="text-green-400 text-sm bg-green-900/20 p-2 rounded border border-green-900/50">
+				<div className="text-green-700 dark:text-green-400 text-sm bg-green-50 dark:bg-green-900/20 p-2 rounded border border-green-200 dark:border-green-900/50">
 					Профиль обновлен!
 				</div>
 			)}
 
+			{/* Кнопка: в светлой теме при наведении hover:bg-blue-700, в темной hover:bg-blue-500 */}
 			<button
 				type="submit"
 				disabled={loading}
-				className="bg-blue-600 hover:bg-blue-500 text-white py-2 mt-2 rounded font-medium transition-all disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed active:scale-[0.98]"
+				className="bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-500 text-white py-2 mt-2 rounded font-medium transition-all disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed active:scale-[0.98]"
 			>
 				{loading ? "Сохраняем..." : "Сохранить"}
 			</button>
@@ -193,7 +210,11 @@ function Profile({ onClose }: ProfileProps) {
 		return (
 			<Portal>
 				<div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-					<div className="absolute inset-0 bg-black/70 backdrop-blur-sm cursor-pointer" onClick={onClose} />
+					{/* Затемнение на фоне модалки (чуть светлее в светлой теме) */}
+					<div
+						className="absolute inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm cursor-pointer"
+						onClick={onClose}
+					/>
 					{formContent}
 				</div>
 			</Portal>
