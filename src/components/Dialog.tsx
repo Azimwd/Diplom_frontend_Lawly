@@ -165,7 +165,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 										{msg.documents.map((doc, i) => (
 											<button
 												key={i}
-												className="p-2 bg-[#1e1e1e] rounded-md cursor-pointer hover:bg-[#3a3a3a] text-justify mr-2"
+												className="p-2 bg-[#d8d8d8] dark:bg-[#1e1e1e] rounded-md cursor-pointer hover:bg-[#838383] dark:hover:bg-[#3a3a3a] text-justify mr-2"
 												onClick={() => onChooseDoc(doc)}
 											>
 												{doc.title}
