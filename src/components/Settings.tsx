@@ -126,7 +126,7 @@ export default function Settings() {
 					{/* Кнопка Профиля */}
 					<button
 						onClick={() => setOpen((prev) => !prev)}
-						className="flex items-center px-3 py-3 w-full hover:bg-gray-100 dark:hover:bg-[#424242] transition-colors rounded-t-[12px]"
+						className="flex items-center px-3 py-3 w-full hover:bg-gray-200 dark:hover:bg-[#424242] transition-colors rounded-t-[12px]"
 					>
 						<div className="h-[36px] w-[36px] rounded-full bg-gray-200 dark:bg-[#4A4A4A] text-gray-600 dark:text-white flex items-center justify-center overflow-hidden border border-gray-300 dark:border-[#555]">
 							{currentAvatar ? (
@@ -143,7 +143,6 @@ export default function Settings() {
 						</div>
 					</button>
 
-					{/* Разделитель */}
 					<div className="h-[1px] bg-gray-200 dark:bg-[#4A4A4A] w-[90%] mx-auto my-1 transition-colors duration-200"></div>
 
 					<div className="flex flex-col px-1.5 py-1 gap-0.5">
