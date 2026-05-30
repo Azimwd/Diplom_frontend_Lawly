@@ -335,7 +335,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 
 				<div
 					className={`rounded-[20px] max-w-[24rem] md:max-w-[45rem] w-full 
-						absolute justify-between transition-all duration-350 bg-[#1A1A1A]
+						absolute justify-between transition-all duration-350 bg-[#fff] dark:bg-[#1A1A1A]
 						${isMoved ? "mt-[750px] md:mt-[700px]" : "mt-0"}`}
 				>
 					{isTrialExpired && (
@@ -367,7 +367,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 							placeholder:text-[#f0f0f0] text-white text-[15px] 
 							resize-none overflow-y-auto 
 							max-h-[250px] w-full 
-							pr-[15px] mt-[20px] bg-transparent"
+							pr-[15px] mt-[20px] bg-transparent border-1 border-[#1E4FE0] dark:border-0 "
 						/>
 					</div>
 
