@@ -16,21 +16,23 @@ interface ChatProps {
 	onChatCreated: () => void;
 }
 
-// ... интерфейсы оставляем без изменений ...
 interface ChatHistoryMessage {
 	role: "user" | "ai" | "assistant" | string;
 	content: string;
 }
+
 interface DocumentItem {
 	template_name: string;
 	title: string;
 }
+
 interface DocumentField {
 	key: string;
 	label: string;
 	hint: string;
 	required: boolean;
 }
+
 interface Lawyer {
 	id?: number;
 	name: string;
@@ -41,21 +43,26 @@ interface Lawyer {
 	city?: string;
 	description?: string;
 }
+
 interface ParsedAiMessage {
 	type?: string;
 	answer?: string;
 	reply?: string;
 	text?: string;
+
 	documents?: DocumentItem[];
 	fields?: DocumentField[];
+
 	document_title?: string;
 	documentTitle?: string;
 	template_name?: string;
 	templateName?: string;
+
 	win_rate?: number;
 	loss_rate?: number;
 	article?: string;
 	file_url?: string;
+
 	lawyers?: Lawyer[];
 }
 
@@ -74,6 +81,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 
 	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 	const servicesRef = useRef<HTMLDivElement | null>(null);
+	const eventSourceRef = useRef<EventSource | null>(null);
 	const aiMessageIndexRef = useRef<number | null>(null);
 	const justCreatedChatRef = useRef(false);
 
@@ -84,7 +92,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	const lang = (profile?.language as Language) || "ru";
 	const t = translations[lang].chat;
 
-	// ... логика useEffect и обработчики (handleCalculator и т.д.) остаются прежними ...
 	useEffect(() => {
 		const handleClickOutside = (e: MouseEvent) => {
 			if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) {
@@ -102,21 +109,37 @@ export default function Chat({ onChatCreated }: ChatProps) {
 				setIsMoved(false);
 				return;
 			}
+
 			if (justCreatedChatRef.current) {
 				justCreatedChatRef.current = false;
 				return;
 			}
-			setMessages((prev) => [...prev, { role: "ai", text: t.loadingDoc, type: "loading" }]);
+
+			setMessages((prev) => [
+				...prev,
+				{
+					role: "ai",
+					text: t.loadingDoc,
+					type: "loading",
+				},
+			]);
 			setLoadingMessages(true);
 			const startTime = Date.now();
+
 			try {
 				const session = (await getChatMessages(id)) as ChatHistoryMessage[];
+
 				const formattedMessages = session
 					.map((msg: ChatHistoryMessage): Message | null => {
-						if (msg.role === "user") return { role: "user", text: msg.content };
+						if (msg.role === "user") {
+							return { role: "user", text: msg.content };
+						}
+
 						try {
 							const parsed = JSON.parse(msg.content) as ParsedAiMessage;
+
 							if (parsed?.type === "document_values") return null;
+
 							if (parsed && typeof parsed === "object" && parsed.type) {
 								return {
 									role: "ai",
@@ -136,18 +159,23 @@ export default function Chat({ onChatCreated }: ChatProps) {
 						} catch (error: unknown) {
 							console.warn("Message content is not JSON:", error);
 						}
+
 						return { role: "ai", text: msg.content };
 					})
 					.filter((msg): msg is Message => msg !== null);
+
 				setMessages(formattedMessages.reverse());
 				setIsMoved(true);
 			} catch (error) {
 				console.error("Ошибка загрузки истории:", error);
 			} finally {
 				const elapsed = Date.now() - startTime;
-				setTimeout(() => setLoadingMessages(false), Math.max(1000 - elapsed, 0));
+				const minSkeletonTime = 1000;
+				const delay = Math.max(minSkeletonTime - elapsed, 0);
+				setTimeout(() => setLoadingMessages(false), delay);
 			}
 		};
+
 		loadHistory();
 	}, [id, t.loadingDoc]);
 
@@ -197,121 +225,136 @@ export default function Chat({ onChatCreated }: ChatProps) {
 		setServicePlaceholder(t.modes.calculator);
 		setVisibleServices(false);
 		setIsMoved(true);
-		setServicePlaceholder("Режим калькулятора...");
+		setServicePlaceholder("Режим калькулятора активирован...");
 	};
+
 	const handleWinChance = () => {
 		setMode("winChance");
 		setServicePlaceholder(t.modes.calculator);
 		setVisibleServices(false);
 		setIsMoved(true);
-		setServicePlaceholder("Режим анализа шанса...");
+		setServicePlaceholder("Режим анализа шанса побед активирован...");
 	};
+
 	const handleDocCreationStart = () => {
 		setMode("service");
 		setServicePlaceholder(t.modes.calculator);
 		setIsDocCreating(true);
 		setVisibleServices(false);
 		setIsStopped(false);
-		setServicePlaceholder("Режим создания документа...");
+		setServicePlaceholder("Режим создания документа активирован...");
 	};
+
 	const handleTopLawyer = () => {
 		setMode("topLawyer");
 		setServicePlaceholder(t.modes.calculator);
 		setVisibleServices(false);
 		setIsMoved(true);
-		setServicePlaceholder("Режим поиска юристов...");
+		setServicePlaceholder("Режим поиска топ юристов активирован...");
 	};
+
 	const switchToChat = () => {
+		eventSourceRef.current?.close();
 		setMode("chat");
-		setServicePlaceholder("");
+		setServicePlaceholder(t.modes.calculator);
 		setIsAiLoading(false);
 		setIsStopped(true);
 		setVisibleServices(false);
 		setIsDocCreating(false);
+
 		setMessages((prev) => {
 			if (aiMessageIndexRef.current === null) return prev;
 			const updated = [...prev];
 			updated.splice(aiMessageIndexRef.current, 1);
 			return updated;
 		});
+
 		aiMessageIndexRef.current = null;
+		setServicePlaceholder("");
 	};
 
 	return (
-		<div className="relative flex flex-col items-center h-[100dvh] w-full bg-gray-50 dark:bg-[#0D0D0D] overflow-hidden">
-			{/* Верхняя часть с сообщениями */}
-			<div className="flex-1 overflow-y-auto mt-2 pt-6 pb-[180px] dialog-scroll w-full max-w-5xl px-4">
-				<Dialog
-					messages={messages}
-					loading={loadingMessages}
-					isTyping={isAiLoading}
-					isStoped={isStopped}
-					onChooseDoc={(doc) => {
-						setMessages((prev) =>
-							prev.map((msg) =>
-								msg.type === "documents_list" ? { ...msg, type: "text", documents: undefined } : msg,
-							),
-						);
-						setPrompt(`Создай ${doc.title}`);
-						textareaRef.current?.focus();
-					}}
-					onSubmitForm={async (formData, templateName) => {
-						if (!id || !templateName) return;
-						setMessages((prev) => [
-							...prev,
-							{ role: "ai", text: "Генерирую ваш документ...", type: "loading" },
-						]);
-						try {
-							const res = await generateDocument(id, templateName, formData, profile?.language || "ru");
-							if (res?.data?.type === "document_generated") {
-								const baseUrl = "https://etha-hypercatalectic-rueben.ngrok-free.dev";
-								setMessages((prev) => {
-									const filtered = prev.filter((m) => m.type !== "loading");
-									return [
-										...filtered,
-										{
-											role: "ai",
-											text: res.data.reply,
-											type: "document_generated",
-											documentTitle: res.data.document_title,
-											fileUrl: baseUrl + res.data.file_url,
-										},
-									];
-								});
-								setIsDocCreating(false);
-							}
-						} catch (error) {
-							console.error(error);
-						}
-					}}
-				/>
-			</div>
+		<div className="relative flex flex-col items-center h-[100dvh] w-full bg-[#f6f6f6] dark:bg-[#0D0D0D] text-[#FFFFFF] overflow-hidden">
+			<div className="flex items-center justify-center bg-[#f6f6f6] dark:bg-[#0D0D0D] text-[#FFFFFF] w-full transition-all duration-500">
+				<div className="flex-1 overflow-y-auto mt-10 pt-6 pb-[150px] dialog-scroll w-full ">
+					<Dialog
+						messages={messages}
+						loading={loadingMessages}
+						isTyping={isAiLoading}
+						isStoped={isStopped}
+						onChooseDoc={(doc) => {
+							setMessages((prev) =>
+								prev.map((msg) =>
+									msg.type === "documents_list"
+										? { ...msg, type: "text", documents: undefined }
+										: msg,
+								),
+							);
+							setPrompt(`Создай ${doc.title}`);
+							textareaRef.current?.focus();
+						}}
+						onSubmitForm={async (formData, templateName) => {
+							if (!id || !templateName) return;
 
-			{/* Контейнер ввода */}
-			<div
-				className={`fixed bottom-8 left-1/2 -translate-x-1/2 w-[92%] max-w-[45rem] transition-all duration-500 z-50
-					${!isMoved ? "top-1/2 -translate-y-1/2 bottom-auto" : "bottom-8"}`}
-			>
-				<div className="bg-white dark:bg-[#1A1A1A] rounded-[24px] shadow-xl dark:shadow-none border border-gray-200 dark:border-gray-800 flex flex-col overflow-hidden">
-					{/* Баннер триала */}
+							setMessages((prev) => [
+								...prev,
+								{
+									role: "ai",
+									text: "Генерирую ваш документ, пожалуйста подождите...",
+									type: "loading",
+								},
+							]);
+
+							const userLanguage = profile?.language || "ru";
+
+							try {
+								const res = await generateDocument(id, templateName, formData, userLanguage);
+								if (res?.data?.type === "document_generated") {
+									const baseUrl = "https://etha-hypercatalectic-rueben.ngrok-free.dev";
+									setMessages((prev) => {
+										const filtered = prev.filter((m) => m.type !== "loading");
+										return [
+											...filtered,
+											{
+												role: "ai",
+												text: res.data.reply,
+												type: "document_generated",
+												documentTitle: res.data.document_title || "Сгенерированный документ",
+												fileUrl: baseUrl + res.data.file_url,
+											},
+										];
+									});
+									setIsDocCreating(false);
+								}
+							} catch (error) {
+								console.error("Ошибка при генерации:", error);
+							}
+						}}
+					/>
+				</div>
+
+				<div
+					className={`rounded-[20px] max-w-[24rem] md:max-w-[45rem] w-full 
+						absolute justify-between transition-all duration-350 bg-[#fff] dark:bg-[#1A1A1A] border-1 border-[#8294ca] dark:border-0
+						${isMoved ? "mt-[750px] md:mt-[700px]" : "mt-0"}`}
+				>
 					{isTrialExpired && (
-						<div className="w-full bg-red-50 dark:bg-red-950/20 border-b border-red-100 dark:border-red-900/30 px-6 py-2 flex items-center justify-between">
+						<div className="w-full bg-[#242424] border-t border-x border-[#2A2A2A] rounded-t-[20px] px-[30px] py-[10px] flex items-center justify-between transition-colors duration-200">
 							<div className="flex items-center gap-2">
-								<span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-								<span className="text-[12px] text-red-600 dark:text-red-400 font-medium">
+								<span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+								<span className="text-[12px] text-red-500 animate-pulse font-medium tracking-wide">
 									{t.trialExpired}
 								</span>
 							</div>
 							<button
 								onClick={() => navigate("/subscription")}
-								className="text-[11px] text-red-700 dark:text-red-400 font-bold hover:underline"
+								className="text-[11px] text-gray-400 hover:text-white underline transition cursor-pointer animate-pulse"
 							>
 								{t.upgrade}
 							</button>
 						</div>
 					)}
-
-					<div className="px-5 pt-4">
+					<div>
 						<textarea
 							ref={textareaRef}
 							value={prompt}
@@ -319,34 +362,35 @@ export default function Chat({ onChatCreated }: ChatProps) {
 							onKeyDown={handleKeyDown}
 							disabled={isAiLoading}
 							placeholder={t.placeholder}
-							className="custom-scrollArea w-full bg-transparent border-none outline-none 
-							text-gray-900 dark:text-gray-100 text-[15px] placeholder-gray-400 dark:placeholder-gray-500
-							resize-none max-h-[200px] min-h-[40px]"
+							className="custom-scrollArea 
+							border-none rounded-[20px] outline-none 
+							placeholder:text-[#2f2f2f] dark:placeholder:text-[#f0f0f0] text-black dark:text-white text-[15px] 
+							resize-none overflow-y-auto 
+							max-h-[250px] w-full 
+							pr-[15px] mt-[20px] bg-transparent  "
 						/>
 					</div>
 
-					<div className="flex items-center justify-between px-4 py-3 bg-gray-50/50 dark:bg-transparent">
-						<div className="flex items-center gap-3 relative flex-1">
-							{/* Кнопка Плюс */}
+					<div className="flex">
+						<div className="px-[30px] py-[20px] flex justify-between items-center gap-2 w-full relative">
 							<button
 								onClick={() => setVisibleServices((prev) => !prev)}
-								className="h-8 w-8 flex items-center justify-center rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-gray-200 transition-colors cursor-pointer"
+								type="button"
+								className="h-[30px] w-[30px] flex justify-center items-center rounded-[7px] bg-[#242424] hover:bg-[#555555] dark:bg-[#f0f0f0] cursor-pointer dark:hover:bg-[#c0c0c0] transition-colors"
 							>
-								<Plus size={18} />
+								<Plus strokeWidth={1.5} className="w-[18px] h-[18px] text-white dark:text-black" />
 							</button>
 
-							{/* Статус режима */}
 							{servicePlaceholder && (
-								<span className="text-[13px] text-blue-600 dark:text-blue-400 font-medium animate-pulse truncate max-w-[200px]">
+								<span className="text-[15px] text-gray-400 whitespace-nowrap animate-pulse select-none flex-1 truncate ml-2">
 									{servicePlaceholder}
 								</span>
 							)}
 
-							{/* Выпадающее меню сервисов */}
 							{visibleServices && (
 								<div
 									ref={servicesRef}
-									className="absolute bottom-12 left-0 w-56 bg-white dark:bg-[#1F1F1F] border border-gray-200 dark:border-gray-800 rounded-xl shadow-2xl p-1.5 z-[60]"
+									className="absolute bottom-[60px] w-[195px] bg-[#1F1F1F] border border-[#2A2A2A] rounded-[12px] shadow-lg p-2 z-10"
 								>
 									<ServiceSelector
 										onDocCreated={handleDocCreationStart}
@@ -357,45 +401,37 @@ export default function Chat({ onChatCreated }: ChatProps) {
 									/>
 								</div>
 							)}
-						</div>
 
-						{/* Кнопка Отправить / Стоп */}
-						<button
-							onClick={() => {
-								if (isAiLoading) return switchToChat();
-								const actions = {
-									service: submitSD,
-									calculator: submitCalculator,
-									winChance: submitWinChance,
-									topLawyer: submitTopLawyer,
-									chat: submitPrompt,
-								};
-								actions[mode]();
-							}}
-							className={`flex items-center justify-center h-9 px-4 rounded-xl font-medium transition-all cursor-pointer
-								${
-									isAiLoading
-										? "bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/20"
-										: "bg-gray-900 dark:bg-gray-100 hover:bg-black dark:hover:bg-white text-white dark:text-black shadow-lg"
-								}`}
-						>
-							{isAiLoading ? (
-								<div className="flex items-center gap-2">
-									<SquareStop size={16} fill="currentColor" />
-									<span className="text-sm">Стоп</span>
-								</div>
-							) : (
-								<div className="flex items-center gap-2">
-									<ArrowUp size={16} strokeWidth={2.5} />
-									<span className="text-sm">Отправить</span>
-								</div>
-							)}
-						</button>
+							<button
+								onClick={() => {
+									if (isAiLoading) return switchToChat();
+									const actions = {
+										service: submitSD,
+										calculator: submitCalculator,
+										winChance: submitWinChance,
+										topLawyer: submitTopLawyer,
+										chat: submitPrompt,
+									};
+									actions[mode]();
+								}}
+								className={`flex justify-center items-center h-[30px] ml-auto w-[80px] rounded-[7px] cursor-pointer gap-1 transition-colors
+								${isAiLoading ? "bg-red-500 hover:bg-red-700 text-white" : "bg-[#242424] hover:bg-[#555555] dark:bg-[#f0f0f0] dark:hover:bg-[#dbdbdb] dark:text-black text-white"}`}
+							>
+								{isAiLoading ? (
+									<>
+										<SquareStop className="w-[15px] h-[15px]" />
+										<span className="text-[14px]">Stop</span>
+									</>
+								) : (
+									<>
+										<ArrowUp className="w-[15px] h-[15px]" />
+										<span className="text-[14px]">Send</span>
+									</>
+								)}
+							</button>
+						</div>
 					</div>
 				</div>
-				<p className="text-center text-[11px] text-gray-400 mt-3 dark:text-gray-500">
-					ИИ может совершать ошибки. Проверяйте важную информацию.
-				</p>
 			</div>
 		</div>
 	);
