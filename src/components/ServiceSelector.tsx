@@ -1,4 +1,6 @@
 import { FileText, BookMarked, Calculator, UserSearch, ChartColumnBig } from "lucide-react";
+import { translations, type Language } from "../utils/translations";
+import { useUser } from "../context/UserContext";
 
 interface ServiceSelectorProps {
 	onDocCreated: () => void;
@@ -15,36 +17,39 @@ export default function ServiceSelector({
 	onWinChance,
 	onTopLawyer,
 }: ServiceSelectorProps) {
-	// Массив кнопок для удобства рендера
+	const { profile } = useUser();
+	const lang = (profile?.language as Language) || "ru";
+	const t = translations[lang].Services;
+
 	const services = [
 		{
 			id: "lawyer",
 			icon: UserSearch,
-			text: "Поиск специалистов",
+			text: t.findtext,
 			onClick: onTopLawyer,
 		},
 		{
 			id: "win_chance",
 			icon: ChartColumnBig,
-			text: "Шанс побед",
+			text: t.chancetext,
 			onClick: onWinChance,
 		},
 		{
 			id: "calculator",
 			icon: Calculator,
-			text: "Калькулятор",
+			text: t.calctext,
 			onClick: onCalculating,
 		},
 		{
 			id: "document",
 			icon: FileText,
-			text: "Создать документ",
+			text: t.doctext,
 			onClick: onDocCreated,
 		},
 		{
 			id: "consultation",
 			icon: BookMarked,
-			text: "Консультация",
+			text: t.consultext,
 			onClick: switchToChat,
 		},
 	];

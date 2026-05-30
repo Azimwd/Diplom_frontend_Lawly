@@ -47,6 +47,13 @@ export const translations = {
 			rename: "Переименовать",
 			delete: "Удалить",
 		},
+		Services: {
+			findtext: "Поиск специалистов",
+			chancetext: "Шанс побед",
+			calctext: "Калькулятор",
+			doctext: "Создать документ",
+			consultext: "Консультация"
+		}
 	},
 	en: {
 		profilefield: {
@@ -96,6 +103,13 @@ export const translations = {
 			rename: "Rename",
 			delete: "Delete",
 		},
+		Services: {
+			findtext: "Search for specialists",
+			chancetext: "A Chance to win",
+			calctext: "Calculator",
+			doctext: "Create a document",
+			consultext: "Consultation"
+		}
 	},
 	kk: {
 		profilefield: {
@@ -145,6 +159,13 @@ export const translations = {
 			rename: "Атын Өзгерту",
 			delete: "Жою",
 		},
+		Services: {
+			findtext: "Мамандарды іздеу",
+			chancetext: "Жеңіс мүмкіндігі",
+			calctext: "Калькулятор",
+			doctext: "Құжат жасау",
+			consultext: "кеңес беру"
+		}
 	},
 };
 
