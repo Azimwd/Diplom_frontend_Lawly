@@ -164,7 +164,7 @@ export const translations = {
 			chancetext: "Жеңіс мүмкіндігі",
 			calctext: "Калькулятор",
 			doctext: "Құжат жасау",
-			consultext: "кеңес беру"
+			consultext: "Кеңес беру"
 		}
 	},
 };
