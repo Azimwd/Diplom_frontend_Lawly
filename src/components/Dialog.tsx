@@ -256,7 +256,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 									)}
 
 								{msg.type === "document_generated" && (
-									<div className="mt-3 p-4  bg-[#d8d8d8] dark:bg-[#212121] rounded-lg border border-[#696969] dark:border-[#3a3a3a] flex flex-col gap-3 w-full">
+									<div className="mt-3 p-4  bg-[#d8d8d8] dark:bg-[#212121] rounded-lg border border-[#a3a3a3] dark:border-[#3a3a3a] flex flex-col gap-3 w-full">
 										<div className="flex flex-col gap-1">
 											<span className="text-[12px] text-[#141414] dark:text-gray-400 uppercase tracking-wider">
 												{t.docdone}
