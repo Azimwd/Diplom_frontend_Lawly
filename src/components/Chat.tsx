@@ -364,7 +364,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 							placeholder={t.placeholder}
 							className="custom-scrollArea 
 							border-none rounded-[20px] outline-none 
-							placeholder:text-[#f0f0f0] text-white text-[15px] 
+							placeholder:text-[#2f2f2f] dark:placeholder:text-[#f0f0f0] text-black dark:text-white text-[15px] 
 							resize-none overflow-y-auto 
 							max-h-[250px] w-full 
 							pr-[15px] mt-[20px] bg-transparent  "
@@ -376,7 +376,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 							<button
 								onClick={() => setVisibleServices((prev) => !prev)}
 								type="button"
-								className="h-[30px] w-[30px] flex justify-center items-center rounded-[7px] bg-[#f0f0f0] cursor-pointer hover:bg-[#c0c0c0] transition-colors"
+								className="h-[30px] w-[30px] flex justify-center items-center rounded-[7px] bg-[#000] hover:bg-[#222] dark:bg-[#f0f0f0] cursor-pointer dark:hover:bg-[#c0c0c0] transition-colors"
 							>
 								<Plus color="#000000" strokeWidth={1.5} className="w-[18px] h-[18px]" />
 							</button>
