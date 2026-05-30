@@ -261,7 +261,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 											<span className="text-[12px] text-[#141414] dark:text-gray-400 uppercase tracking-wider">
 												{t.docdone}
 											</span>
-											<h3 className="text-[18px] font-bold text-white">
+											<h3 className="text-[18px] font-bold text-[#171717] dark:text-white">
 												{msg.documentTitle || "Документ"}
 											</h3>
 										</div>
