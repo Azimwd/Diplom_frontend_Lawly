@@ -235,7 +235,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 															{msg.winRate}%
 														</span>
 													</div>
-													<div className="w-full bg-[#e2f3ff] dark:bg-[#2A2A2A] rounded-full h-2.5">
+													<div className="w-full bg-[#b8ddf8] dark:bg-[#2A2A2A] rounded-full h-2.5">
 														<div
 															className="bg-[#1E4FE0] h-2.5 rounded-full transition-all duration-1000"
 															style={{ width: `${msg.winRate}%` }}
@@ -252,7 +252,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 															{msg.lossRate}%
 														</span>
 													</div>
-													<div className="w-full bg-[#ffb1b1] dark:bg-[#2A2A2A] rounded-full h-2.5">
+													<div className="w-full bg-[#ffcece] dark:bg-[#2A2A2A] rounded-full h-2.5">
 														<div
 															className="bg-[#c13636] dark:bg-[#8c2828] h-2.5 rounded-full transition-all duration-1000"
 															style={{ width: `${msg.lossRate}%` }}
