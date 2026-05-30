@@ -415,7 +415,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 									actions[mode]();
 								}}
 								className={`flex justify-center items-center h-[30px] ml-auto w-[80px] rounded-[7px] cursor-pointer gap-1 transition-colors
-								${isAiLoading ? "bg-red-500 hover:bg-red-700 text-white" : "bg-[#f0f0f0] hover:bg-[#dbdbdb] text-black"}`}
+								${isAiLoading ? "bg-red-500 hover:bg-red-700 text-white" : "bg-[#242424] hover:bg-[#242424] dark:bg-[#f0f0f0] dark:hover:bg-[#dbdbdb] dark:text-black text-white"}`}
 							>
 								{isAiLoading ? (
 									<>
