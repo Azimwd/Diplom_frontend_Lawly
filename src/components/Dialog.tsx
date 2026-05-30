@@ -3,6 +3,8 @@ import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import "../styles/DocFrom.css";
 import LawyerSlider from "./LawyerSlider";
+import { translations, type Language } from "../utils/translations";
+import { useUser } from "../context/UserContext";
 
 type Message = {
 	role: "user" | "ai";
@@ -57,6 +59,10 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 
 	const [formData, setFormData] = useState<Record<string, string>>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	const { profile } = useUser();
+	const lang = (profile?.language as Language) || "ru";
+	const t = translations[lang].Dialog;
 
 	const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
 		if (containerRef.current) {
@@ -136,7 +142,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 								}`}
 							>
 								{msg.text === "Загрузка..." ? (
-									<span className="animate-pulse text-[#a8a8a8]">Загрузка...</span>
+									<span className="animate-pulse text-[#a8a8a8]">{t.loading}</span>
 								) : msg.text ? (
 									<ReactMarkdown
 										remarkPlugins={[remarkBreaks]}
@@ -149,7 +155,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 											: msg.text.trim()}
 									</ReactMarkdown>
 								) : isTyping && msg.role === "ai" ? (
-									<span className="animate-pulse text-[#a8a8a8]">Загрузка...</span>
+									<span className="animate-pulse text-[#a8a8a8]">{t.loading}</span>
 								) : null}
 
 								{msg.type === "documents_list" && msg.documents && (
@@ -171,9 +177,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 										<h3 className="text-[16px] font-semibold">{msg.documentTitle}</h3>
 
 										{isSubmitting ? (
-											<div className="text-gray-400 animate-pulse">
-												Ваш документ генерируется...
-											</div>
+											<div className="text-gray-400 animate-pulse">{t.docload}</div>
 										) : (
 											<form className="flex flex-col gap-2">
 												{msg.fields.map((field, i) => (
@@ -201,7 +205,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 													}}
 													className="mt-2 bg-[#1E4FE0] hover:bg-[#3c6df0] p-2 rounded-md cursor-pointer"
 												>
-													Сгенерировать документ
+													{t.genbutton}
 												</button>
 											</form>
 										)}
@@ -222,7 +226,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 											<div className="flex flex-col gap-4">
 												<div className="w-full">
 													<div className="flex justify-between text-sm mb-1">
-														<span className="text-[#3966ed]">Благоприятный исход</span>
+														<span className="text-[#3966ed]">{t.wc}</span>
 														<span className="text-white font-bold">{msg.winRate}%</span>
 													</div>
 													<div className="w-full bg-[#2A2A2A] rounded-full h-2.5">
@@ -235,7 +239,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 
 												<div className="w-full">
 													<div className="flex justify-between text-sm mb-1">
-														<span className="text-[#f87171]">Неблагоприятный исход</span>
+														<span className="text-[#f87171]">{t.lc}</span>
 														<span className="text-white font-bold">{msg.lossRate}%</span>
 													</div>
 													<div className="w-full bg-[#2A2A2A] rounded-full h-2.5">
@@ -253,7 +257,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 									<div className="mt-3 p-4 bg-[#212121] rounded-lg border border-[#3a3a3a] flex flex-col gap-3 w-full">
 										<div className="flex flex-col gap-1">
 											<span className="text-[12px] text-gray-400 uppercase tracking-wider">
-												Готовый документ
+												{t.docdone}
 											</span>
 											<h3 className="text-[18px] font-bold text-white">
 												{msg.documentTitle || "Документ"}
@@ -267,7 +271,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 											}
 											className="flex items-center justify-center bg-[#1E4FE0] hover:bg-[#3c6df0] text-white py-2 px-4 rounded-md transition-colors font-medium cursor-pointer"
 										>
-											Скачать документ
+											{t.dowdoc}
 										</button>
 									</div>
 								)}

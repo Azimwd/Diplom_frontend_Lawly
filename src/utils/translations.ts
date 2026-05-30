@@ -53,6 +53,15 @@ export const translations = {
 			calctext: "Калькулятор",
 			doctext: "Создать документ",
 			consultext: "Консультация"
+		},
+		Dialog: {
+			loading: "Загрузка...",
+			docload: "Ваш документ генерируется...",
+			genbutton: "Сгенерировать документ",
+			docdone: "Готовый документ",
+			dowdoc: "Скачать документ",
+			wc: "Благоприятный исход",
+			lc: "Неблагоприятный исход",
 		}
 	},
 	en: {
@@ -109,6 +118,15 @@ export const translations = {
 			calctext: "Calculator",
 			doctext: "Create a document",
 			consultext: "Consultation"
+		},
+		Dialog: {
+			loading: "Loading...",
+			docload: "Your document is being generated...",
+			genbutton: "Generate a document",
+			docdone: "The finished document",
+			dowdoc: "Download the document",
+			wc: "A favorable outcome",
+			lc: "An unfavorable outcome",
 		}
 	},
 	kk: {
@@ -165,6 +183,15 @@ export const translations = {
 			calctext: "Калькулятор",
 			doctext: "Құжат жасау",
 			consultext: "Кеңес беру"
+		},
+		Dialog: {
+			loading: "Жүктелуде...",
+			docload: "Сіздің құжатыңыз жасалуда...",
+			genbutton: "Құжатты жасау",
+			docdone: "Дайын құжат",
+			dowdoc: "Құжатты жүктеу",
+			wc: "Қолайлы нәтиже",
+			lc: "Қолайсыз нәтиже",
 		}
 	},
 };
