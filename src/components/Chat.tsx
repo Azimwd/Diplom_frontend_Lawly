@@ -378,7 +378,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 								type="button"
 								className="h-[30px] w-[30px] flex justify-center items-center rounded-[7px] bg-[#242424] hover:bg-[#454545] dark:bg-[#f0f0f0] cursor-pointer dark:hover:bg-[#c0c0c0] transition-colors"
 							>
-								<Plus color="#000000" strokeWidth={1.5} className="w-[18px] h-[18px]" />
+								<Plus strokeWidth={1.5} className="w-[18px] h-[18px] text-white dark:text-black" />
 							</button>
 
 							{servicePlaceholder && (
