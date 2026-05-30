@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* ВОТ ЭТА СТРОКА СКАЖЕТ ТЕЙЛВИНДУ ИСКАТЬ КЛАСС .dark ВМЕСТО СИСТЕМНЫХ НАСТРОЕК OS */
+@custom-variant dark (&:is(.dark *));
+
 @layer base {
   body {
     font-family: "Inter", sans-serif;
