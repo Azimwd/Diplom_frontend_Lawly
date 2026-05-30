@@ -1,6 +1,10 @@
 // tailwind.config.js
 module.exports = {
 	darkMode: 'class',
+	content: [
+		"./index.html",
+		"./src/**/*.{js,ts,jsx,tsx}",
+	],
 	theme: {
 		boxShadow: {
 			"custom-right": "8px 0 16px 0 rgba(26,35,126,0.2)",
