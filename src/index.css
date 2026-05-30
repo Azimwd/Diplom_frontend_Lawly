@@ -1,15 +1,11 @@
 @import "tailwindcss";
 
-body {
-	font-family: "Inter", sans-serif;
-	background-color: #001A41;
+@layer base {
+  body {
+    font-family: "Inter", sans-serif;
+    @apply bg-white dark:bg-[#001A41] text-gray-900 dark:text-white transition-colors duration-300;
+  }
 }
-
-html { 
-	background-color: white;
- }
-
-
 
 .label-anim {
 	@apply text-[16px] transition-[color,transform,top,left] duration-100 ease-in-out;
@@ -30,7 +26,7 @@ input[type="password"]:not(:placeholder-shown) ~ .label-anim {
 .skeleton-anim {
 	position: relative;
 	overflow: hidden;
-	background-color: #2a2a2a;
+	@apply bg-gray-200 dark:bg-[#2a2a2a];
 }
 
 .skeleton-anim::after {
@@ -43,7 +39,7 @@ input[type="password"]:not(:placeholder-shown) ~ .label-anim {
 	background: linear-gradient(
 		90deg,
 		rgba(255, 255, 255, 0) 0%,
-		rgba(255, 255, 255, 0.08) 50%,
+		rgba(255, 255, 255, 0.4) 50%, 
 		rgba(255, 255, 255, 0) 100%
 	);
 	animation: shimmer 1.5s infinite;
@@ -58,23 +54,22 @@ input[type="password"]:not(:placeholder-shown) ~ .label-anim {
 	}
 }
 
-
 html.lenis, html.lenis body {
 	height: auto;
-  }
+}
   
-  .lenis.lenis-smooth {
+.lenis.lenis-smooth {
 	scroll-behavior: auto !important;
-  }
+}
   
-  .lenis.lenis-smooth [data-lenis-prevent] {
+.lenis.lenis-smooth [data-lenis-prevent] {
 	overscroll-behavior: contain;
-  }
+}
   
-  .lenis.lenis-stopped {
+.lenis.lenis-stopped {
 	overflow: hidden;
-  }
+}
   
-  .lenis.lenis-scrolling iframe {
+.lenis.lenis-scrolling iframe {
 	pointer-events: none;
-  }
+}
