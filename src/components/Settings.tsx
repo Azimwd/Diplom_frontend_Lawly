@@ -123,7 +123,7 @@ export default function Settings() {
 	return (
 		<div className="flex items-center justify-center">
 			<div ref={containerRef} className="relative max-w-[260px] w-full">
-				<div className="flex flex-col relative bg-[#1f1f1f] text-white rounded-[12px] border border-[#444] font-sans">
+				<div className="flex flex-col relative bg-[#e6f1fc] dark:bg-[#1f1f1f] text-white rounded-[12px] border border-[#444] font-sans">
 					{/* Кнопка Профиля */}
 					<button
 						onClick={() => setOpen((prev) => !prev)}
@@ -167,7 +167,7 @@ export default function Settings() {
 								/>
 							</div>
 							{themeOpen && (
-								<div className="absolute top-0 left-full ml-2 w-[160px] bg-[#1f1f1f] border border-[#444] rounded-xl shadow-2xl z-[60] py-1">
+								<div className="absolute top-0 left-full ml-2 w-[160px] bg-[#e6f1fc] dark:bg-[#1f1f1f] border dark:border-[#444] rounded-xl shadow-2xl z-[60] py-1">
 									{THEMES.map((t) => (
 										<button
 											key={t.code}
