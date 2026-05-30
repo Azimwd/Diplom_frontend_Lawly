@@ -9,11 +9,30 @@ import SubscriptionFailed from "./pages/SubscriptionFailed";
 
 import ChatWindow from "./test/ChatWindow";
 import "./App.css";
-import { UserProvider } from "./context/UserContext";
+import { UserProvider, useUser } from "./context/UserContext";
+import { useEffect } from "react";
+
+function ThemeManager() {
+	const { profile } = useUser();
+
+	useEffect(() => {
+		const theme = profile?.theme || "dark";
+
+		if (theme === "dark") {
+			document.documentElement.classList.add("dark");
+		} else {
+			document.documentElement.classList.remove("dark");
+		}
+	}, [profile?.theme]);
+
+	return null;
+}
 
 function App() {
 	return (
 		<UserProvider>
+			<ThemeManager />
+
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Home />} />

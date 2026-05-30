@@ -172,7 +172,12 @@ export default function Settings() {
 										<button
 											key={t.code}
 											onClick={() => handleThemeChange(t)}
-											className={`w-full text-left px-3 py-2 text-[14px] hover:bg-[#424242] flex items-center justify-between ${currentTheme.code === t.code ? "text-white bg-[#333]" : "text-gray-300"}`}
+											className={`w-full text-left px-3 py-2 text-[14px] hover:bg-gray-100 dark:hover:bg-[#424242] flex items-center justify-between 
+					${
+						currentTheme.code === t.code
+							? "text-black bg-gray-200 dark:text-white dark:bg-[#333]"
+							: "text-gray-600 dark:text-gray-300"
+					}`}
 										>
 											{t.label}
 											{currentTheme.code === t.code && (
