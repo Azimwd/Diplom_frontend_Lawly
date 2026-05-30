@@ -248,9 +248,11 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 														<span className="text-[#fc2727] dark:text-[#f87171]">
 															{t.lc}
 														</span>
-														<span className="text-white font-bold">{msg.lossRate}%</span>
+														<span className="text-[#000] dark:text-white font-bold">
+															{msg.lossRate}%
+														</span>
 													</div>
-													<div className="w-full bg-[#2A2A2A] rounded-full h-2.5">
+													<div className="w-full bg-[#ffb1b1] dark:bg-[#2A2A2A] rounded-full h-2.5">
 														<div
 															className="bg-[#c13636] dark:bg-[#8c2828] h-2.5 rounded-full transition-all duration-1000"
 															style={{ width: `${msg.lossRate}%` }}
