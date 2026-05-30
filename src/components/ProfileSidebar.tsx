@@ -60,8 +60,8 @@ function ProfileSidebar({ isOpen }: ProfileProps) {
 					setIsPopoverOpen((prev: any) => !prev);
 				}}
 				className={`
-					flex items-center hover:bg-[#424242]
-					rounded-[6px]  cursor-pointer px-2 py-1
+					flex items-center hover:bg-[#98caff] dark:hover:bg-[#424242]
+					rounded-[6px] cursor-pointer px-2 py-1
 					transition-all duration-200 justify-start
 					${isOpen ? "w-full" : "w-[40px] py-2"}
 				`}
@@ -76,7 +76,9 @@ function ProfileSidebar({ isOpen }: ProfileProps) {
 							className="h-full w-full object-cover flex-shrink-0"
 						/>
 					) : initials ? (
-						<span className="font-medium text-white text-[10px] rounded-full select-none">{initials}</span>
+						<span className="font-medium text-black dark:text-white text-[10px] rounded-full select-none">
+							{initials}
+						</span>
 					) : (
 						<UserIcon size={20} className="text-gray-400" />
 					)}
@@ -84,7 +86,7 @@ function ProfileSidebar({ isOpen }: ProfileProps) {
 
 				{isOpen && (
 					<div className="flex items-start flex-col ml-3 overflow-hidden">
-						<div className="text-[12px]  truncate">
+						<div className="text-[12px] truncate text-black dark:text-white">
 							{profile?.first_name || profile?.last_name
 								? `${profile.first_name || ""} ${profile.last_name || ""}`.trim()
 								: `${t.notSet}`}
