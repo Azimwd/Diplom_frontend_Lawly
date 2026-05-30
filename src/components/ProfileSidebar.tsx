@@ -48,7 +48,7 @@ function ProfileSidebar({ isOpen }: ProfileProps) {
 		<section
 			className={`
 				relative mt-auto h-[60px] flex items-center justify-start
-				p-2 border-[#333] bg-[#1A1A1A] text-white
+				p-2 border-[#333] bg-white dark:bg-[#1A1A1A] text-white
 				transition-all duration-200
 				${isOpen ? "w-full max-w-[340px]" : "w-[59px]"}
 			`}

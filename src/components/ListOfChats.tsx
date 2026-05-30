@@ -79,7 +79,7 @@ export default function ListOfChats({ isOpen, refreshChats, onChatSelect }: Side
 					navigate("/chat");
 				}}
 				className={clsx(
-					"flex items-center gap-3 p-1 rounded-md hover:bg-[#525252] transition-all duration-300 cursor-pointer h-[36px] w-[36px] px-1.5",
+					"flex items-center gap-3 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-[#525252] transition-all duration-300 cursor-pointer h-[36px] w-[36px] px-1.5",
 					isOpen ? "w-full max-w-[305px] justify-start" : "w-[36px]",
 				)}
 			>
@@ -125,7 +125,7 @@ export default function ListOfChats({ isOpen, refreshChats, onChatSelect }: Side
 								onChatSelect?.();
 							}}
 							className={clsx(
-								"group relative flex items-center justify-between py-2 px-2 rounded-md  hover:bg-[#424242] cursor-pointer text-[13px] w-full",
+								"group relative flex items-center justify-between py-2 px-2 rounded-md  hover:bg-gray-100 dark:hover:bg-[#424242] cursor-pointer text-[13px] w-full",
 								isOpen && "hover:pr-9",
 							)}
 						>
