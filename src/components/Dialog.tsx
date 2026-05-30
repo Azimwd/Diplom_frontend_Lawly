@@ -175,7 +175,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 								)}
 
 								{msg.type === "document_fields" && msg.fields && (
-									<div className="mt-3 flex flex-col gap-3">
+									<div className="mt-3 flex flex-col gap-3 max-h-[300px] overflow-y-auto">
 										<h3 className="text-[16px] font-semibold">{msg.documentTitle}</h3>
 
 										{isSubmitting ? (
