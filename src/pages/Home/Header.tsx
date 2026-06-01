@@ -33,7 +33,7 @@ export default function Header() {
 							<li key={link.label} className="relative group cursor-pointer">
 								<a
 									href={link.href}
-									className="text-sm font-bold uppercase tracking-wider text-[#1A237E]"
+									className="text-sm font-bold uppercase tracking-wider text-[#121212]"
 								>
 									{link.label}
 								</a>
