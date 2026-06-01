@@ -110,7 +110,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 		return () => document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
 
-	// === ФУНКЦИЯ ЗАГРУЗКИ ИСТОРИИ ===
 	const loadHistory = async (pageNum: number) => {
 		if (!id) {
 			setMessages([]);
@@ -128,7 +127,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 			setLoadingMessages(true);
 		} else {
 			setIsLoadingMore(true);
-			// Запоминаем высоту скролла до добавления старых сообщений
 			if (scrollContainerRef.current) {
 				previousScrollHeightRef.current = scrollContainerRef.current.scrollHeight;
 			}
@@ -137,15 +135,11 @@ export default function Chat({ onChatCreated }: ChatProps) {
 		const startTime = Date.now();
 
 		try {
-			// Передаем pageNum в API.
-			// Убедитесь что в api/chats.ts `getChatMessages` принимает этот параметр
 			const response = (await getChatMessages(id, pageNum)) as any;
 
-			// Безопасное извлечение данных на основе вашей структуры JSON
 			const apiData = response.data || response;
 			const paginationData = apiData.data || apiData;
 
-			// Достаем массив сообщений и флаг следующей страницы
 			const session = paginationData?.results?.data?.messages || paginationData?.messages || [];
 			setHasMore(paginationData?.has_next || false);
 
@@ -175,9 +169,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 								lawyers: parsed.lawyers,
 							};
 						}
-					} catch (error: unknown) {
-						// Пропускаем ошибку парсинга, оставляем как обычный текст
-					}
+					} catch (error: unknown) {}
 
 					return { role: "ai", text: msg.content };
 				})

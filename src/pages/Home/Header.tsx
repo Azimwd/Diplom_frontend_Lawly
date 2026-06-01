@@ -22,7 +22,7 @@ export default function Header() {
 				{/* Logo & Desktop Nav */}
 				<div className="flex items-center gap-4 lg:gap-6 xl:gap-10">
 					<NavLink to="/" className="text-2xl">
-						<span className="group font-bold font-['Inter']">
+						<span className="group font-bold font-['Inter'] text-[#1A237E]">
 							<b className="group-hover:text-[#1A237E] transition-colors duration-300">LAW</b>
 							<b className="group-hover:text-[#BFA14A] transition-colors duration-300">LY</b>
 						</span>
@@ -31,7 +31,10 @@ export default function Header() {
 					<ul className="hidden lg:flex items-center gap-6">
 						{LINKS.map((link) => (
 							<li key={link.label} className="relative group cursor-pointer">
-								<a href={link.href} className="text-sm font-bold uppercase tracking-wider">
+								<a
+									href={link.href}
+									className="text-sm font-bold uppercase tracking-wider text-[#1A237E]"
+								>
 									{link.label}
 								</a>
 								<span className="absolute left-0 -bottom-1 w-0 h-[3px] rounded-full bg-[#BFA14A] transition-all duration-300 group-hover:w-full"></span>
