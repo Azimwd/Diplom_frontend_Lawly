@@ -1,10 +1,10 @@
 // Chat.tsx
 import { useUser } from "../context/UserContext";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import Dialog from "./Dialog";
 import "../styles/scrollArea.css";
 import "../styles/dialogScroll.css";
-import { ArrowUp, Plus, SquareStop } from "lucide-react";
+import { ArrowUp, Plus, SquareStop, Loader2 } from "lucide-react";
 import { generateDocument, getChatMessages } from "../api/chats";
 import { useParams, useNavigate } from "react-router-dom";
 import ServiceSelector from "./ServiceSelector";
@@ -79,6 +79,14 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	const [isStopped, setIsStopped] = useState(false);
 	const [servicePlaceholder, setServicePlaceholder] = useState("");
 
+	// === СОСТОЯНИЯ ПАГИНАЦИИ ===
+	const [page, setPage] = useState(1);
+	const [hasMore, setHasMore] = useState(false);
+	const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+	const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+	const previousScrollHeightRef = useRef<number>(0);
+
 	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 	const servicesRef = useRef<HTMLDivElement | null>(null);
 	const eventSourceRef = useRef<EventSource | null>(null);
@@ -102,82 +110,136 @@ export default function Chat({ onChatCreated }: ChatProps) {
 		return () => document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
 
-	useEffect(() => {
-		const loadHistory = async () => {
-			if (!id) {
-				setMessages([]);
-				setIsMoved(false);
-				return;
-			}
+	// === ФУНКЦИЯ ЗАГРУЗКИ ИСТОРИИ ===
+	const loadHistory = async (pageNum: number) => {
+		if (!id) {
+			setMessages([]);
+			setIsMoved(false);
+			return;
+		}
 
-			if (justCreatedChatRef.current) {
-				justCreatedChatRef.current = false;
-				return;
-			}
+		if (justCreatedChatRef.current && pageNum === 1) {
+			justCreatedChatRef.current = false;
+			return;
+		}
 
-			setMessages((prev) => [
-				...prev,
-				{
-					role: "ai",
-					text: t.loadingDoc,
-					type: "loading",
-				},
-			]);
+		if (pageNum === 1) {
+			setMessages([{ role: "ai", text: t.loadingDoc, type: "loading" }]);
 			setLoadingMessages(true);
-			const startTime = Date.now();
-
-			try {
-				const session = (await getChatMessages(id)) as ChatHistoryMessage[];
-
-				const formattedMessages = session
-					.map((msg: ChatHistoryMessage): Message | null => {
-						if (msg.role === "user") {
-							return { role: "user", text: msg.content };
-						}
-
-						try {
-							const parsed = JSON.parse(msg.content) as ParsedAiMessage;
-
-							if (parsed?.type === "document_values") return null;
-
-							if (parsed && typeof parsed === "object" && parsed.type) {
-								return {
-									role: "ai",
-									text: parsed.answer || parsed.reply || parsed.text || "",
-									type: parsed.type,
-									documents: parsed.documents,
-									fields: parsed.fields,
-									documentTitle: parsed.document_title || parsed.documentTitle,
-									templateName: parsed.template_name || parsed.templateName,
-									winRate: parsed.win_rate,
-									lossRate: parsed.loss_rate,
-									article: parsed.article,
-									fileUrl: parsed.file_url,
-									lawyers: parsed.lawyers,
-								};
-							}
-						} catch (error: unknown) {
-							console.warn("Message content is not JSON:", error);
-						}
-
-						return { role: "ai", text: msg.content };
-					})
-					.filter((msg): msg is Message => msg !== null);
-
-				setMessages(formattedMessages.reverse());
-				setIsMoved(true);
-			} catch (error) {
-				console.error("Ошибка загрузки истории:", error);
-			} finally {
-				const elapsed = Date.now() - startTime;
-				const minSkeletonTime = 1000;
-				const delay = Math.max(minSkeletonTime - elapsed, 0);
-				setTimeout(() => setLoadingMessages(false), delay);
+		} else {
+			setIsLoadingMore(true);
+			// Запоминаем высоту скролла до добавления старых сообщений
+			if (scrollContainerRef.current) {
+				previousScrollHeightRef.current = scrollContainerRef.current.scrollHeight;
 			}
-		};
+		}
 
-		loadHistory();
+		const startTime = Date.now();
+
+		try {
+			// Передаем pageNum в API.
+			// Убедитесь что в api/chats.ts `getChatMessages` принимает этот параметр
+			const response = (await getChatMessages(id, pageNum)) as any;
+
+			// Безопасное извлечение данных на основе вашей структуры JSON
+			const apiData = response.data || response;
+			const paginationData = apiData.data || apiData;
+
+			// Достаем массив сообщений и флаг следующей страницы
+			const session = paginationData?.results?.data?.messages || paginationData?.messages || [];
+			setHasMore(paginationData?.has_next || false);
+
+			const formattedMessages = session
+				.map((msg: ChatHistoryMessage): Message | null => {
+					if (msg.role === "user") {
+						return { role: "user", text: msg.content };
+					}
+
+					try {
+						const parsed = JSON.parse(msg.content) as ParsedAiMessage;
+						if (parsed?.type === "document_values") return null;
+
+						if (parsed && typeof parsed === "object" && parsed.type) {
+							return {
+								role: "ai",
+								text: parsed.answer || parsed.reply || parsed.text || "",
+								type: parsed.type,
+								documents: parsed.documents,
+								fields: parsed.fields,
+								documentTitle: parsed.document_title || parsed.documentTitle,
+								templateName: parsed.template_name || parsed.templateName,
+								winRate: parsed.win_rate,
+								lossRate: parsed.loss_rate,
+								article: parsed.article,
+								fileUrl: parsed.file_url,
+								lawyers: parsed.lawyers,
+							};
+						}
+					} catch (error: unknown) {
+						// Пропускаем ошибку парсинга, оставляем как обычный текст
+					}
+
+					return { role: "ai", text: msg.content };
+				})
+				.filter((msg: any): msg is Message => msg !== null);
+
+			// Переворачиваем сообщения (старые выше, новые ниже)
+			const newMessages = formattedMessages.reverse();
+
+			setMessages((prev) => {
+				if (pageNum === 1) {
+					setIsMoved(true);
+					return newMessages;
+				}
+				// Добавляем старые сообщения В НАЧАЛО массива
+				return [...newMessages, ...prev];
+			});
+		} catch (error) {
+			console.error("Ошибка загрузки истории:", error);
+		} finally {
+			const elapsed = Date.now() - startTime;
+			const minSkeletonTime = 1000;
+			const delay = Math.max(minSkeletonTime - elapsed, 0);
+			setTimeout(() => {
+				if (pageNum === 1) setLoadingMessages(false);
+				setIsLoadingMore(false);
+			}, delay);
+		}
+	};
+
+	// Загружаем 1 страницу при смене чата (id)
+	useEffect(() => {
+		setPage(1);
+		setHasMore(false);
+		loadHistory(1);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id, t.loadingDoc]);
+
+	// Подгружаем историю при изменении страницы скроллом
+	useEffect(() => {
+		if (page > 1) {
+			loadHistory(page);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [page]);
+
+	// === КОРРЕКТИРОВКА СКРОЛЛА ПРИ ПАГИНАЦИИ ===
+	useLayoutEffect(() => {
+		if (scrollContainerRef.current && page > 1 && !isLoadingMore) {
+			const container = scrollContainerRef.current;
+			// Сдвигаем скролл вниз ровно на размер добавленных сверху сообщений
+			container.scrollTop = container.scrollHeight - previousScrollHeightRef.current;
+		}
+	}, [messages, isLoadingMore, page]);
+
+	// === ОБРАБОТЧИК БЕСКОНЕЧНОГО СКРОЛЛА ===
+	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+		const container = e.currentTarget;
+		// Если дошли до верха и есть еще страницы -> увеличиваем page
+		if (container.scrollTop <= 50 && hasMore && !isLoadingMore && !loadingMessages) {
+			setPage((prev) => prev + 1);
+		}
+	};
 
 	useEffect(() => {
 		const el = textareaRef.current;
@@ -276,7 +338,19 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	return (
 		<div className="relative flex flex-col items-center h-[100dvh] w-full bg-[#f6f6f6] dark:bg-[#0D0D0D] text-[#FFFFFF] overflow-hidden">
 			<div className="flex items-center justify-center bg-[#f6f6f6] dark:bg-[#0D0D0D] text-[#FFFFFF] w-full transition-all duration-500">
-				<div className="flex-1 overflow-y-auto mt-10 pt-6 pb-[150px] dialog-scroll w-full ">
+				{/* КОНТЕЙНЕР ДЛЯ СКРОЛЛА */}
+				<div
+					ref={scrollContainerRef}
+					onScroll={handleScroll}
+					className="flex-1 overflow-y-auto mt-10 pt-6 pb-[150px] dialog-scroll w-full "
+				>
+					{/* ИНДИКАТОР ЗАГРУЗКИ СТАРЫХ СООБЩЕНИЙ */}
+					{isLoadingMore && (
+						<div className="flex justify-center items-center py-4 w-full">
+							<Loader2 className="w-6 h-6 animate-spin text-gray-500" />
+						</div>
+					)}
+
 					<Dialog
 						messages={messages}
 						loading={loadingMessages}

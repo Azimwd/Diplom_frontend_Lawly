@@ -254,18 +254,22 @@ export const postChat = async (title: string) => {
 };
 
 // Делаем запрос гет чтобы получить данные с чата айди
-export const getChatMessages = async (chatId: string) => {
+export const getChatMessages = async (chatId: string, pageNum: number = 1) => {
 	try {
-		const response = await api.get(`/chats/sessions/${chatId}/`,
+		const response = await api.get(`/chats/sessions/${chatId}/?page=${pageNum}`,
 			{
-				withCredentials: true,xsrfCookieName: "csrftoken",
+				withCredentials: true,
+				xsrfCookieName: "csrftoken",
 				xsrfHeaderName: "X-CSRFToken",
 			}
 		);
-		console.log(response.data.data.results.data.messages);
-		return response.data.data.results.data.messages;
+		
+		return response.data.data;
 	} catch (error) {
 		console.error("Ошибка при получении сообщений:", error);
-		return [];
+		return { 
+			has_next: false, 
+			results: { data: { messages: [] } } 
+		};
 	}
 };
