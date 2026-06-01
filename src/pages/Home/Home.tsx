@@ -124,10 +124,7 @@ export default function Home() {
 				<Header />
 			</header>
 
-			<section
-				id="home"
-				className="min-h-[50vh] md:min-h-screen flex flex-col items-center pt-[12vh] md:pt-[15vh] px-4 bg-gradient-to-b from-white via-gray-300 to-gray-500 overflow-hidden"
-			>
+			<section className="min-h-[50vh] md:min-h-screen flex flex-col items-center pt-[12vh] md:pt-[15vh] px-4 bg-gradient-to-b from-white via-gray-300 to-gray-500 overflow-hidden">
 				<div className="flex flex-col justify-center items-center gap-5 mb-10 md:mb-24 text-center max-w-6xl w-full text-[#121212]">
 					<h1 className="font-['Cinzel'] text-[32px] leading-tight md:text-[48px] font-bold px-2 ">
 						Your intelligent legal partner — Reliable <br className="hidden md:block" /> Guidance for every
@@ -167,7 +164,10 @@ export default function Home() {
 			</section>
 
 			{/* СЕКЦИЯ 2: Темный блок с навигацией по функциям (на всю ширину экрана) */}
-			<section className="relative z-30 bg-[#001A41] w-full flex flex-col justify-center items-center gap-4 md:gap-5 py-8 md:py-10 px-4">
+			<section
+				id="home"
+				className="relative z-30 bg-[#001A41] w-full flex flex-col justify-center items-center gap-4 md:gap-5 py-8 md:py-10 px-4"
+			>
 				{/* Десктопное меню */}
 				<div className="max-w-[980px] hidden md:flex justify-between items-center border border-[#BFA14A] px-6 py-3 rounded-[26px] gap-[14px]">
 					<div className="flex gap-[24px]">
