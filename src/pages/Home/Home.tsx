@@ -74,9 +74,24 @@ export default function Home() {
 		gsap.ticker.add(update);
 		gsap.ticker.lagSmoothing(0);
 
+		const handleAnchorClick = (e: MouseEvent) => {
+			const target = e.target as HTMLElement;
+			const anchor = target.closest('a[href^="#"]');
+			if (anchor) {
+				e.preventDefault();
+				const id = anchor.getAttribute("href");
+				if (id && id !== "#") {
+					lenis.scrollTo(id);
+				}
+			}
+		};
+
+		document.addEventListener("click", handleAnchorClick);
+
 		return () => {
 			lenis.destroy();
 			gsap.ticker.remove(update);
+			document.removeEventListener("click", handleAnchorClick);
 		};
 	}, []);
 
@@ -102,7 +117,7 @@ export default function Home() {
 	);
 
 	return (
-		<div className="relative w-full overflow-x-hidden scroll-smooth">
+		<div className="relative w-full overflow-x-hidden ">
 			{/*  */}
 
 			<header className="z-50 relative">
