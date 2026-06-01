@@ -105,13 +105,14 @@ export default function Home() {
 		<div className="relative w-full overflow-x-hidden">
 			{/*  */}
 
-			{/* Навбар */}
 			<header className="z-50 relative">
 				<Header />
 			</header>
 
-			{/* СЕКЦИЯ 1:   */}
-			<section className="min-h-[50vh] md:min-h-screen flex flex-col items-center pt-[12vh] md:pt-[15vh] px-4 bg-gradient-to-b from-white via-gray-300 to-gray-500 overflow-hidden">
+			<section
+				id="home"
+				className="min-h-[50vh] md:min-h-screen flex flex-col items-center pt-[12vh] md:pt-[15vh] px-4 bg-gradient-to-b from-white via-gray-300 to-gray-500 overflow-hidden"
+			>
 				<div className="flex flex-col justify-center items-center gap-5 mb-10 md:mb-24 text-center max-w-6xl w-full text-[#121212]">
 					<h1 className="font-['Cinzel'] text-[32px] leading-tight md:text-[48px] font-bold px-2 ">
 						Your intelligent legal partner — Reliable <br className="hidden md:block" /> Guidance for every
@@ -225,12 +226,15 @@ export default function Home() {
 			</section>
 
 			{/* СЕКЦИЯ 3: Реклама телеграм бота */}
-			<section className="relative z-30 bg-[#001A41] md:h-screen pt-10">
+			<section id="tg" className="relative z-30 bg-[#001A41] md:h-screen pt-10">
 				<TelegramAD />
 			</section>
 
 			{/* СЕКЦИЯ 4: Показываем достойнства нашего ИИ */}
-			<section className="relative z-30 bg-gradient-to-b from-[#001A41] via-[#000c1d] to-[#000000] min-h-[200vh] pt-20 ">
+			<section
+				id="dv"
+				className="relative z-30 bg-gradient-to-b from-[#001A41] via-[#000c1d] to-[#000000] min-h-[200vh] pt-20 "
+			>
 				<WhyChooseLegion />
 				<div className="flex justify-center items-center w-full">
 					<p className=" text-lg md:text-2xl lg:text-2xl text-gray-300 leading-relaxed w-[85vw] md:w-[50vw] font-light tracking-wide font-['Inter'] text-center select-none">
@@ -247,7 +251,10 @@ export default function Home() {
 			</section>
 
 			{/* СЕКЦИЯ 6:  */}
-			<section className="relative z-30 bg-gradient-to-b from-[#000000]  to-[#001A41] min-h-screen pt-20 ">
+			<section
+				id="hiw"
+				className="relative z-30 bg-gradient-to-b from-[#000000]  to-[#001A41] min-h-screen pt-20 "
+			>
 				<Howitworks />
 			</section>
 

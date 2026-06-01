@@ -2,10 +2,10 @@ import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
 const LINKS = [
-	{ href: "#", label: "Home" },
-	{ href: "#", label: "Features" },
-	{ href: "#", label: "About" },
-	{ href: "#", label: "Contacts" },
+	{ href: "#home", label: "Home" },
+	{ href: "#tg", label: "Telegram" },
+	{ href: "#dv", label: "Features" },
+	{ href: "#hiw", label: "How it works" },
 ];
 
 export default function Header() {
