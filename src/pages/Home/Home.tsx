@@ -112,7 +112,7 @@ export default function Home() {
 
 			{/* СЕКЦИЯ 1:   */}
 			<section className="min-h-[50vh] md:min-h-screen flex flex-col items-center pt-[12vh] md:pt-[15vh] px-4 bg-gradient-to-b from-white via-gray-300 to-gray-500 overflow-hidden">
-				<div className="flex flex-col justify-center items-center gap-5 mb-10 md:mb-24 text-center max-w-6xl w-full text-[#1A237E]">
+				<div className="flex flex-col justify-center items-center gap-5 mb-10 md:mb-24 text-center max-w-6xl w-full text-[#121212]">
 					<h1 className="font-['Cinzel'] text-[32px] leading-tight md:text-[48px] font-bold px-2 ">
 						Your intelligent legal partner — Reliable <br className="hidden md:block" /> Guidance for every
 						step
