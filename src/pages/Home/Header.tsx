@@ -81,7 +81,7 @@ export default function Header() {
 							key={link.label}
 							href={link.href}
 							onClick={() => setIsOpen(false)}
-							className="text-2xl font-bold border-b pb-2"
+							className="text-2xl font-bold border-b pb-2 text-[#121212]"
 						>
 							{link.label}
 						</a>

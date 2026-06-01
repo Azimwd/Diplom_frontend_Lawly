@@ -102,7 +102,7 @@ export default function Home() {
 	);
 
 	return (
-		<div className="relative w-full overflow-x-hidden">
+		<div className="relative w-full overflow-x-hidden scroll-smooth">
 			{/*  */}
 
 			<header className="z-50 relative">

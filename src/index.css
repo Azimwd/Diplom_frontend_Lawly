@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
-/* ВОТ ЭТА СТРОКА СКАЖЕТ ТЕЙЛВИНДУ ИСКАТЬ КЛАСС .dark ВМЕСТО СИСТЕМНЫХ НАСТРОЕК OS */
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
   body {
     font-family: "Inter", sans-serif;
+	scroll-behavior: smooth;
     @apply bg-white dark:bg-[#001A41] text-gray-900 dark:text-white transition-colors duration-300;
   }
 }
