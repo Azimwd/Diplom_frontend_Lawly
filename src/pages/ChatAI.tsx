@@ -5,22 +5,31 @@ import Chat from "../components/Chat";
 export default function ChatAI() {
 	const [refreshChats, setRefreshChats] = useState(0);
 	const [isFading, setIsFading] = useState(false);
-	const [isVisible, setIsVisible] = useState(true);
+
+	// Проверяем флаг прямо при создании компонента (синхронно), чтобы не было "моргания" приложения
+	const [isVisible, setIsVisible] = useState(() => {
+		return sessionStorage.getItem("showSplash") === "true";
+	});
 
 	useEffect(() => {
-		const fadeTimer = setTimeout(() => {
-			setIsFading(true);
-		}, 1500);
+		if (isVisible) {
+			// СРАЗУ удаляем флаг. Теперь при обновлении страницы (F5) анимации не будет
+			sessionStorage.removeItem("showSplash");
 
-		const removeTimer = setTimeout(() => {
-			setIsVisible(false);
-		}, 1800);
+			const fadeTimer = setTimeout(() => {
+				setIsFading(true);
+			}, 1500);
 
-		return () => {
-			clearTimeout(fadeTimer);
-			clearTimeout(removeTimer);
-		};
-	}, []);
+			const removeTimer = setTimeout(() => {
+				setIsVisible(false);
+			}, 1800);
+
+			return () => {
+				clearTimeout(fadeTimer);
+				clearTimeout(removeTimer);
+			};
+		}
+	}, [isVisible]);
 
 	return (
 		<>

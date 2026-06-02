@@ -214,6 +214,29 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 									</div>
 								)}
 
+								{msg.type === "document_generated" && (
+									<div className="mt-3 p-4  bg-[#d8d8d8] dark:bg-[#212121] rounded-lg border border-[#a3a3a3] dark:border-[#3a3a3a] flex flex-col gap-3 w-full">
+										<div className="flex flex-col gap-1">
+											<span className="text-[12px] text-[#141414] dark:text-gray-400 uppercase tracking-wider">
+												{t.docdone}
+											</span>
+											<h3 className="text-[18px] font-bold text-[#171717] dark:text-white">
+												{msg.documentTitle || "Документ"}
+											</h3>
+										</div>
+
+										<button
+											onClick={() =>
+												msg.fileUrl &&
+												handleDownload(msg.fileUrl, msg.documentTitle || "document")
+											}
+											className="flex items-center justify-center bg-[#1E4FE0] hover:bg-[#3c6df0] text-white py-2 px-4 rounded-md transition-colors font-medium cursor-pointer"
+										>
+											{t.dowdoc}
+										</button>
+									</div>
+								)}
+
 								{(msg.type === "top_lawyers_by_article" || msg.type === "top_lawyers") &&
 									msg.lawyers && <LawyerSlider lawyers={msg.lawyers} />}
 
@@ -262,29 +285,6 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 											</div>
 										</div>
 									)}
-
-								{msg.type === "document_generated" && (
-									<div className="mt-3 p-4  bg-[#d8d8d8] dark:bg-[#212121] rounded-lg border border-[#a3a3a3] dark:border-[#3a3a3a] flex flex-col gap-3 w-full">
-										<div className="flex flex-col gap-1">
-											<span className="text-[12px] text-[#141414] dark:text-gray-400 uppercase tracking-wider">
-												{t.docdone}
-											</span>
-											<h3 className="text-[18px] font-bold text-[#171717] dark:text-white">
-												{msg.documentTitle || "Документ"}
-											</h3>
-										</div>
-
-										<button
-											onClick={() =>
-												msg.fileUrl &&
-												handleDownload(msg.fileUrl, msg.documentTitle || "document")
-											}
-											className="flex items-center justify-center bg-[#1E4FE0] hover:bg-[#3c6df0] text-white py-2 px-4 rounded-md transition-colors font-medium cursor-pointer"
-										>
-											{t.dowdoc}
-										</button>
-									</div>
-								)}
 							</div>
 						);
 					})

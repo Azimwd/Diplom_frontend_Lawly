@@ -15,7 +15,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
-	const [showSuccessScreen, setShowSuccessScreen] = useState(false); // Новое состояние для экрана успеха
+	const [showSuccessScreen, setShowSuccessScreen] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -27,6 +27,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 	const { setUser, setProfile } = useUser();
 
 	const handleClick = () => {
+		sessionStorage.setItem("showSplash", "true");
 		window.location.href = "https://lawly.up.railway.app/accounts/google/login/?process=login";
 	};
 
@@ -43,23 +44,24 @@ export default function SignInForm({ path }: PropsSignIn) {
 				const profileData = await getMyProfile(data.data.id);
 				setProfile(profileData);
 
-				// Вместо мгновенного перехода показываем загрузочный экран
+				// Ставим флаг для показа черного экрана в ChatAI
+				sessionStorage.setItem("showSplash", "true");
+
 				setShowSuccessScreen(true);
 				setTimeout(() => {
 					navigate("/chat");
 				}, 2000);
 			} else {
 				setError(data?.message || "Не удалось войти");
-				setLoading(false); // Выключаем лоадинг только если ошибка
+				setLoading(false);
 			}
 		} catch (error: any) {
 			console.log(error);
 			setError(error.response?.data?.message);
-			setLoading(false); // Выключаем лоадинг только если ошибка
+			setLoading(false);
 		}
 	};
 
-	// Если вход успешен — показываем экран загрузки поверх всего или вместо формы
 	if (showSuccessScreen) {
 		return (
 			<div className="flex flex-col items-center justify-center h-[300px]">
@@ -72,7 +74,6 @@ export default function SignInForm({ path }: PropsSignIn) {
 
 	return (
 		<div className="text-center">
-			{/* Ваш текущий код формы (без изменений) */}
 			<form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
 				<h2
 					className="justify-center align-center text-[#1E1E2F] items-center flex text-[64px]/[16px] font-bold tracking-[-2px]
