@@ -141,9 +141,9 @@ export default function Home() {
 					</NavLink>
 				</div>
 
-				<div ref={featureContainerRef} className="flex flex-col items-center w-full max-w-[1250px]">
+				<div ref={featureContainerRef} className="flex flex-col items-center w-full max-w-[1250px]" id="img">
 					<div className="flex flex-col items-center relative z-10 font-['Cinzel'] w-full">
-						<h2 id="img" className="text-[18px] md:text-[48px] font-bold text-[#001A41] text-center">
+						<h2 className="text-[18px] md:text-[48px] font-bold text-[#001A41] text-center">
 							AI legal assistant features
 						</h2>
 
