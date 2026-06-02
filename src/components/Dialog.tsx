@@ -136,7 +136,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 								className={`w-fit rounded-[10px] shrink-0 px-4 py-3 min-h-[3.2vh] break-words ${
 									msg.role === "user"
 										? "self-end bg-[#1E4FE0]"
-										: "self-start bg-[#d8d8d8] dark:bg-[#212121] text-[#141414] dark:text-[#fff]"
+										: "self-start bg-[#e7e7e7] dark:bg-[#212121] text-[#141414] dark:text-[#fff]"
 								} ${
 									msg.type === "document_fields"
 										? "!max-w-[500px] w-full"
