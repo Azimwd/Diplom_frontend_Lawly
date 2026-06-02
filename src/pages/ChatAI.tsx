@@ -26,7 +26,7 @@ export default function ChatAI() {
 	if (isLoading) {
 		return (
 			<div className="flex flex-col h-[100vh] w-full items-center justify-center bg-black">
-				<h2 className="text-[#ffffff] text-[20px] font-bold tracking-[-0.5px] animate-pulse">LAWLY</h2>
+				<h2 className="text-[#ffffff] text-[50px] font-bold tracking-[-0.5px] ">LAWLY</h2>
 			</div>
 		);
 	}
