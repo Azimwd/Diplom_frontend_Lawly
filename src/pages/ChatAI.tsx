@@ -5,16 +5,20 @@ import Chat from "../components/Chat";
 export default function ChatAI() {
 	const [refreshChats, setRefreshChats] = useState(0);
 	const [isFading, setIsFading] = useState(false);
+	const [animateColors, setAnimateColors] = useState(false); // Состояние для запуска цвета
 
-	// Проверяем флаг прямо при создании компонента (синхронно), чтобы не было "моргания" приложения
 	const [isVisible, setIsVisible] = useState(() => {
 		return sessionStorage.getItem("showSplash") === "true";
 	});
 
 	useEffect(() => {
 		if (isVisible) {
-			// СРАЗУ удаляем флаг. Теперь при обновлении страницы (F5) анимации не будет
 			sessionStorage.removeItem("showSplash");
+
+			// Запускаем перекрашивание текста через 100мс после рендера экрана
+			const colorTimer = setTimeout(() => {
+				setAnimateColors(true);
+			}, 100);
 
 			const fadeTimer = setTimeout(() => {
 				setIsFading(true);
@@ -25,6 +29,7 @@ export default function ChatAI() {
 			}, 1800);
 
 			return () => {
+				clearTimeout(colorTimer);
 				clearTimeout(fadeTimer);
 				clearTimeout(removeTimer);
 			};
@@ -39,7 +44,22 @@ export default function ChatAI() {
 						isFading ? "opacity-0" : "opacity-100"
 					}`}
 				>
-					<h2 className="text-[#ffffff] text-[50px] font-bold tracking-[-0.5px]">LAWLY</h2>
+					<h2 className="font-bold font-['Inter'] text-[50px] tracking-[-0.5px]">
+						<b
+							className={`transition-colors duration-700 ease-in-out ${
+								animateColors ? "text-[#1A237E]" : "text-white"
+							}`}
+						>
+							LAW
+						</b>
+						<b
+							className={`transition-colors duration-700 ease-in-out delay-300 ${
+								animateColors ? "text-[#BFA14A]" : "text-white"
+							}`}
+						>
+							LY
+						</b>
+					</h2>
 				</div>
 			)}
 
