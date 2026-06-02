@@ -154,6 +154,13 @@ export default function Chat({ onChatCreated }: ChatProps) {
 						if (parsed?.type === "document_values") return null;
 
 						if (parsed && typeof parsed === "object" && parsed.type) {
+							const baseUrl = "https://etha-hypercatalectic-rueben.ngrok-free.dev";
+							let fullFileUrl = parsed.file_url;
+
+							if (fullFileUrl && !fullFileUrl.startsWith("http")) {
+								fullFileUrl = baseUrl + fullFileUrl;
+							}
+
 							return {
 								role: "ai",
 								text: parsed.answer || parsed.reply || parsed.text || "",
@@ -165,7 +172,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 								winRate: parsed.win_rate,
 								lossRate: parsed.loss_rate,
 								article: parsed.article,
-								fileUrl: parsed.file_url,
+								fileUrl: fullFileUrl,
 								lawyers: parsed.lawyers,
 							};
 						}
@@ -175,7 +182,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 				})
 				.filter((msg: any): msg is Message => msg !== null);
 
-			// Переворачиваем сообщения (старые выше, новые ниже)
 			const newMessages = formattedMessages.reverse();
 
 			setMessages((prev) => {
@@ -183,7 +189,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 					setIsMoved(true);
 					return newMessages;
 				}
-				// Добавляем старые сообщения В НАЧАЛО массива
 				return [...newMessages, ...prev];
 			});
 		} catch (error) {
