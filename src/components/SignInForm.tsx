@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NavLink, useNavigate } from "react-router-dom";
 import { getMyProfile } from "../api/chat";
 import { loginUser } from "../api/user";
@@ -6,7 +5,6 @@ import { useUser } from "../context/UserContext";
 import googleicon from "../assets/search.svg";
 import AuthInput from "../ui/AuthInput";
 import React, { useState } from "react";
-// global statement для доступа к страницам юзеру если он прежде был залогинен
 
 interface PropsSignIn {
 	path: string;
@@ -17,6 +15,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
+	const [showSuccessScreen, setShowSuccessScreen] = useState(false); // Новое состояние для экрана успеха
 
 	const navigate = useNavigate();
 
@@ -37,32 +36,43 @@ export default function SignInForm({ path }: PropsSignIn) {
 		setLoading(true);
 
 		try {
-			const data = await loginUser({
-				email,
-				password,
-			});
-			console.log("Успешный логин:", data);
+			const data = await loginUser({ email, password });
 
 			if (data?.success) {
 				setUser(data.data);
-
 				const profileData = await getMyProfile(data.data.id);
 				setProfile(profileData);
 
-				navigate("/chat");
+				// Вместо мгновенного перехода показываем загрузочный экран
+				setShowSuccessScreen(true);
+				setTimeout(() => {
+					navigate("/chat");
+				}, 2000);
 			} else {
 				setError(data?.message || "Не удалось войти");
+				setLoading(false); // Выключаем лоадинг только если ошибка
 			}
 		} catch (error: any) {
 			console.log(error);
 			setError(error.response?.data?.message);
-		} finally {
-			setLoading(false);
+			setLoading(false); // Выключаем лоадинг только если ошибка
 		}
 	};
 
+	// Если вход успешен — показываем экран загрузки поверх всего или вместо формы
+	if (showSuccessScreen) {
+		return (
+			<div className="flex flex-col items-center justify-center h-[300px]">
+				<div className="w-14 h-14 border-4 border-gray-200 border-t-[#1E4FE0] rounded-full animate-spin mb-4"></div>
+				<h2 className="text-[#1E1E2F] text-[24px] font-bold">Welcome back!</h2>
+				<p className="text-[#666666] mt-2">Preparing your chats...</p>
+			</div>
+		);
+	}
+
 	return (
-		<div className="text-center ">
+		<div className="text-center">
+			{/* Ваш текущий код формы (без изменений) */}
 			<form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
 				<h2
 					className="justify-center align-center text-[#1E1E2F] items-center flex text-[64px]/[16px] font-bold tracking-[-2px]
@@ -82,9 +92,9 @@ export default function SignInForm({ path }: PropsSignIn) {
 				<button
 					type="submit"
 					disabled={loading}
-					className="bg-[#1E4FE0] h-[52px] hover:cursor-pointer rounded-[3px] mt-[-7px] hover:bg-[#1f43ad] text-[16px] font-bold"
+					className="bg-[#1E4FE0] h-[52px] hover:cursor-pointer rounded-[3px] mt-[-7px] hover:bg-[#1f43ad] text-[16px] font-bold text-white transition-all disabled:opacity-50"
 				>
-					{loading ? "Loading..." : "Sign In"}
+					{loading ? "Signing in..." : "Sign In"}
 				</button>
 				<div className="text-[#666666] text-[14px] items-center flex justify-center mt-[-7px]">
 					Don`t have an account? &nbsp;
@@ -104,7 +114,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 					type="button"
 					onClick={handleClick}
 				>
-					<img src={googleicon} className="w-[30px] h-[30px]" />
+					<img src={googleicon} className="w-[30px] h-[30px]" alt="Google" />
 					Sign In with Google
 				</button>
 			</div>
