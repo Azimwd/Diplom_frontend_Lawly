@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
 const LINKS = [
-	{ href: "#home", label: "Home" },
+	{ href: "#img", label: "Home" },
 	{ href: "#tg", label: "Telegram" },
 	{ href: "#dv", label: "Features" },
 	{ href: "#hiw", label: "How it works" },

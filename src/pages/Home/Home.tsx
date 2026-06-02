@@ -153,6 +153,7 @@ export default function Home() {
                             bg-gradient-to-b from-blue-400/10 to-transparent bg-blue-600/20 backdrop-blur-[50px] border border-white/[0.12]"
 						>
 							<img
+								id="img"
 								src={activeImage}
 								alt={active}
 								className="max-w-[2000px] min-h-[300px] md:min-h-[575px] w-full h-full  rounded-t-[10px] object-cover shadow-2xl transition-opacity duration-300"
@@ -164,10 +165,7 @@ export default function Home() {
 			</section>
 
 			{/* СЕКЦИЯ 2: Темный блок с навигацией по функциям (на всю ширину экрана) */}
-			<section
-				id="home"
-				className="relative z-30 bg-[#001A41] w-full flex flex-col justify-center items-center gap-4 md:gap-5 py-8 md:py-10 px-4"
-			>
+			<section className="relative z-30 bg-[#001A41] w-full flex flex-col justify-center items-center gap-4 md:gap-5 py-8 md:py-10 px-4">
 				{/* Десктопное меню */}
 				<div className="max-w-[980px] hidden md:flex justify-between items-center border border-[#BFA14A] px-6 py-3 rounded-[26px] gap-[14px]">
 					<div className="flex gap-[24px]">
