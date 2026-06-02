@@ -1,3 +1,4 @@
+// Dialog.tsx
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
@@ -84,6 +85,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 	const handleDownload = (fileUrl: string, fileName: string) => {
 		const link = document.createElement("a");
 		link.href = fileUrl;
+		link.target = "_blank";
 		link.download = fileName.endsWith(".docx") ? fileName : `${fileName}.docx`;
 
 		document.body.appendChild(link);

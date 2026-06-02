@@ -100,6 +100,8 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	const lang = (profile?.language as Language) || "ru";
 	const t = translations[lang].chat;
 
+	const baseUrl = "https://etha-hypercatalectic-rueben.ngrok-free.dev";
+
 	useEffect(() => {
 		const handleClickOutside = (e: MouseEvent) => {
 			if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) {
@@ -154,6 +156,13 @@ export default function Chat({ onChatCreated }: ChatProps) {
 						if (parsed?.type === "document_values") return null;
 
 						if (parsed && typeof parsed === "object" && parsed.type) {
+							// Приводим относительный путь файла к абсолютному URL
+							const absoluteFileUrl = parsed.file_url
+								? parsed.file_url.startsWith("http")
+									? parsed.file_url
+									: `${baseUrl}${parsed.file_url}`
+								: undefined;
+
 							return {
 								role: "ai",
 								text: parsed.answer || parsed.reply || parsed.text || "",
@@ -165,7 +174,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 								winRate: parsed.win_rate,
 								lossRate: parsed.loss_rate,
 								article: parsed.article,
-								fileUrl: parsed.file_url,
+								fileUrl: absoluteFileUrl,
 								lawyers: parsed.lawyers,
 							};
 						}
@@ -175,7 +184,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 				})
 				.filter((msg: any): msg is Message => msg !== null);
 
-			// Переворачиваем сообщения (старые выше, новые ниже)
 			const newMessages = formattedMessages.reverse();
 
 			setMessages((prev) => {
@@ -183,7 +191,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 					setIsMoved(true);
 					return newMessages;
 				}
-				// Добавляем старые сообщения В НАЧАЛО массива
 				return [...newMessages, ...prev];
 			});
 		} catch (error) {
@@ -219,7 +226,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	useLayoutEffect(() => {
 		if (scrollContainerRef.current && page > 1 && !isLoadingMore) {
 			const container = scrollContainerRef.current;
-			// Сдвигаем скролл вниз ровно на размер добавленных сверху сообщений
 			container.scrollTop = container.scrollHeight - previousScrollHeightRef.current;
 		}
 	}, [messages, isLoadingMore, page]);
@@ -227,7 +233,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	// === ОБРАБОТЧИК БЕСКОНЕЧНОГО СКРОЛЛА ===
 	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 		const container = e.currentTarget;
-		// Если дошли до верха и есть еще страницы -> увеличиваем page
 		if (container.scrollTop <= 50 && hasMore && !isLoadingMore && !loadingMessages) {
 			setPage((prev) => prev + 1);
 		}
@@ -330,13 +335,11 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	return (
 		<div className="relative flex flex-col items-center h-[100dvh] w-full bg-[#f6f6f6] dark:bg-[#0D0D0D] text-[#FFFFFF] overflow-hidden">
 			<div className="flex items-center justify-center bg-[#f6f6f6] dark:bg-[#0D0D0D] text-[#FFFFFF] w-full transition-all duration-500">
-				{/* КОНТЕЙНЕР ДЛЯ СКРОЛЛА */}
 				<div
 					ref={scrollContainerRef}
 					onScroll={handleScroll}
 					className="flex-1 overflow-y-auto mt-10 pt-6 pb-[150px] dialog-scroll w-full "
 				>
-					{/* ИНДИКАТОР ЗАГРУЗКИ СТАРЫХ СООБЩЕНИЙ */}
 					{isLoadingMore && (
 						<div className="flex justify-center items-center py-4 w-full">
 							<Loader2 className="w-6 h-6 animate-spin text-gray-500" />
@@ -376,7 +379,11 @@ export default function Chat({ onChatCreated }: ChatProps) {
 							try {
 								const res = await generateDocument(id, templateName, formData, userLanguage);
 								if (res?.data?.type === "document_generated") {
-									const baseUrl = "https://etha-hypercatalectic-rueben.ngrok-free.dev";
+									const fileUrlPath = res.data.file_url;
+									const absoluteFileUrl = fileUrlPath.startsWith("http")
+										? fileUrlPath
+										: `${baseUrl}${fileUrlPath}`;
+
 									setMessages((prev) => {
 										const filtered = prev.filter((m) => m.type !== "loading");
 										return [
@@ -386,7 +393,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 												text: res.data.reply,
 												type: "document_generated",
 												documentTitle: res.data.document_title || "Сгенерированный документ",
-												fileUrl: baseUrl + res.data.file_url,
+												fileUrl: absoluteFileUrl,
 											},
 										];
 									});
