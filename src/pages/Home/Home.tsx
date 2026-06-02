@@ -151,9 +151,9 @@ export default function Home() {
 							className="flex flex-col items-center justify-center px-4 pt-4 md:px-8 md:pt-8 rounded-t-[10px] w-full min-h-[250px] md:min-h-[575px]
                             shadow-[0_0_150px_rgba(99,120,241,0.35)]
                             bg-gradient-to-b from-blue-400/10 to-transparent bg-blue-600/20 backdrop-blur-[50px] border border-white/[0.12]"
+							id="img"
 						>
 							<img
-								id="img"
 								src={activeImage}
 								alt={active}
 								className="max-w-[2000px] min-h-[300px] md:min-h-[575px] w-full h-full  rounded-t-[10px] object-cover shadow-2xl transition-opacity duration-300"
