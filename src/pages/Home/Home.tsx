@@ -143,7 +143,7 @@ export default function Home() {
 
 				<div ref={featureContainerRef} className="flex flex-col items-center w-full max-w-[1250px]">
 					<div className="flex flex-col items-center relative z-10 font-['Cinzel'] w-full">
-						<h2 className="text-[18px] md:text-[48px] font-bold text-[#001A41] text-center">
+						<h2 id="img" className="text-[18px] md:text-[48px] font-bold text-[#001A41] text-center">
 							AI legal assistant features
 						</h2>
 
@@ -151,7 +151,6 @@ export default function Home() {
 							className="flex flex-col items-center justify-center px-4 pt-4 md:px-8 md:pt-8 rounded-t-[10px] w-full min-h-[250px] md:min-h-[575px]
                             shadow-[0_0_150px_rgba(99,120,241,0.35)]
                             bg-gradient-to-b from-blue-400/10 to-transparent bg-blue-600/20 backdrop-blur-[50px] border border-white/[0.12]"
-							id="img"
 						>
 							<img
 								src={activeImage}
