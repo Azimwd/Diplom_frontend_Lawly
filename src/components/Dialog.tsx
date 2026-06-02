@@ -81,28 +81,14 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 		scrollToBottom("smooth");
 	}, [messages, loading]);
 
-	const handleDownload = async (fileUrl: string, fileName: string) => {
-		try {
-			const response = await fetch(fileUrl);
-			if (!response.ok) throw new Error("Ошибка при скачивании файла");
+	const handleDownload = (fileUrl: string, fileName: string) => {
+		const link = document.createElement("a");
+		link.href = fileUrl;
+		link.download = fileName.endsWith(".docx") ? fileName : `${fileName}.docx`;
 
-			const blob = await response.blob();
-
-			const blobUrl = URL.createObjectURL(blob);
-
-			const link = document.createElement("a");
-			link.href = blobUrl;
-			link.download = fileName.endsWith(".docx") ? fileName : `${fileName}.docx`;
-
-			document.body.appendChild(link);
-			link.click();
-
-			document.body.removeChild(link);
-			URL.revokeObjectURL(blobUrl);
-		} catch (error) {
-			console.error("Ошибка скачивания файла:", error);
-			alert("Не удалось скачать файл. Возможно, он был удален с сервера.");
-		}
+		document.body.appendChild(link);
+		link.click();
+		link.remove();
 	};
 
 	return (
