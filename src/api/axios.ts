@@ -3,7 +3,6 @@ import type { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 interface RetryAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
-  _skipRedirect?: boolean;
 }
 
 const api = axios.create({
@@ -31,10 +30,6 @@ api.interceptors.response.use(
     const originalRequest = error.config as RetryAxiosRequestConfig | undefined;
 
     if (!originalRequest) {
-      return Promise.reject(error);
-    }
-
-    if (originalRequest._skipRedirect) {
       return Promise.reject(error);
     }
 

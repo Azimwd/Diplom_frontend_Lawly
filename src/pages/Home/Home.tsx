@@ -267,14 +267,6 @@ export default function Home() {
 				<Carousel />
 			</section>
 
-			{/* СЕКЦИЯ 6:  */}
-			<section
-				id="hiw"
-				className="relative z-30 bg-gradient-to-b from-[#000000]  to-[#001A41] min-h-screen pt-20 "
-			>
-				<Howitworks />
-			</section>
-
 			{/* Футер */}
 			<footer className="relative z-30  ">
 				<Footer />

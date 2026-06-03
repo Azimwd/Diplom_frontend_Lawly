@@ -49,9 +49,7 @@ const logApiError = (label: string, error: unknown) => {
 
 export const getUserInfo = async (): Promise<UserInfo | null> => {
   try {
-    const response = await api.get<UserInfoResponse>("/users/user-info/",
-      { _skipRedirect: true } as any
-    );
+    const response = await api.get<UserInfoResponse>("/users/user-info/");
     return response.data.data;
   } catch (error: unknown) {
     logApiError("Ошибка при получении данных пользователя:", error);

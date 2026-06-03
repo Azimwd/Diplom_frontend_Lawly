@@ -30,34 +30,22 @@ export default function Footer() {
 							<h1 className="text-[16px] font-bold">Explore</h1>
 							<div className="flex flex-col text-[15px] uppercase gap-2 items-center md:items-start">
 								<a
-									href="#"
+									href="#img"
 									className="border-b border-transparent hover:border-[#BFBFBF] w-fit text-[#BFBFBF] transition-all"
 								>
 									Home
 								</a>
 								<a
-									href="#"
-									className="border-b border-transparent hover:border-[#BFBFBF] w-fit text-[#BFBFBF] transition-all"
-								>
-									Features
-								</a>
-								<a
-									href="#"
+									href="#tg"
 									className="border-b border-transparent hover:border-[#BFBFBF] w-fit text-[#BFBFBF] transition-all"
 								>
 									Telegram
 								</a>
 								<a
-									href="#"
+									href="#dv"
 									className="border-b border-transparent hover:border-[#BFBFBF] w-fit text-[#BFBFBF] transition-all"
 								>
-									Why choose LAWLY
-								</a>
-								<a
-									href="#"
-									className="border-b border-transparent hover:border-[#BFBFBF] w-fit text-[#BFBFBF] transition-all"
-								>
-									How it works
+									Features
 								</a>
 							</div>
 						</div>

@@ -5,7 +5,6 @@ const LINKS = [
 	{ href: "#img", label: "Home" },
 	{ href: "#tg", label: "Telegram" },
 	{ href: "#dv", label: "Features" },
-	{ href: "#hiw", label: "How it works" },
 ];
 
 export default function Header() {
