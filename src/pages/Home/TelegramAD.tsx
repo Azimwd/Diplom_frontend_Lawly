@@ -111,7 +111,7 @@ export default function TelegramAD() {
 									<div className="p-2">
 										<p className="text-[18px] pl-[5px]">Legal Analysis & Lawyer Matching</p>
 										<h2 className="items-end text-[16px] md:text-[18px] pl-[5px] mt-[14px] text-[#D6D6D6]">
-											Create legal documents and estimate costs. Fast and structured.
+											Create legal documents and estimate costs.
 										</h2>
 									</div>
 								</div>
