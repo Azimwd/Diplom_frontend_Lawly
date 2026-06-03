@@ -19,7 +19,6 @@ export default function LawyerSlider({ lawyers }: { lawyers: any[] }) {
 
 	return (
 		<div className="mt-4 flex flex-col w-full max-w-[650px] bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-[#333] text-gray-900 dark:text-white shadow-sm overflow-hidden">
-			{/* Кнопка навигации вверх */}
 			<button
 				onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
 				disabled={currentIndex === 0}
@@ -28,7 +27,6 @@ export default function LawyerSlider({ lawyers }: { lawyers: any[] }) {
 				<ChevronUp className="w-5 h-5 text-gray-400 dark:text-gray-500" />
 			</button>
 
-			{/* Шапка слайдера */}
 			<div className="px-4 py-3 flex justify-between items-center bg-gray-50 dark:bg-[#212121] border-b border-gray-100 dark:border-transparent">
 				<span className="text-[14px] font-bold uppercase tracking-wider text-gray-700 dark:text-gray-200">
 					Топ специалистов
@@ -38,7 +36,6 @@ export default function LawyerSlider({ lawyers }: { lawyers: any[] }) {
 				</span>
 			</div>
 
-			{/* Основной контент */}
 			<div className="p-5 flex flex-col gap-4 min-h-[300px] bg-white dark:bg-[#1e1e1e]">
 				<div className="flex justify-between items-start gap-4">
 					<div>
@@ -48,9 +45,8 @@ export default function LawyerSlider({ lawyers }: { lawyers: any[] }) {
 						</p>
 					</div>
 
-					{/* Блок с рейтингом и частичными победами */}
 					<div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
-						{item.partial_wins !== undefined && item.partial_wins > 0 && (
+						{item.partial_wins && (
 							<div className="bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 px-2 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap">
 								Част. побед: {item.partial_wins}
 							</div>
@@ -64,7 +60,6 @@ export default function LawyerSlider({ lawyers }: { lawyers: any[] }) {
 					</div>
 				</div>
 
-				{/* Сетка параметров */}
 				<div className="grid grid-cols-2 gap-2">
 					<div className="bg-gray-50 dark:bg-[#252525] p-2 rounded-lg border border-gray-200 dark:border-[#333]">
 						<p className="text-[11px] text-gray-500 dark:text-gray-400 uppercase font-medium">Опыт / Дел</p>
@@ -83,22 +78,8 @@ export default function LawyerSlider({ lawyers }: { lawyers: any[] }) {
 						<p className="text-[13px] text-gray-800 dark:text-gray-200">{city || "Республика Казахстан"}</p>
 					</div>
 				</div>
-
-				{/* Информационный блок */}
-				<div className="flex flex-col gap-1 justify-start items-start">
-					<p className="text-[11px] text-gray-500 dark:text-gray-400 uppercase font-medium">Информация</p>
-					<div className="max-h-[100px] overflow-y-auto pr-2">
-						<p className="text-[14px] text-gray-600 dark:text-gray-300 leading-relaxed">
-							{description ||
-								(item.wins !== undefined
-									? `Юрист имеет ${item.wins} успешных исходов из ${item.total} рассмотренных дел по данной категории.`
-									: "Информация подготавливается...")}
-						</p>
-					</div>
-				</div>
 			</div>
 
-			{/* Кнопка навигации вниз */}
 			<button
 				onClick={() => setCurrentIndex((prev) => Math.min(lawyers.length - 1, prev + 1))}
 				disabled={currentIndex === lawyers.length - 1}
