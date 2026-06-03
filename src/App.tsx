@@ -12,16 +12,31 @@ import "./App.css";
 import { UserProvider, useUser } from "./context/UserContext";
 import { useEffect } from "react";
 
+// Мгновенная установка темы из localStorage до рендеринга React,
+// чтобы избежать "вспышки" белого или темного фона при перезагрузке страницы.
+const savedTheme = localStorage.getItem("theme") || "dark";
+if (savedTheme === "dark") {
+	document.documentElement.classList.add("dark");
+} else {
+	document.documentElement.classList.remove("dark");
+}
+
 function ThemeManager() {
 	const { profile } = useUser();
 
 	useEffect(() => {
-		const theme = profile?.theme || "dark";
+		// Приоритет: 1. Тема из профиля (сервер), 2. Тема из localStorage, 3. Значение по умолчанию "dark"
+		const theme = profile?.theme || localStorage.getItem("theme") || "dark";
 
 		if (theme === "dark") {
 			document.documentElement.classList.add("dark");
 		} else {
 			document.documentElement.classList.remove("dark");
+		}
+
+		// Если профиль загрузился и содержит тему, сохраняем её актуальное состояние в localStorage
+		if (profile?.theme) {
+			localStorage.setItem("theme", profile.theme);
 		}
 	}, [profile?.theme]);
 

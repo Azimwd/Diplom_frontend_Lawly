@@ -17,7 +17,10 @@ const LANGUAGES = [
 
 export default function Settings() {
 	const { user, loading, profile, setProfile } = useUser();
-	const langKey = (profile?.language as Language) || "ru";
+
+	// Пытаемся получить язык из профиля или из localStorage, иначе используем "ru"
+	const savedLang = localStorage.getItem("language") as Language | null;
+	const langKey = (profile?.language as Language) || savedLang || "ru";
 	const t = translations[langKey].settings;
 
 	const THEMES = [
@@ -29,14 +32,26 @@ export default function Settings() {
 	const [langOpen, setLangOpen] = useState(false);
 	const [themeOpen, setThemeOpen] = useState(false);
 
-	const currentLang = LANGUAGES.find((l) => l.code === profile?.language) || LANGUAGES[0];
-	const currentTheme = THEMES.find((th) => th.code === (profile?.theme || "dark")) || THEMES[0];
+	// Текущий язык и тема с учетом резервного копирования в localStorage
+	const savedTheme = localStorage.getItem("theme") || "dark";
+	const currentLang = LANGUAGES.find((l) => l.code === (profile?.language || langKey)) || LANGUAGES[0];
+	const currentTheme = THEMES.find((th) => th.code === (profile?.theme || savedTheme)) || THEMES[0];
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const langContainerRef = useRef<HTMLDivElement>(null);
 	const themeContainerRef = useRef<HTMLDivElement>(null);
 
 	const navigate = useNavigate();
+
+	// Синхронизируем localStorage при загрузке актуального профиля
+	useEffect(() => {
+		if (profile?.language) {
+			localStorage.setItem("language", profile.language);
+		}
+		if (profile?.theme) {
+			localStorage.setItem("theme", profile.theme);
+		}
+	}, [profile?.language, profile?.theme]);
 
 	if (loading) return null;
 
@@ -47,6 +62,7 @@ export default function Settings() {
 			const updatedData = await switchLanguage(profile.id, lang.code);
 			if (updatedData) {
 				setProfile({ ...profile, language: lang.code });
+				localStorage.setItem("language", lang.code); // Сохраняем в localStorage
 			}
 		} catch (err) {
 			console.error("Ошибка при смене языка", err);
@@ -62,6 +78,8 @@ export default function Settings() {
 			const updatedData = await switchTheme(profile.id, theme.code);
 			if (updatedData) {
 				setProfile({ ...profile, theme: theme.code });
+				localStorage.setItem("theme", theme.code); // Сохраняем в localStorage
+
 				if (theme.code === "dark") {
 					document.documentElement.classList.add("dark");
 				} else {
@@ -115,6 +133,9 @@ export default function Settings() {
 	const handleLogout = () => {
 		Cookies.remove("access_token");
 		Cookies.remove("refresh_token");
+		// При выходе можно очистить локальные настройки, если это необходимо
+		localStorage.removeItem("theme");
+		localStorage.removeItem("language");
 		navigate("/login");
 	};
 
@@ -233,7 +254,6 @@ export default function Settings() {
 						</div>
 					</div>
 
-					{/* Разделитель */}
 					<div className="h-[1px] bg-gray-200 dark:bg-[#4A4A4A] w-[90%] mx-auto my-1 transition-colors duration-200"></div>
 
 					<div className="px-1.5 pb-1.5 pt-1">
@@ -247,7 +267,6 @@ export default function Settings() {
 					</div>
 				</div>
 
-				{/* Всплывающее окно профиля */}
 				{open && (
 					<div className="absolute top-[-275px] left-full ml-4 z-50 bg-white dark:bg-[#1f1f1f] border border-gray-200 dark:border-[#444] rounded-xl shadow-xl dark:shadow-2xl p-5 w-[320px] transition-colors duration-200">
 						<Profile />
