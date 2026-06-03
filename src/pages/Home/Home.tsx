@@ -160,7 +160,7 @@ export default function Home() {
 							<img
 								src={activeImage}
 								alt={active}
-								className="max-w-[2000px] min-h-[300px] md:min-h-[600px] w-full h-full  rounded-t-[10px] object-cover shadow-2xl transition-opacity duration-300"
+								className="max-w-[2000px] min-h-[300px] md:min-h-[600px] w-full h-full  rounded-t-[10px] object-cover shadow-2xl transition-opacity"
 								draggable={false}
 							/>
 						</div>
