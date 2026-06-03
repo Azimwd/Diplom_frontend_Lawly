@@ -57,10 +57,16 @@ const titles = [
 export default function Home() {
 	const [active, setActive] = useState("Assistant");
 	const [dropdown, setDropdown] = useState(false);
+	const [isPlaying, setIsPlaying] = useState(false); // Состояние для запуска/остановки анимации или превью
 	const featureContainerRef = useRef(null);
 
 	const activeItem = titles.find((item) => item.label === active);
 	const activeImage = activeItem ? activeItem.screen : consult;
+
+	// Сбрасываем состояние воспроизведения при смене вкладки
+	useEffect(() => {
+		setIsPlaying(false);
+	}, [active]);
 
 	useEffect(() => {
 		const lenis = new Lenis({
@@ -123,8 +129,6 @@ export default function Home() {
 
 	return (
 		<div className="relative w-full overflow-x-hidden ">
-			{/*  */}
-
 			<header className="z-50 relative">
 				<Header />
 			</header>
@@ -148,29 +152,56 @@ export default function Home() {
 
 				<div ref={featureContainerRef} className="flex flex-col items-center w-full max-w-[1250px]" id="img">
 					<div className="flex flex-col items-center relative z-10 font-['Cinzel'] w-full">
-						<h2 className="text-[18px] md:text-[48px] font-bold text-[#001A41] text-center">
+						<h2 className="text-[18px] md:text-[48px] font-bold text-[#001A41] text-center mb-6">
 							AI legal assistant features
 						</h2>
 
 						<div
-							className="flex flex-col items-center justify-center px-4 pt-4 md:px-8 md:pt-8 rounded-t-[10px] w-full min-h-[250px] md:min-h-[575px]
+							className="relative flex flex-col items-center justify-center p-4 md:p-8 rounded-[10px] w-full max-w-[280px] md:max-w-[575px] aspect-square
                             shadow-[0_0_150px_rgba(99,120,241,0.35)]
-                            bg-gradient-to-b from-blue-400/10 to-transparent bg-blue-600/20 backdrop-blur-[50px] border border-white/[0.12]"
+                            bg-gradient-to-b from-blue-400/10 to-transparent bg-blue-600/20 backdrop-blur-[50px] border border-white/[0.12] overflow-hidden"
 						>
-							<img
-								src={activeImage}
-								alt={active}
-								className="max-w-[2000px] min-h-[300px] md:min-h-[575px] w-full h-full  rounded-t-[10px] object-cover shadow-2xl transition-opacity duration-300"
-								draggable={false}
-							/>
+							<div className="relative w-full h-full aspect-square rounded-[10px] overflow-hidden">
+								<img
+									src={activeImage}
+									alt={active}
+									className={`w-full h-full rounded-[10px] object-cover shadow-2xl transition-all duration-500 ${
+										isPlaying ? "opacity-100 scale-100" : "opacity-60 scale-95 blur-[2px]"
+									}`}
+									draggable={false}
+								/>
+
+								<div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-[10px] transition-colors duration-300">
+									<button
+										type="button"
+										onClick={() => setIsPlaying(!isPlaying)}
+										className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-[#1A237E]/90 hover:bg-[#212ca1] text-white rounded-full shadow-lg border-2 border-[#BFA14A] transition-all duration-300 transform hover:scale-110 active:scale-95 cursor-pointer z-20"
+										aria-label={isPlaying ? "Pause" : "Play"}
+									>
+										{isPlaying ? (
+											<svg
+												className="w-6 h-6 md:w-8 md:h-8 fill-current text-white"
+												viewBox="0 0 24 24"
+											>
+												<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+											</svg>
+										) : (
+											<svg
+												className="w-6 h-6 md:w-8 md:h-8 fill-current text-white ml-1"
+												viewBox="0 0 24 24"
+											>
+												<path d="M8 5v14l11-7z" />
+											</svg>
+										)}
+									</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			{/* СЕКЦИЯ 2: Темный блок с навигацией по функциям (на всю ширину экрана) */}
 			<section className="relative z-30 bg-[#001A41] w-full flex flex-col justify-center items-center gap-4 md:gap-5 py-8 md:py-10 px-4">
-				{/* Десктопное меню */}
 				<div className="max-w-[980px] hidden md:flex justify-between items-center border border-[#BFA14A] px-6 py-3 rounded-[26px] gap-[14px]">
 					<div className="flex gap-[24px]">
 						{titles.map((item, index) => (
@@ -232,7 +263,6 @@ export default function Home() {
 					</div>
 				</div>
 
-				{/* Описание активного таба */}
 				<div className="text-white text-[16px] max-w-[750px] w-full text-center px-4 min-h-[45px] mt-4 pb-25">
 					{titles.map((item, index) => (
 						<p key={index} className={`${active === item.label ? "block animate-fade-in" : "hidden"}`}>
@@ -242,12 +272,10 @@ export default function Home() {
 				</div>
 			</section>
 
-			{/* СЕКЦИЯ 3: Реклама телеграм бота */}
 			<section id="tg" className="relative z-30 bg-[#001A41] md:h-screen pt-10">
 				<TelegramAD />
 			</section>
 
-			{/* СЕКЦИЯ 4: Показываем достойнства нашего ИИ */}
 			<section
 				id="dv"
 				className="relative z-30 bg-gradient-to-b from-[#001A41] via-[#000c1d] to-[#000000] min-h-[200vh] pt-20 "
@@ -262,12 +290,10 @@ export default function Home() {
 				</div>
 			</section>
 
-			{/* СЕКЦИЯ 5: Также достойнства но подробнее */}
 			<section className="relative z-30 bg-[#000] min-h-screen pt-20 ">
 				<Carousel />
 			</section>
 
-			{/* СЕКЦИЯ 6:  */}
 			<section
 				id="hiw"
 				className="relative z-30 bg-gradient-to-b from-[#000000]  to-[#001A41] min-h-screen pt-20 "
@@ -279,8 +305,6 @@ export default function Home() {
 			<footer className="relative z-30  ">
 				<Footer />
 			</footer>
-
-			{/*  */}
 		</div>
 	);
 }

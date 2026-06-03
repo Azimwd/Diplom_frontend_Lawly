@@ -29,7 +29,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 
 	const handleClick = () => {
 		sessionStorage.setItem("showSplash", "true");
-		GoogleCallbackPage();
+		navigate("/auth/google/callback");
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
