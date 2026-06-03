@@ -1,20 +1,21 @@
 import api from "./axios";
 import axios from "axios";
-const logApiError = (label: string, error: unknown) => {
-  if (axios.isAxiosError(error)) {
-    console.error(label, error.response?.data || error.message);
-    return;
-  }
 
-  console.error(label, error);
+const logApiError = (label: string, error: unknown) => {
+	if (axios.isAxiosError(error)) {
+		console.error(label, error.response?.data || error.message);
+		return;
+	}
+
+	console.error(label, error);
 };
 
 const getApiErrorStatus = (error: unknown): number | undefined => {
-  if (axios.isAxiosError(error)) {
-    return error.response?.status;
-  }
+	if (axios.isAxiosError(error)) {
+		return error.response?.status;
+	}
 
-  return undefined;
+	return undefined;
 };
 export interface ChatSession {
 	id: number;
@@ -41,7 +42,6 @@ export interface ChatsResponse {
 	message: string;
 }
 
-
 export const getListOfChat = async (): Promise<ChatSession[] | null> => {
 	try {
 		const response = await api.get<ChatsResponse>(`/chats/sessions/`, {
@@ -52,15 +52,18 @@ export const getListOfChat = async (): Promise<ChatSession[] | null> => {
 
 		return response.data.data.results;
 	} catch (error: unknown) {
-	logApiError("catched error:", error);
-	return null;
+		logApiError("catched error:", error);
+		return null;
 	}
 };
 
 export const deleteChat = async (id: number) => {
 	try {
-		await api.delete(`/chats/sessions/${id}/`, {withCredentials: true, xsrfCookieName: "csrftoken",
-			xsrfHeaderName: "X-CSRFToken",});
+		await api.delete(`/chats/sessions/${id}/`, {
+			withCredentials: true,
+			xsrfCookieName: "csrftoken",
+			xsrfHeaderName: "X-CSRFToken",
+		});
 		return true;
 	} catch (error) {
 		console.log(error);
@@ -70,8 +73,11 @@ export const deleteChat = async (id: number) => {
 
 export const editChatName = async (id: number, title: string) => {
 	try {
-		await api.patch(`/chats/sessions/${id}/`, { title }, {withCredentials: true, xsrfCookieName: "csrftoken",
-			xsrfHeaderName: "X-CSRFToken",});
+		await api.patch(
+			`/chats/sessions/${id}/`,
+			{ title },
+			{ withCredentials: true, xsrfCookieName: "csrftoken", xsrfHeaderName: "X-CSRFToken" },
+		);
 		return true;
 	} catch (error) {
 		console.log(error);
@@ -80,56 +86,13 @@ export const editChatName = async (id: number, title: string) => {
 };
 
 // Консультация
-export const sendMessage = async (
-	chatId: string,
-	question: string,
-	language: string
-  ) => {
-	try {
-	  const response = await api.post(
-		`/ai_modules/sessions/${chatId}/ask/`,
-		{ 
-			question,
-			language
-		},
-		{
-		  withCredentials: true,
-		  xsrfCookieName: "csrftoken",
-				xsrfHeaderName: "X-CSRFToken",
-		}
-	  );
-  
-	  return response.data;
-	} catch (error: unknown) {
-	const status = getApiErrorStatus(error);
-
-	if (status === 502) {
-		logApiError("Backend unavailable:", error);
-
-		return {
-		success: false,
-		message: "Сервер временно недоступен",
-		};
-	}
-
-	logApiError("Send message error:", error);
-
-	return {
-		success: false,
-		message: "Произошла ошибка",
-	};
-	}
-};
-
-// Запрос на список и на проверку заполненой формы
-export const createDocument = async (chatId: string, action: string, question: string, language:string) => {
+export const sendMessage = async (chatId: string, question: string, language: string) => {
 	try {
 		const response = await api.post(
-			`/ai-documents/sessions/${chatId}/documents/`,
+			`/ai_modules/sessions/${chatId}/ask/`,
 			{
-				action,
 				question,
-				language
+				language,
 			},
 			{
 				withCredentials: true,
@@ -140,12 +103,56 @@ export const createDocument = async (chatId: string, action: string, question: s
 
 		return response.data;
 	} catch (error: unknown) {
-	logApiError("Action error:", error);
+		const status = getApiErrorStatus(error);
+
+		if (status === 502) {
+			logApiError("Backend unavailable:", error);
+
+			return {
+				success: false,
+				message: "Сервер временно недоступен",
+			};
+		}
+
+		logApiError("Send message error:", error);
+
+		return {
+			success: false,
+			message: "Произошла ошибка",
+		};
+	}
+};
+
+// Запрос на список и на проверку заполненой формы
+export const createDocument = async (chatId: string, action: string, question: string, language: string) => {
+	try {
+		const response = await api.post(
+			`/ai-documents/sessions/${chatId}/documents/`,
+			{
+				action,
+				question,
+				language,
+			},
+			{
+				withCredentials: true,
+				xsrfCookieName: "csrftoken",
+				xsrfHeaderName: "X-CSRFToken",
+			},
+		);
+
+		return response.data;
+	} catch (error: unknown) {
+		logApiError("Action error:", error);
 	}
 };
 
 // Генерация документа
-export const generateDocument = async (chatId: string, templateName: string, values: Record<string, string>,language:string) => {
+export const generateDocument = async (
+	chatId: string,
+	templateName: string,
+	values: Record<string, string>,
+	language: string,
+) => {
 	try {
 		const response = await api.post(
 			`/ai-documents/sessions/${chatId}/documents/`,
@@ -153,7 +160,7 @@ export const generateDocument = async (chatId: string, templateName: string, val
 				action: "generate",
 				template_name: templateName,
 				values: values,
-				language
+				language,
 			},
 			{
 				withCredentials: true,
@@ -169,15 +176,15 @@ export const generateDocument = async (chatId: string, templateName: string, val
 };
 
 // Калькулятор
-export const attorneyPrice = async (chatId: string, question: string, language:string) => {
+export const attorneyPrice = async (chatId: string, question: string, language: string) => {
 	try {
 		const response = await api.post(
 			`/ai_modules/sessions/${chatId}/attorney-price/`,
 			{
 				question,
-				language
+				language,
 			},
-			{ 
+			{
 				withCredentials: true,
 				xsrfCookieName: "csrftoken",
 				xsrfHeaderName: "X-CSRFToken",
@@ -197,9 +204,9 @@ export const articleWinChance = async (chatId: string, question: string, languag
 			`/ai_modules/sessions/${chatId}/article-win-chance/`,
 			{
 				question,
-				language
+				language,
 			},
-			{ 
+			{
 				withCredentials: true,
 				xsrfCookieName: "csrftoken",
 				xsrfHeaderName: "X-CSRFToken",
@@ -212,17 +219,18 @@ export const articleWinChance = async (chatId: string, question: string, languag
 };
 
 // Поиск юристов
-export const topLawyers = async (chatId: string, question: string, top_l: number, language:string) => {
+export const topLawyers = async (chatId: string, question: string, top_l: number, language: string) => {
 	try {
 		const response = await api.post(
 			`/ai_modules/sessions/${chatId}/top-lawyers/`,
 			{
 				question,
 				top_l,
-				language
+				language,
 			},
 			{
-				withCredentials: true,xsrfCookieName: "csrftoken",
+				withCredentials: true,
+				xsrfCookieName: "csrftoken",
 				xsrfHeaderName: "X-CSRFToken",
 			},
 		);
@@ -236,40 +244,40 @@ export const topLawyers = async (chatId: string, question: string, top_l: number
 // Создание чата
 export const postChat = async (title: string) => {
 	try {
-		const response = await api.post(`/chats/sessions/create/`, {
-			title
-		},
-		{
-			withCredentials: true,
-			xsrfCookieName: "csrftoken",
+		const response = await api.post(
+			`/chats/sessions/create/`,
+			{
+				title,
+			},
+			{
+				withCredentials: true,
+				xsrfCookieName: "csrftoken",
 				xsrfHeaderName: "X-CSRFToken",
-		}
-	);
+			},
+		);
 
 		return response.data.data;
 	} catch (error: unknown) {
-	logApiError("catched error:", error);
-	return null;
+		logApiError("catched error:", error);
+		return null;
 	}
 };
 
 // Делаем запрос гет чтобы получить данные с чата айди
 export const getChatMessages = async (chatId: string, pageNum: number = 1) => {
 	try {
-		const response = await api.get(`/chats/sessions/${chatId}/?page=${pageNum}`,
-			{
-				withCredentials: true,
-				xsrfCookieName: "csrftoken",
-				xsrfHeaderName: "X-CSRFToken",
-			}
-		);
-		
+		const response = await api.get(`/chats/sessions/${chatId}/?page=${pageNum}`, {
+			withCredentials: true,
+			xsrfCookieName: "csrftoken",
+			xsrfHeaderName: "X-CSRFToken",
+		});
+
 		return response.data.data;
 	} catch (error) {
 		console.error("Ошибка при получении сообщений:", error);
-		return { 
-			has_next: false, 
-			results: { data: { messages: [] } } 
+		return {
+			has_next: false,
+			results: { data: { messages: [] } },
 		};
 	}
 };
