@@ -97,7 +97,9 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	const navigate = useNavigate();
 	const { profile } = useUser();
 
-	const lang = (profile?.language as Language) || "ru";
+	// ПРИОРИТЕТ ДЛЯ ЯЗЫКА: profile -> localStorage -> "ru"
+	const savedLang = localStorage.getItem("language") as Language | null;
+	const lang = (profile?.language as Language) || savedLang || "ru";
 	const t = translations[lang].chat;
 
 	const baseUrl = "https://etha-hypercatalectic-rueben.ngrok-free.dev";
@@ -156,7 +158,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 						if (parsed?.type === "document_values") return null;
 
 						if (parsed && typeof parsed === "object" && parsed.type) {
-							// Приводим относительный путь файла к абсолютному URL
 							const absoluteFileUrl = parsed.file_url
 								? parsed.file_url.startsWith("http")
 									? parsed.file_url
@@ -206,7 +207,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 		}
 	};
 
-	// Загружаем 1 страницу при смене чата (id)
 	useEffect(() => {
 		setPage(1);
 		setHasMore(false);
@@ -214,7 +214,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id, t.loadingDoc]);
 
-	// Подгружаем историю при изменении страницы скроллом
 	useEffect(() => {
 		if (page > 1) {
 			loadHistory(page);
@@ -222,7 +221,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [page]);
 
-	// === КОРРЕКТИРОВКА СКРОЛЛА ПРИ ПАГИНАЦИИ ===
 	useLayoutEffect(() => {
 		if (scrollContainerRef.current && page > 1 && !isLoadingMore) {
 			const container = scrollContainerRef.current;
@@ -230,7 +228,6 @@ export default function Chat({ onChatCreated }: ChatProps) {
 		}
 	}, [messages, isLoadingMore, page]);
 
-	// === ОБРАБОТЧИК БЕСКОНЕЧНОГО СКРОЛЛА ===
 	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 		const container = e.currentTarget;
 		if (container.scrollTop <= 50 && hasMore && !isLoadingMore && !loadingMessages) {
@@ -333,8 +330,9 @@ export default function Chat({ onChatCreated }: ChatProps) {
 	};
 
 	return (
-		<div className="relative flex flex-col items-center h-[100dvh] w-full bg-[#f6f6f6] dark:bg-[#0D0D0D] text-[#FFFFFF] overflow-hidden">
-			<div className="flex items-center justify-center bg-[#f6f6f6] dark:bg-[#0D0D0D] text-[#FFFFFF] w-full transition-all duration-500">
+		// ИЗМЕНЕН КЛАСС: text-[#FFFFFF] заменен на text-gray-900 dark:text-white
+		<div className="relative flex flex-col items-center h-[100dvh] w-full bg-[#f6f6f6] dark:bg-[#0D0D0D] text-gray-900 dark:text-white overflow-hidden">
+			<div className="flex items-center justify-center bg-[#f6f6f6] dark:bg-[#0D0D0D] w-full transition-all duration-500">
 				<div
 					ref={scrollContainerRef}
 					onScroll={handleScroll}

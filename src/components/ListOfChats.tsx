@@ -32,7 +32,10 @@ export default function ListOfChats({ isOpen, refreshChats, onChatSelect }: Side
 	const navigate = useNavigate();
 
 	const { profile } = useUser();
-	const langKey = (profile?.language as Language) || "ru";
+
+	// ПРИОРИТЕТ ДЛЯ ЯЗЫКА: profile -> localStorage -> "ru"
+	const savedLang = localStorage.getItem("language") as Language | null;
+	const langKey = (profile?.language as Language) || savedLang || "ru";
 	const t = translations[langKey].sidebar;
 
 	useEffect(() => {
