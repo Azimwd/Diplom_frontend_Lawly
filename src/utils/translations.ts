@@ -161,7 +161,7 @@ export const translations = {
 			},
 		},
 		settings: {
-			subscription: "Жазылым жоспары",
+			subscription: "Жоспар",
 			appearance: "Сыртқы түрі",
 			language: "Тіл",
 			logout: "Шығу",
