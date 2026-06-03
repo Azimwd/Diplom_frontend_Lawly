@@ -141,7 +141,7 @@ export default function Settings() {
 			localStorage.removeItem("theme");
 			localStorage.removeItem("language");
 
-			localStorage.setItem("isAuth", "false");
+			localStorage.removeItem("isAuth");
 
 			navigate("/login");
 		}

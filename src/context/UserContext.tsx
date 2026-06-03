@@ -20,7 +20,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 	const [loading, setLoading] = useState(true);
 
 	const fetchUser = async () => {
-		if (!localStorage.getItem("isAuth")) {
+		if (localStorage.getItem("isAuth") !== "true") {
 			setLoading(false);
 			return;
 		}
