@@ -82,7 +82,6 @@ export default function ForgotPasswordPage() {
 
 	return (
 		<div className="min-h-screen w-full flex items-center justify-center bg-[#E5E6E6] p-4">
-			/* Белая карточка с закругленными углами и легкой тенью */
 			<div className="bg-white rounded-[8px] shadow-sm w-[480px] py-[64px] px-[40px] flex flex-col items-center">
 				<div className="w-[320px] flex flex-col gap-[24px] text-center">
 					<h2 className="text-[#1E1E2F] text-[40px] font-bold tracking-[-1.5px] pb-[8px]">Reset Password</h2>
