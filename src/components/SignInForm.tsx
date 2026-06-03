@@ -28,7 +28,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 
 	const handleClick = () => {
 		sessionStorage.setItem("showSplash", "true");
-		window.location.href = "https://lawly.up.railway.app/accounts/google/login/callback/";
+		window.location.href = "https://lawly.up.railway.app/users/google/login/";
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {

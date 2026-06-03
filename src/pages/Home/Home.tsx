@@ -5,7 +5,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
 import Header from "./Header";
 import { NavLink } from "react-router-dom";
-import chatScr from "../../screens/image.png";
+import consult from "../../assets/gifs/0604.gif";
+import doc from "../../assets/gifs/Doc.gif";
+import calculator from "../../assets/gifs/Calculator.gif";
+import winchance from "../../assets/gifs/0604(1).gif";
+import search from "../../assets/gifs/0604(2).gif";
+
 import activeselect from "../../assets/check.png";
 import selector from "../../assets/chevron.png";
 import TelegramAD from "./TelegramAD";
@@ -19,31 +24,31 @@ gsap.registerPlugin(ScrollTrigger);
 const titles = [
 	{
 		label: "Assistant",
-		screen: chatScr,
+		screen: consult,
 		description:
 			"Your personal AI legal assistant. It helps clarify legal terms, analyze queries, and suggest possible solutions based on current laws.",
 	},
 	{
 		label: "Document",
-		screen: chatScr,
+		screen: doc,
 		description:
 			"Upload contracts, agreements, and other legal documents for automatic analysis, risk detection, and clause improvement suggestions.",
 	},
 	{
-		label: "Matching",
-		screen: chatScr,
-		description:
-			"Get matched with qualified lawyers or legal experts based on your issue type, region, and specialization.",
-	},
-	{
 		label: "Calculator",
-		screen: chatScr,
+		screen: calculator,
 		description:
 			"Use smart legal calculators to estimate penalties, compensations, fines, or alimony based on case details.",
 	},
 	{
+		label: "Winrate",
+		screen: winchance,
+		description:
+			"Get matched with qualified lawyers or legal experts based on your issue type, region, and specialization.",
+	},
+	{
 		label: "Search",
-		screen: chatScr,
+		screen: search,
 		description:
 			"AI-powered legal search engine. Instantly find relevant laws, precedents, and document templates for your case.",
 	},
@@ -55,7 +60,7 @@ export default function Home() {
 	const featureContainerRef = useRef(null);
 
 	const activeItem = titles.find((item) => item.label === active);
-	const activeImage = activeItem ? activeItem.screen : chatScr;
+	const activeImage = activeItem ? activeItem.screen : consult;
 
 	useEffect(() => {
 		const lenis = new Lenis({
