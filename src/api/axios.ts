@@ -105,10 +105,7 @@ api.interceptors.response.use(
 
           sessionStorage.removeItem("csrf_token");
 
-          if (window.location.pathname !== "/login") {
-            console.warn("[Axios] Перенаправление на /login из-за проваленного рефреша.");
-            window.location.href = "/login";
-          }
+          location.reload();
 
           return Promise.reject(err);
         }
