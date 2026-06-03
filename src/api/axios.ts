@@ -5,6 +5,19 @@ interface RetryAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
+function getCookie(name: string): string | null {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    return parts.pop()?.split(";").shift() || null;
+  }
+  return null;
+}
+
+function getCsrfToken(): string {
+  return sessionStorage.getItem("csrf_token") || getCookie("csrftoken") || "";
+}
+
 const api = axios.create({
   baseURL: "https://lawly.up.railway.app",
   withCredentials: true,
@@ -14,7 +27,7 @@ api.interceptors.request.use((config) => {
   const method = config.method?.toLowerCase();
 
   if (["post", "put", "patch", "delete"].includes(method || "")) {
-    const csrfToken = sessionStorage.getItem("csrf_token");
+    const csrfToken = getCsrfToken();
 
     if (csrfToken) {
       config.headers["X-CSRFToken"] = csrfToken;
@@ -45,24 +58,26 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
+        const csrfTokenForRefresh = getCsrfToken();
+
         const refreshResponse = await axios.post(
           "https://lawly.up.railway.app/users/token/refresh/",
           {},
           {
             withCredentials: true,
             headers: {
-              "X-CSRFToken": sessionStorage.getItem("csrf_token") || "",
+              "X-CSRFToken": csrfTokenForRefresh,
             },
           }
         );
 
-        const csrfToken =
+        const newCsrfToken =
           refreshResponse.data?.csrf_token ||
           refreshResponse.data?.data?.csrf_token ||
           refreshResponse.data?.data?.data?.csrf_token;
 
-        if (csrfToken) {
-          sessionStorage.setItem("csrf_token", csrfToken);
+        if (newCsrfToken) {
+          sessionStorage.setItem("csrf_token", newCsrfToken);
         }
 
         return api(originalRequest);
