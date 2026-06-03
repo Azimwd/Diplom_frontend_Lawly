@@ -66,7 +66,7 @@ export default function TelegramAD() {
 			<div className="flex flex-col justify-center items-center text-[#ffffff] font-['Cinzel'] font-bold">
 				<h1 className="text-[24px] md:text-[48px] ">Meet Our Telegram Bot</h1>
 				<h3 className="font-['Inter'] font-light text-[16px] md:text-[24px] mb-[30px]">
-					All the power of Legion, now in Telegram.
+					All the power of Lawly, now in Telegram.
 				</h3>
 			</div>
 

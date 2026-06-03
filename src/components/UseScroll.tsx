@@ -81,7 +81,7 @@ export default function UseScroll({ img }: ParallaxProps) {
 						to="/chat"
 						className="flex justify-center items-center w-[184px] h-[45px] cursor-pointer bg-[#1A237E] text-center rounded-[5px] text-white transition-all duration-200 hover:bg-[#212ca1] p-6 font-['Inter']font-normal text-16px"
 					>
-						Try Legion
+						Try Lawly
 					</NavLink>
 				</div>
 

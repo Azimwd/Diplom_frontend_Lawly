@@ -5,6 +5,7 @@ import { useUser } from "../context/UserContext";
 import googleicon from "../assets/search.svg";
 import AuthInput from "../ui/AuthInput";
 import React, { useState } from "react";
+import GoogleCallbackPage from "./GoogleCallbackPage";
 
 interface PropsSignIn {
 	path: string;
@@ -28,7 +29,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 
 	const handleClick = () => {
 		sessionStorage.setItem("showSplash", "true");
-		window.location.href = "https://lawly.up.railway.app/users/google/login/";
+		GoogleCallbackPage();
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {

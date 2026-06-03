@@ -19,7 +19,7 @@ export default function Footer() {
 								secure, and designed for professionals who value precision.
 							</h4>
 							<button className="text-[#0D1B2A] bg-[#BFA14A] px-[35px] py-3 cursor-pointer rounded-[5px] w-fit font-bold mt-2">
-								Try Legion
+								Try Lawly
 							</button>
 						</div>
 					</div>

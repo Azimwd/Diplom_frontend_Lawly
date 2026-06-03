@@ -17,7 +17,7 @@ export default function Footer() {
 								secure, and designed for professionals who value precision.
 							</h4>
 							<button className="text-[#0D1B2A] bg-[#BFA14A] px-[35px] py-3 cursor-pointer rounded-[5px] w-fit">
-								Try Legion
+								Try Lawly
 							</button>
 						</div>
 					</div>
@@ -38,7 +38,7 @@ export default function Footer() {
 									Telegram
 								</a>
 								<a href="#" className="border-b-1 w-fit text-[#BFBFBF] ">
-									Why choose Legion
+									Why choose Lawly
 								</a>
 								<a href="#" className="border-b-1 w-fit text-[#BFBFBF] ">
 									How it works

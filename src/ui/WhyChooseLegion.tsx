@@ -12,7 +12,7 @@ export default function WhyChooseLegion() {
 						<h5 className="text-[16px]">Trusted. Intelligent. Always at your side.</h5>
 						<br />
 						<h5 className="text-[16px]">
-							Legion combines advanced AI with expert legal insights to make legal support accessible,
+							Lawly combines advanced AI with expert legal insights to make legal support accessible,
 							efficient, and secure — anytime, anywhere.
 						</h5>
 						<h5 className="text-[16px]"> We simplify complexity so you can focus on what truly matters.</h5>
@@ -45,7 +45,7 @@ export default function WhyChooseLegion() {
 								<p className="text-sm text-gray-200 leading-relaxed">
 									No more waiting for consultations.
 									<br />
-									Legion processes and responds within seconds, giving you clarity fast.
+									Lawly processes and responds within seconds, giving you clarity fast.
 								</p>
 							</div>
 							<div className="relative w-[400px] bg-transparent from-[#11263f] to-[#0c1a2b] border border-[#ffffff] rounded-lg p-6 text-white h-[200px]">

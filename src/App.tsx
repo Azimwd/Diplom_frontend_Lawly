@@ -12,6 +12,7 @@ import "./App.css";
 import { UserProvider, useUser } from "./context/UserContext";
 import { useEffect } from "react";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import GoogleCallbackPage from "./components/GoogleCallbackPage";
 
 // Мгновенная установка темы из localStorage до рендеринга React
 const savedTheme = localStorage.getItem("theme") || "dark";
@@ -58,6 +59,7 @@ function App() {
 					<Route path="/subscription" element={<Subscription />} />
 					<Route path="/payment/success" element={<SubscriptionConfirmed />} />
 					<Route path="/payment/fail" element={<SubscriptionFailed />} />
+					<Route path="/auth/google/callback" element={<GoogleCallbackPage />} />
 				</Routes>
 			</BrowserRouter>
 		</UserProvider>
