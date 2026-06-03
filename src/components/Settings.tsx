@@ -121,9 +121,7 @@ export default function Settings() {
 	return (
 		<div className="flex items-center justify-center">
 			<div ref={containerRef} className="relative max-w-[260px] w-full">
-				{/* Основной контейнер меню */}
 				<div className="flex flex-col relative bg-white dark:bg-[#1f1f1f] text-gray-900 dark:text-white rounded-[12px] border border-gray-200 dark:border-[#444] font-sans shadow-sm dark:shadow-none transition-colors duration-200">
-					{/* Кнопка Профиля */}
 					<button
 						onClick={() => setOpen((prev) => !prev)}
 						className="flex items-center px-3 py-3 w-full hover:bg-[#98caff] dark:hover:bg-[#424242] transition-colors rounded-t-[12px]"

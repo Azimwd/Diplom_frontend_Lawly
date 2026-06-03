@@ -63,7 +63,7 @@ function Profile({ onClose }: ProfileProps) {
 		const updatedProfile = await updateProfile(user.id, data);
 
 		if (updatedProfile) {
-			setProfile(updatedProfile);
+			setProfile(profile ? { ...profile, ...updatedProfile } : updatedProfile);
 			setSuccess(true);
 			setSelectedFile(null);
 		} else {
@@ -88,12 +88,10 @@ function Profile({ onClose }: ProfileProps) {
 			onClick={stopPropagation}
 			onMouseDown={stopPropagation}
 			onTouchStart={stopPropagation}
-			// Изменены цвета фона и текста: bg-white/dark:bg-[#1f1f1f] и text-gray-900/dark:text-white
 			className={`flex flex-col gap-4 text-gray-900 dark:text-white bg-white dark:bg-[#1f1f1f] ${
 				isMobile ? "p-6 rounded-xl w-full max-w-sm shadow-2xl relative z-10 mb-20" : ""
 			}`}
 		>
-			{/* Изменен цвет бордера снизу */}
 			<div className="flex justify-between items-center border-b border-gray-200 dark:border-[#444] pb-2 mb-1">
 				<h3 className="text-lg font-semibold">{t.ChangeAvatar}</h3>
 
@@ -104,7 +102,6 @@ function Profile({ onClose }: ProfileProps) {
 							stopPropagation(e);
 							onClose();
 						}}
-						// Изменены цвета крестика
 						className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
 					>
 						<X size={20} />
@@ -113,12 +110,10 @@ function Profile({ onClose }: ProfileProps) {
 			</div>
 
 			<div className="flex flex-col gap-2 items-center mb-2">
-				{/* Изменен цвет label */}
 				<label className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider self-start">
 					{t.Avatar}
 				</label>
 				<div className="relative group cursor-pointer" onClick={handleAvatarClick}>
-					{/* Изменен фон и бордер аватарки */}
 					<div className="h-[90px] w-[90px] rounded-full overflow-hidden border-2 border-gray-200 dark:border-[#444] group-hover:border-blue-500 transition-all bg-gray-100 dark:bg-[#2a2a2a] flex items-center justify-center">
 						{avatarPreview ? (
 							<img src={avatarPreview} alt="avatar" className="h-full w-full object-cover" />
@@ -139,7 +134,6 @@ function Profile({ onClose }: ProfileProps) {
 						accept="image/*"
 					/>
 				</div>
-				{/* Изменен цвет подписи под фото */}
 				<p className="text-[10px] text-gray-500 dark:text-gray-400">{t.EditProfile}</p>
 			</div>
 
@@ -147,7 +141,6 @@ function Profile({ onClose }: ProfileProps) {
 				<label className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">
 					{t.NameField}
 				</label>
-				{/* Изменены стили input (фон, текст, бордер, placeholder) */}
 				<input
 					type="text"
 					value={firstName}
@@ -183,7 +176,6 @@ function Profile({ onClose }: ProfileProps) {
 				/>
 			</div>
 
-			{/* Адаптированы цвета сообщений об ошибке и успехе */}
 			{error && (
 				<div className="text-red-600 dark:text-red-400 text-sm bg-red-50 dark:bg-red-900/20 p-2 rounded border border-red-200 dark:border-red-900/50">
 					{error}
@@ -195,7 +187,6 @@ function Profile({ onClose }: ProfileProps) {
 				</div>
 			)}
 
-			{/* Кнопка: в светлой теме при наведении hover:bg-blue-700, в темной hover:bg-blue-500 */}
 			<button
 				type="submit"
 				disabled={loading}
