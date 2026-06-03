@@ -115,7 +115,7 @@ export default function ListOfChats({ isOpen, refreshChats, onChatSelect }: Side
 				{loading &&
 					Array.from({ length: 6 }).map((_, index) => (
 						<div key={index} className="skeleton-anim flex items-center py-2 px-2 rounded-md">
-							<div className="h-7 w-full bg-[#2a2a2a] rounded-md" />
+							<div className="h-7 w-full bg-gray-300 dark:bg-[#2a2a2a] rounded-md" />
 						</div>
 					))}
 
