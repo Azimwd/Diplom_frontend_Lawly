@@ -37,7 +37,6 @@ export const refreshToken = async () => {
 
 export const logoutAccount = async () => {
 	try {
-		// {} - тело запроса, { withCredentials: true } - конфигурация
 		const response = await api.post("/users/logout/", {}, {
 			withCredentials: true
 		});

@@ -10,9 +10,6 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// http://localhost:8000
-// https://lawly.up.railway.app
-
 api.interceptors.request.use((config) => {
   const method = config.method?.toLowerCase();
 
