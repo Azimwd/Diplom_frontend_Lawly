@@ -53,8 +53,7 @@ export default function LawyerSlider({ lawyers }: { lawyers: any[] }) {
 						)}
 						{rating !== undefined && (
 							<div className="bg-blue-600 dark:bg-[#1E4FE0] text-white px-3 py-1 rounded-lg text-[14px] font-bold shadow-lg shadow-blue-500/10 dark:shadow-blue-900/20 whitespace-nowrap">
-								winrate:
-								{item.win_rate ? `${item.win_rate}%` : ` ${rating}`}
+								winrate: {item.win_rate ? `${item.win_rate}%` : ` ${rating}`}
 							</div>
 						)}
 					</div>
