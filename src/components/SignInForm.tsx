@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { getMyProfile } from "../api/chat";
-import { requestReset } from "../api/resetpassword";
+// Импортируем обе функции из вашего файла resetpassword
+import { requestReset, passwordComplete } from "../api/resetpassword";
 import { loginUser } from "../api/user";
 import { useUser } from "../context/UserContext";
 import googleicon from "../assets/search.svg";
@@ -11,6 +12,9 @@ interface PropsSignIn {
 	path: string;
 }
 
+// Определяем типы шагов для модального окна
+type ResetStep = "email" | "password" | "success";
+
 export default function SignInForm({ path }: PropsSignIn) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -20,10 +24,16 @@ export default function SignInForm({ path }: PropsSignIn) {
 
 	// Состояния для модального окна восстановления пароля
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [resetStep, setResetStep] = useState<ResetStep>("email");
 	const [resetEmail, setResetEmail] = useState("");
+	const [newPassword, setNewPassword] = useState("");
+
+	// Сохранение полученных с сервера данных
+	const [resetUid, setResetUid] = useState("");
+	const [resetToken, setResetToken] = useState("");
+
 	const [resetLoading, setResetLoading] = useState(false);
 	const [resetError, setResetError] = useState("");
-	const [resetSuccess, setResetSuccess] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -77,10 +87,12 @@ export default function SignInForm({ path }: PropsSignIn) {
 		try {
 			const response = await requestReset(resetEmail);
 
-			if (response?.success) {
-				setResetSuccess(true);
+			if (response?.uidb64 && response?.token) {
+				setResetUid(response.uidb64);
+				setResetToken(response.token);
+				setResetStep("password");
 			} else {
-				setResetError(response?.message || "Не удалось отправить запрос");
+				setResetError(response?.message || "Не удалось получить проверочные данные от сервера");
 			}
 		} catch (err: any) {
 			setResetError(err.response?.data?.message || "Произошла ошибка при отправке");
@@ -89,11 +101,38 @@ export default function SignInForm({ path }: PropsSignIn) {
 		}
 	};
 
+	const handlePasswordCompleteSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!newPassword) {
+			setResetError("Please enter a new password");
+			return;
+		}
+		setResetError("");
+		setResetLoading(true);
+
+		try {
+			const response = await passwordComplete(resetUid, resetToken, newPassword);
+
+			if (response) {
+				setResetStep("success");
+			} else {
+				setResetError("Failed to update password. Please check your data.");
+			}
+		} catch (err: any) {
+			setResetError(err.response?.data?.message || "Произошла ошибка при обновлении пароля");
+		} finally {
+			setResetLoading(false);
+		}
+	};
+
 	const closeModal = () => {
 		setIsModalOpen(false);
 		setResetEmail("");
+		setNewPassword("");
+		setResetUid("");
+		setResetToken("");
 		setResetError("");
-		setResetSuccess(false);
+		setResetStep("email");
 	};
 
 	if (showSuccessScreen) {
@@ -124,7 +163,6 @@ export default function SignInForm({ path }: PropsSignIn) {
 						value={password}
 						onChange={makeChangeHandler(setPassword)}
 					/>
-					{/* Кнопка "Забыли пароль?" */}
 					<div className="text-right">
 						<button
 							type="button"
@@ -178,10 +216,11 @@ export default function SignInForm({ path }: PropsSignIn) {
 						</button>
 						<h3 className="text-[20px] font-bold text-[#1E1E2F] mb-4">Reset Password</h3>
 
-						{resetSuccess ? (
+						{resetStep === "success" && (
 							<div className="flex flex-col gap-4">
 								<p className="text-[14px] text-green-700 bg-green-50 p-3 rounded">
-									Instructions to reset your password have been sent to your email.
+									Your password has been successfully reset. You can now use your new credentials to
+									sign in.
 								</p>
 								<button
 									type="button"
@@ -191,10 +230,12 @@ export default function SignInForm({ path }: PropsSignIn) {
 									Close
 								</button>
 							</div>
-						) : (
+						)}
+
+						{resetStep === "email" && (
 							<form onSubmit={handleResetSubmit} className="flex flex-col gap-4">
 								<p className="text-[14px] text-[#666666]">
-									Enter your email address and we will send you a link to reset your password.
+									Enter your email address and we will verify it to allow password resetting.
 								</p>
 								<AuthInput
 									id="ResetEmail"
@@ -209,7 +250,30 @@ export default function SignInForm({ path }: PropsSignIn) {
 									disabled={resetLoading}
 									className="bg-[#1E4FE0] h-[48px] rounded-[3px] text-white font-bold hover:bg-[#1f43ad] transition-all disabled:opacity-50"
 								>
-									{resetLoading ? "Sending..." : "Send Reset Link"}
+									{resetLoading ? "Sending..." : "Verify Email"}
+								</button>
+							</form>
+						)}
+
+						{resetStep === "password" && (
+							<form onSubmit={handlePasswordCompleteSubmit} className="flex flex-col gap-4">
+								<p className="text-[14px] text-[#666666]">
+									Verification successful. Please enter your new password below.
+								</p>
+								<AuthInput
+									id="NewPassword"
+									label="New Password"
+									type="password"
+									value={newPassword}
+									onChange={makeChangeHandler(setNewPassword)}
+								/>
+								{resetError && <div className="text-red-800 text-[14px]">{resetError}</div>}
+								<button
+									type="submit"
+									disabled={resetLoading}
+									className="bg-[#1E4FE0] h-[48px] rounded-[3px] text-white font-bold hover:bg-[#1f43ad] transition-all disabled:opacity-50"
+								>
+									{resetLoading ? "Saving..." : "Save New Password"}
 								</button>
 							</form>
 						)}
