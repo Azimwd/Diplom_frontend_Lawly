@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, useSearchParams } from "react-router-dom"; // Импортируем useSearchParams
 import { requestReset, passwordComplete } from "../api/resetpassword";
 import AuthInput from "../ui/AuthInput";
 
@@ -9,18 +9,34 @@ export default function ForgotPasswordPage() {
 	const [step, setStep] = useState<ResetStep>("email");
 	const [email, setEmail] = useState("");
 	const [newPassword, setNewPassword] = useState("");
+
 	const [uidb64, setUidb64] = useState("");
 	const [token, setToken] = useState("");
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 
+	// Инициализируем хук для работы с query-параметрами
+	const [searchParams] = useSearchParams();
+
+	// Проверяем наличие параметров при загрузке страницы
+	useEffect(() => {
+		const queryUid = searchParams.get("uidb64");
+		const queryToken = searchParams.get("token");
+
+		if (queryUid && queryToken) {
+			setUidb64(queryUid);
+			setToken(queryToken);
+			setStep("password"); // Сразу переходим к шагу ввода нового пароля
+		}
+	}, [searchParams]);
+
 	const makeChangeHandler = (setter: (v: string) => void) => (eOrVal: any) => {
 		const value = typeof eOrVal === "string" ? eOrVal : (eOrVal?.target?.value ?? "");
 		setter(value);
 	};
 
-	// Шаг 1: Запрос восстановления (получение uidb64 и token)
+	// Шаг 1: Запрос восстановления (если пользователь зашел вручную без ссылки)
 	const handleEmailSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setError("");
@@ -43,7 +59,7 @@ export default function ForgotPasswordPage() {
 		}
 	};
 
-	// Шаг 2: Установка нового пароля с использованием uidb64 и token
+	// Шаг 2: Установка нового пароля
 	const handlePasswordSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!newPassword) {
@@ -69,7 +85,7 @@ export default function ForgotPasswordPage() {
 	};
 
 	return (
-		<div className="text-center flex flex-col items-center justify-center min-h-[400px] bg-[#E5E6E6]">
+		<div className="text-center flex flex-col items-center justify-center min-h-max">
 			<div className="w-[320px] flex flex-col gap-[24px]">
 				<h2 className="text-[#1E1E2F] text-[32px] font-bold tracking-[-1px] pb-[8px]">Reset Password</h2>
 
@@ -101,7 +117,7 @@ export default function ForgotPasswordPage() {
 				{step === "password" && (
 					<form onSubmit={handlePasswordSubmit} className="flex flex-col gap-[24px]">
 						<p className="text-[14px] text-[#666666] text-center leading-relaxed">
-							Verification successful. Please enter your new secure password below.
+							Please enter your new secure password below.
 						</p>
 						<AuthInput
 							id="NewPassword"
