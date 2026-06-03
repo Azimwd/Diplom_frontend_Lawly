@@ -82,7 +82,6 @@ export default function SignInForm({ path }: PropsSignIn) {
 				</h2>
 				<AuthInput id="Email" label="Email" type="text" value={email} onChange={makeChangeHandler(setEmail)} />
 
-				{/* Контейнер для пароля и ссылки */}
 				<div className="flex flex-col gap-2">
 					<AuthInput
 						id="Password"

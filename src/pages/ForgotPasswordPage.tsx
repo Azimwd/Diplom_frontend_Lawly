@@ -69,7 +69,7 @@ export default function ForgotPasswordPage() {
 	};
 
 	return (
-		<div className="text-center flex flex-col items-center justify-center min-h-[400px]">
+		<div className="text-center flex flex-col items-center justify-center min-h-[400px] bg-[#E5E6E6]">
 			<div className="w-[320px] flex flex-col gap-[24px]">
 				<h2 className="text-[#1E1E2F] text-[32px] font-bold tracking-[-1px] pb-[8px]">Reset Password</h2>
 
