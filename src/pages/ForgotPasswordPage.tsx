@@ -143,7 +143,7 @@ export default function ForgotPasswordPage() {
 								in.
 							</p>
 							<NavLink
-								to="/signin"
+								to="/login"
 								className="bg-[#1E4FE0] w-full h-[52px] flex items-center justify-center rounded-[3px] text-[16px] font-bold text-white hover:bg-[#1f43ad] transition-all"
 							>
 								Go to Sign In
