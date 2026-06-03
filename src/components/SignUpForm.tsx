@@ -18,7 +18,7 @@ export default function SignUpForm({ path }: PropsSignUp) {
 	const [loading, setLoading] = useState(false);
 
 	const handleClick = () => {
-		window.location.href = "https://lawly.up.railway.app/accounts/google/login/?process=login";
+		window.location.href = "https://lawly.up.railway.app/users/google/login/";
 	};
 
 	const [isAgreed, setIsAgreed] = useState(false);

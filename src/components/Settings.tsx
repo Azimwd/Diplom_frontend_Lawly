@@ -33,7 +33,6 @@ export default function Settings() {
 	const [langOpen, setLangOpen] = useState(false);
 	const [themeOpen, setThemeOpen] = useState(false);
 
-	// Текущий язык и тема с приоритетом локального хранилища
 	const savedTheme = localStorage.getItem("theme") || "dark";
 	const currentLang = LANGUAGES.find((l) => l.code === (savedLang || profile?.language)) || LANGUAGES[0];
 	const currentTheme = THEMES.find((th) => th.code === (savedTheme || profile?.theme)) || THEMES[0];
@@ -44,7 +43,6 @@ export default function Settings() {
 
 	const navigate = useNavigate();
 
-	// Синхронизируем localStorage при загрузке профиля ТОЛЬКО если локально еще нет записей
 	useEffect(() => {
 		if (profile?.language && !localStorage.getItem("language")) {
 			localStorage.setItem("language", profile.language);
@@ -60,11 +58,9 @@ export default function Settings() {
 		if (!profile?.id) return;
 
 		try {
-			// Сначала сохраняем локально, чтобы интерфейс мгновенно отреагировал
 			localStorage.setItem("language", lang.code);
 			setProfile({ ...profile, language: lang.code });
 
-			// Затем отправляем запрос на сервер
 			await switchLanguage(profile.id, lang.code);
 		} catch (err) {
 			console.error("Ошибка при смене языка", err);
