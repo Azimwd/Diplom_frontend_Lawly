@@ -11,6 +11,7 @@ import ChatWindow from "./test/ChatWindow";
 import "./App.css";
 import { UserProvider, useUser } from "./context/UserContext";
 import { useEffect } from "react";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 // Мгновенная установка темы из localStorage до рендеринга React
 const savedTheme = localStorage.getItem("theme") || "dark";
@@ -51,6 +52,7 @@ function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/login" element={<SignIn />} />
 					<Route path="/register" element={<SignUp />} />
+					<Route path="/login/forgot-password" element={<ForgotPasswordPage />} />
 					<Route path="/chat/:id?" element={<ChatAI />} />
 					<Route path="/test" element={<ChatWindow />} />
 					<Route path="/subscription" element={<Subscription />} />
