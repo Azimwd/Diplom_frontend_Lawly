@@ -103,8 +103,7 @@ export default function TelegramAD() {
 									<div className="p-2">
 										<p className="text-[18px] pl-[5px]">Seamless Telegram Access</p>
 										<h2 className="items-end text-[16px] md:text-[18px] pl-[5px] mt-[14px] text-[#D6D6D6]">
-											Use LAWLY directly inside Telegram. No website needed, everything in one
-											chat.
+											Use LAWLY directly in Telegram. No website needed.
 										</h2>
 									</div>
 								</div>
@@ -112,8 +111,7 @@ export default function TelegramAD() {
 									<div className="p-2">
 										<p className="text-[18px] pl-[5px]">Legal Analysis & Lawyer Matching</p>
 										<h2 className="items-end text-[16px] md:text-[18px] pl-[5px] mt-[14px] text-[#D6D6D6]">
-											Case Insights & Legal Experts Estimate case outcomes, risks, and find
-											qualified lawyers for your situation. Make informed legal decisions easily.
+											Create legal documents and estimate costs. Fast and structured.
 										</h2>
 									</div>
 								</div>
@@ -121,8 +119,7 @@ export default function TelegramAD() {
 									<div className="p-2">
 										<p className="text-[18px] pl-[5px]">Legal Documents & Pricing</p>
 										<h2 className="items-end text-[16px] md:text-[18px] pl-[5px] mt-[14px] text-[#D6D6D6]">
-											Smart Legal Tools Create legal documents automatically and estimate legal
-											service costs. Fast, structured, and ready to use.
+											Estimate case outcomes and find lawyers. Make better legal decisions.
 										</h2>
 									</div>
 								</div>
