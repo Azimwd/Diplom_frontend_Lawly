@@ -438,7 +438,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 							placeholder:text-[#2f2f2f] dark:placeholder:text-[#f0f0f0] text-black dark:text-white text-[15px] 
 							resize-none overflow-y-auto 
 							max-h-[250px] w-full 
-							pr-[15px] mt-[20px] bg-transparent  "
+							pr-[15px] mt-[20px] bg-transparent"
 						/>
 					</div>
 
@@ -447,7 +447,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 							<button
 								onClick={() => setVisibleServices((prev) => !prev)}
 								type="button"
-								className="h-[30px] w-[30px] flex justify-center items-center rounded-[7px] bg-[#242424] hover:bg-[#555555] dark:bg-[#f0f0f0] cursor-pointer dark:hover:bg-[#c0c0c0] transition-colors"
+								className="h-[30px] w-[30px] flex justify-center items-center rounded-[7px] bg-[#1E4FE0] hover:bg-[#14379f] dark:bg-[#f0f0f0] cursor-pointer dark:hover:bg-[#c0c0c0] transition-colors"
 							>
 								<Plus strokeWidth={1.5} className="w-[18px] h-[18px] text-white dark:text-black" />
 							</button>
@@ -486,7 +486,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 									actions[mode]();
 								}}
 								className={`flex justify-center items-center h-[30px] ml-auto w-[80px] rounded-[7px] cursor-pointer gap-1 transition-colors
-								${isAiLoading ? "bg-red-500 hover:bg-red-700 text-white" : "bg-[#242424] hover:bg-[#555555] dark:bg-[#f0f0f0] dark:hover:bg-[#dbdbdb] dark:text-black text-white"}`}
+								${isAiLoading ? "bg-red-500 hover:bg-red-700 text-white" : "bg-[#1E4FE0] hover:bg-[#14379f] dark:bg-[#f0f0f0] dark:hover:bg-[#dbdbdb] dark:text-black text-white"}`}
 							>
 								{isAiLoading ? (
 									<>
