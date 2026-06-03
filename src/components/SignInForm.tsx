@@ -27,7 +27,12 @@ export default function SignInForm({ path }: PropsSignIn) {
 	const { setUser, setProfile } = useUser();
 
 	const handleClick = () => {
+		sessionStorage.removeItem("csrf_token");
 		sessionStorage.setItem("showSplash", "true");
+
+		// Ставим флаг, чтобы при возвращении от Google контекст загрузил данные
+		localStorage.setItem("isAuth", "true");
+
 		window.location.href = "https://lawly.up.railway.app/users/google/login/";
 	};
 
@@ -45,6 +50,9 @@ export default function SignInForm({ path }: PropsSignIn) {
 				setProfile(profileData);
 
 				sessionStorage.setItem("showSplash", "true");
+
+				// Ставим флаг успешной авторизации
+				localStorage.setItem("isAuth", "true");
 
 				setShowSuccessScreen(true);
 				setTimeout(() => {
@@ -74,10 +82,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 	return (
 		<div className="text-center">
 			<form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
-				<h2
-					className="justify-center align-center text-[#1E1E2F] items-center flex text-[64px]/[16px] font-bold tracking-[-2px]
-				pb-[32px]"
-				>
+				<h2 className="justify-center align-center text-[#1E1E2F] items-center flex text-[64px]/[16px] font-bold tracking-[-2px] pb-[32px]">
 					Sign In
 				</h2>
 				<AuthInput id="Email" label="Email" type="text" value={email} onChange={makeChangeHandler(setEmail)} />

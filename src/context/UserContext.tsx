@@ -9,6 +9,7 @@ interface UserContextType {
 	profile: UserProfile | null;
 	setProfile: (profile: UserProfile | null) => void;
 	loading: boolean;
+	logout: () => void;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
@@ -19,6 +20,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 	const [loading, setLoading] = useState(true);
 
 	const fetchUser = async () => {
+		if (!localStorage.getItem("isAuth")) {
+			setLoading(false);
+			return;
+		}
+
 		try {
 			const userData = await getUserInfo();
 			setUser(userData);
@@ -27,9 +33,22 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 				const profileData = await getMyProfile(userData.id);
 				setProfile(profileData);
 			}
+		} catch (error) {
+			console.warn("Ошибка при получении профиля. Сброс авторизации.");
+			localStorage.removeItem("isAuth");
+			setUser(null);
+			setProfile(null);
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	const logout = () => {
+		localStorage.removeItem("isAuth");
+		sessionStorage.removeItem("csrf_token");
+		setUser(null);
+		setProfile(null);
+		window.location.href = "/login";
 	};
 
 	useEffect(() => {
@@ -37,7 +56,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 	}, []);
 
 	return (
-		<UserContext.Provider value={{ user, loading, profile, setProfile, setUser }}>
+		<UserContext.Provider value={{ user, loading, profile, setProfile, setUser, logout }}>
 			{children}
 		</UserContext.Provider>
 	);
