@@ -168,7 +168,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 
 			{/* Модальное окно восстановления пароля */}
 			{isModalOpen && (
-				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4">
+				<div className="fixed inset-0 z-50 flex items-center justify-center bg-[#E5E6E6] bg-opacity-50 px-4">
 					<div className="bg-white p-6 rounded-[8px] shadow-lg w-[400px] max-w-full relative text-left">
 						<button
 							type="button"
