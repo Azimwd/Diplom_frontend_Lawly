@@ -18,7 +18,7 @@ export default function LawyerSlider({ lawyers }: { lawyers: any[] }) {
 	const city = item.city;
 
 	return (
-		<div className="mt-4 flex flex-col w-full max-w-[650px] bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-[#333] text-gray-900 dark:text-white shadow-sm overflow-hidden">
+		<div className="mt-4 flex flex-col w-full max-w-[650px] bg-transparent dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-[#333] text-gray-900 dark:text-white shadow-sm overflow-hidden">
 			<button
 				onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
 				disabled={currentIndex === 0}

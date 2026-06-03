@@ -247,7 +247,7 @@ export default function Dialog({ messages, loading, isTyping, isStoped, onChoose
 								{msg.type === "article_win_chance" &&
 									msg.winRate !== undefined &&
 									msg.lossRate !== undefined && (
-										<div className="mt-4 p-5 bg-[#d8d8d8] dark:bg-[#212121] border border-[#a3a3a3] dark:border-[#2A2A2A] rounded-[15px] w-full">
+										<div className="mt-4 p-5 bg-transparent dark:bg-[#212121] border border-[#a3a3a3] dark:border-[#2A2A2A] rounded-[15px] w-full">
 											<h3 className=" dark:text-white font-medium mb-4 text-[16px]">
 												{msg.article || "Анализ судебной практики"}
 											</h3>
