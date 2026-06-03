@@ -30,9 +30,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 		sessionStorage.removeItem("csrf_token");
 		sessionStorage.setItem("showSplash", "true");
 
-		// Ставим флаг, чтобы при возвращении от Google контекст загрузил данные
 		localStorage.setItem("isAuth", "true");
-
 		window.location.href = "https://lawly.up.railway.app/users/google/login/";
 	};
 
@@ -51,7 +49,6 @@ export default function SignInForm({ path }: PropsSignIn) {
 
 				sessionStorage.setItem("showSplash", "true");
 
-				// Ставим флаг успешной авторизации
 				localStorage.setItem("isAuth", "true");
 
 				setShowSuccessScreen(true);

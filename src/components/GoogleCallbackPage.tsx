@@ -21,15 +21,14 @@ const GoogleCallbackPage = () => {
 				});
 
 				const csrfToken = response.data?.data?.csrf_token;
-				const redirect = response.data?.data?.redirect || "/chat";
 
 				if (csrfToken) {
 					sessionStorage.setItem("csrf_token", csrfToken);
 				}
 
-				navigate(redirect, { replace: true });
+				navigate("/chat", { replace: true });
 			} catch (error) {
-				console.error("Google exchange error:", error);
+				console.error(error);
 				navigate("/login", { replace: true });
 			}
 		};

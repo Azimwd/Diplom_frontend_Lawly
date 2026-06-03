@@ -1,4 +1,4 @@
-import telegram_ad from "../../assets/telegram_ad.png";
+import telegram_ad from "../../assets/Group 239200.png";
 import tg from "../../assets/Vector 14.png";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -93,33 +93,36 @@ export default function TelegramAD() {
 							<div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:justify-normal md:gap-6 min-w-[365px] md:w-[535px]">
 								<div className="tg-cards bg-[#0C2147] rounded-[16px] h-[137px] ">
 									<div className="p-2">
-										<p className="text-[18px] pl-[5px]">Seamless Chat</p>
+										<p className="text-[18px] pl-[5px]">AI Legal Assistant</p>
 										<h2 className="items-end text-[16px] md:text-[18px] pl-[5px] mt-[14px] text-[#D6D6D6]">
-											Communicate with our AI legal assistant directly in Telegram.
+											Get instant legal answers powered by AI. Ask questions anytime, 24/7.
 										</h2>
 									</div>
 								</div>
 								<div className="tg-cards bg-[#0C2147] rounded-[16px] h-[137px] ">
 									<div className="p-2">
-										<p className="text-[18px] pl-[5px]">Seamless Chat</p>
+										<p className="text-[18px] pl-[5px]">Seamless Telegram Access</p>
 										<h2 className="items-end text-[16px] md:text-[18px] pl-[5px] mt-[14px] text-[#D6D6D6]">
-											Communicate with our AI legal assistant directly in Telegram.
+											Use LAWLY directly inside Telegram. No website needed, everything in one
+											chat.
 										</h2>
 									</div>
 								</div>
 								<div className="tg-cards bg-[#0C2147] rounded-[16px] h-[137px] ">
 									<div className="p-2">
-										<p className="text-[18px] pl-[5px]">Seamless Chat</p>
+										<p className="text-[18px] pl-[5px]">Legal Analysis & Lawyer Matching</p>
 										<h2 className="items-end text-[16px] md:text-[18px] pl-[5px] mt-[14px] text-[#D6D6D6]">
-											Communicate with our AI legal assistant directly in Telegram.
+											Case Insights & Legal Experts Estimate case outcomes, risks, and find
+											qualified lawyers for your situation. Make informed legal decisions easily.
 										</h2>
 									</div>
 								</div>
 								<div className="tg-cards bg-[#0C2147] rounded-[16px] h-[137px] ">
 									<div className="p-2">
-										<p className="text-[18px] pl-[5px]">Seamless Chat</p>
+										<p className="text-[18px] pl-[5px]">Legal Documents & Pricing</p>
 										<h2 className="items-end text-[16px] md:text-[18px] pl-[5px] mt-[14px] text-[#D6D6D6]">
-											Communicate with our AI legal assistant directly in Telegram.
+											Smart Legal Tools Create legal documents automatically and estimate legal
+											service costs. Fast, structured, and ready to use.
 										</h2>
 									</div>
 								</div>
@@ -128,7 +131,7 @@ export default function TelegramAD() {
 
 						<div className="text-white  p-4 h-24 flex items-center justify-center md:inline mt-[120px] md:mt-0">
 							<a
-								href="#"
+								href="https://t.me/legal_ai_telegram_bot"
 								className="tg-button bg-[#229ED9] hover:bg-[#1E90C2] px-2 py-2 rounded-[16px] justify-center w-full max-w-[360px] md:w-[275px] flex items-center gap-5 font-bold"
 							>
 								<img src={tg} alt="tg" className="w-[19px] h-[28px] ml-[4px]" />
