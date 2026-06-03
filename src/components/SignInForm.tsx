@@ -30,7 +30,7 @@ export default function SignInForm({ path }: PropsSignIn) {
 		sessionStorage.removeItem("csrf_token");
 		sessionStorage.setItem("showSplash", "true");
 
-		localStorage.setItem("isAuth", "true");
+		// ❌ ЗДЕСЬ ФЛАГ УБРАН! МЫ ПРОСТО ПЕРЕХОДИМ НА ГУГЛ
 		window.location.href = "https://lawly.up.railway.app/users/google/login/";
 	};
 
@@ -48,6 +48,9 @@ export default function SignInForm({ path }: PropsSignIn) {
 				setProfile(profileData);
 
 				sessionStorage.setItem("showSplash", "true");
+
+				// ✅ СТАВИМ ФЛАГ ЗДЕСЬ (для успешного входа по почте)
+				localStorage.setItem("isAuth", "true");
 
 				setShowSuccessScreen(true);
 				setTimeout(() => {
