@@ -137,8 +137,8 @@ export default function Settings() {
 		} catch (error) {
 			console.error("Не удалось выполнить логаут на сервере", error);
 		} finally {
-			Cookies.remove("access_token", { path: "/" });
-			Cookies.remove("refresh_token", { path: "/" });
+			Cookies.remove("access_token");
+			Cookies.remove("refresh_token");
 
 			sessionStorage.removeItem("csrf_token");
 
