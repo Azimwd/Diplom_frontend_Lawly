@@ -15,7 +15,14 @@ function getCookie(name: string): string | null {
 }
 
 function getCsrfToken(): string {
-  return sessionStorage.getItem("csrf_token") || getCookie("csrftoken") || "";
+  // ИЗМЕНЕНИЕ: Сначала берем свежую куку (которую поставил бэкенд после Google),
+  // а только потом смотрим в sessionStorage
+  const cookieToken = getCookie("csrftoken");
+  const sessionToken = sessionStorage.getItem("csrf_token");
+  
+  if (cookieToken) return cookieToken;
+  if (sessionToken) return sessionToken;
+  return "";
 }
 
 const api = axios.create({
@@ -28,7 +35,6 @@ api.interceptors.request.use((config) => {
 
   if (["post", "put", "patch", "delete"].includes(method || "")) {
     const csrfToken = getCsrfToken();
-
     if (csrfToken) {
       config.headers["X-CSRFToken"] = csrfToken;
     }
@@ -54,44 +60,62 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+    // ЛОГИРОВАНИЕ: Смотрим, какой запрос вызвал 401
+    if (error.response?.status === 401) {
+      console.warn(`[Axios] Получен 401 для запроса: ${originalRequest.url}. Пытаемся обновить токен...`);
+      
+      if (!originalRequest._retry) {
+        originalRequest._retry = true;
 
-      try {
-        const csrfTokenForRefresh = getCsrfToken();
+        try {
+          const csrfTokenForRefresh = getCsrfToken();
+          console.log("[Axios] CSRF токен для рефреша:", csrfTokenForRefresh);
 
-        const refreshResponse = await axios.post(
-          "https://lawly.up.railway.app/users/token/refresh/",
-          {},
-          {
-            withCredentials: true,
-            headers: {
-              "X-CSRFToken": csrfTokenForRefresh,
-            },
+          const refreshResponse = await axios.post(
+            "https://lawly.up.railway.app/users/token/refresh/",
+            {},
+            {
+              withCredentials: true,
+              headers: {
+                "X-CSRFToken": csrfTokenForRefresh,
+              },
+            }
+          );
+
+          console.log("[Axios] Рефреш успешен! Ответ:", refreshResponse.data);
+
+          const newCsrfToken =
+            refreshResponse.data?.csrf_token ||
+            refreshResponse.data?.data?.csrf_token ||
+            refreshResponse.data?.data?.data?.csrf_token;
+
+          if (newCsrfToken) {
+            sessionStorage.setItem("csrf_token", newCsrfToken);
           }
-        );
 
-        const newCsrfToken =
-          refreshResponse.data?.csrf_token ||
-          refreshResponse.data?.data?.csrf_token ||
-          refreshResponse.data?.data?.data?.csrf_token;
+          return api(originalRequest);
+        } catch (err: any) {
+          console.error("[Axios] Ошибка при обновлении токена (Refresh Failed):");
+          if (err.response) {
+            console.error("-> Статус:", err.response.status);
+            console.error("-> Данные:", err.response.data);
+          } else {
+            console.error("-> Текст ошибки:", err.message);
+          }
 
-        if (newCsrfToken) {
-          sessionStorage.setItem("csrf_token", newCsrfToken);
+          sessionStorage.removeItem("csrf_token");
+
+          if (window.location.pathname !== "/login") {
+            console.warn("[Axios] Перенаправление на /login из-за проваленного рефреша.");
+            window.location.href = "/login";
+          }
+
+          return Promise.reject(err);
         }
-
-        return api(originalRequest);
-      } catch (err: unknown) {
-        sessionStorage.removeItem("csrf_token");
-
-        if (window.location.pathname !== "/login") {
-          window.location.href = "/login";
-        }
-
-        return Promise.reject(err);
       }
     }
 
+    console.error(`[Axios] Ошибка ${error.response?.status} для ${originalRequest.url}:`, error.response?.data);
     return Promise.reject(error);
   }
 );
