@@ -17,7 +17,7 @@ export const requestReset = async (email: string) =>{
 
 export const passwordComplete = async (uidb64: string, token: string, password: string) =>{
     try{
-        const response = await api.post('/users/password-reset-complete/',
+        const response = await api.patch('/users/password-reset-complete/',
             {
                 uidb64,
                 token,
