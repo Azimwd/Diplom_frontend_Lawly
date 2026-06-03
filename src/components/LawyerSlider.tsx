@@ -48,7 +48,7 @@ export default function LawyerSlider({ lawyers }: { lawyers: any[] }) {
 					<div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
 						{partration !== undefined && (
 							<div className="bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 px-3 py-1 rounded-lg text-[14px] font-semibold whitespace-nowrap">
-								partical wins: {item.partial_wins}
+								partial wins: {item.partial_wins}
 							</div>
 						)}
 						{rating !== undefined && (
