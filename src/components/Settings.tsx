@@ -8,6 +8,7 @@ import Profile from "./Profile";
 import Cookies from "js-cookie";
 import { switchLanguage, switchTheme } from "../api/settings";
 import { getStatusSubscription } from "../api/subscription";
+import { logoutAccount } from "../api/user";
 
 const LANGUAGES = [
 	{ code: "ru", label: "Русский" },
@@ -130,12 +131,22 @@ export default function Settings() {
 	};
 	const initials = getInitials();
 
-	const handleLogout = () => {
-		Cookies.remove("access_token");
-		Cookies.remove("refresh_token");
-		localStorage.removeItem("theme");
-		localStorage.removeItem("language");
-		navigate("/login");
+	const handleLogout = async () => {
+		try {
+			await logoutAccount();
+		} catch (error) {
+			console.error("Не удалось выполнить логаут на сервере", error);
+		} finally {
+			Cookies.remove("access_token", { path: "/" });
+			Cookies.remove("refresh_token", { path: "/" });
+
+			sessionStorage.removeItem("csrf_token");
+
+			localStorage.removeItem("theme");
+			localStorage.removeItem("language");
+
+			navigate("/login");
+		}
 	};
 
 	return (
