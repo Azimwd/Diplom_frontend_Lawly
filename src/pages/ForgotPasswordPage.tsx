@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useSearchParams } from "react-router-dom"; // Импортируем useSearchParams
+import { NavLink, useSearchParams } from "react-router-dom";
 import { requestReset, passwordComplete } from "../api/resetpassword";
 import AuthInput from "../ui/AuthInput";
 
@@ -16,10 +16,8 @@ export default function ForgotPasswordPage() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 
-	// Инициализируем хук для работы с query-параметрами
 	const [searchParams] = useSearchParams();
 
-	// Проверяем наличие параметров при загрузке страницы
 	useEffect(() => {
 		const queryUid = searchParams.get("uidb64");
 		const queryToken = searchParams.get("token");
@@ -27,7 +25,7 @@ export default function ForgotPasswordPage() {
 		if (queryUid && queryToken) {
 			setUidb64(queryUid);
 			setToken(queryToken);
-			setStep("password"); // Сразу переходим к шагу ввода нового пароля
+			setStep("password");
 		}
 	}, [searchParams]);
 
@@ -36,7 +34,6 @@ export default function ForgotPasswordPage() {
 		setter(value);
 	};
 
-	// Шаг 1: Запрос восстановления (если пользователь зашел вручную без ссылки)
 	const handleEmailSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setError("");
@@ -59,7 +56,6 @@ export default function ForgotPasswordPage() {
 		}
 	};
 
-	// Шаг 2: Установка нового пароля
 	const handlePasswordSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!newPassword) {
@@ -85,81 +81,86 @@ export default function ForgotPasswordPage() {
 	};
 
 	return (
-		<div className="text-center flex flex-col items-center justify-center min-h-max bg-[#fff]">
-			<div className="w-[320px] flex flex-col gap-[24px]">
-				<h2 className="text-[#1E1E2F] text-[32px] font-bold tracking-[-1px] pb-[8px]">Reset Password</h2>
+		<div className="min-h-screen w-full flex items-center justify-center bg-[#E5E6E6] p-4">
+			/* Белая карточка с закругленными углами и легкой тенью */
+			<div className="bg-white rounded-[8px] shadow-sm w-[480px] py-[64px] px-[40px] flex flex-col items-center">
+				<div className="w-[320px] flex flex-col gap-[24px] text-center">
+					<h2 className="text-[#1E1E2F] text-[40px] font-bold tracking-[-1.5px] pb-[8px]">Reset Password</h2>
 
-				{/* Шаг 1: Ввод почты */}
-				{step === "email" && (
-					<form onSubmit={handleEmailSubmit} className="flex flex-col gap-[24px]">
-						<p className="text-[14px] text-[#666666] text-center leading-relaxed">
-							Enter your email address and we will verify it to proceed with resetting your password.
-						</p>
-						<AuthInput
-							id="ResetEmail"
-							label="Email"
-							type="email"
-							value={email}
-							onChange={makeChangeHandler(setEmail)}
-						/>
-						{error && <div className="text-red-800 mt-[-10px] text-[14px]">{error}</div>}
-						<button
-							type="submit"
-							disabled={loading}
-							className="bg-[#1E4FE0] h-[52px] rounded-[3px] text-[16px] font-bold text-white transition-all disabled:opacity-50 hover:bg-[#1f43ad] cursor-pointer"
-						>
-							{loading ? "Verifying..." : "Verify Email"}
-						</button>
-					</form>
-				)}
+					{step === "email" && (
+						<form onSubmit={handleEmailSubmit} className="flex flex-col gap-[24px] items-center">
+							<p className="text-[14px] text-[#666666] text-center leading-relaxed">
+								Enter your email address and we will verify it to proceed with resetting your password.
+							</p>
+							<AuthInput
+								id="ResetEmail"
+								label="Email"
+								type="email"
+								value={email}
+								onChange={makeChangeHandler(setEmail)}
+							/>
+							{error && (
+								<div className="text-red-800 mt-[-10px] text-[14px] text-center w-full">{error}</div>
+							)}
+							<button
+								type="submit"
+								disabled={loading}
+								className="bg-[#1E4FE0] w-full h-[52px] rounded-[3px] text-[16px] font-bold text-white transition-all disabled:opacity-50 hover:bg-[#1f43ad] cursor-pointer"
+							>
+								{loading ? "Verifying..." : "Verify Email"}
+							</button>
+						</form>
+					)}
 
-				{/* Шаг 2: Ввод нового пароля */}
-				{step === "password" && (
-					<form onSubmit={handlePasswordSubmit} className="flex flex-col gap-[24px]">
-						<p className="text-[14px] text-[#666666] text-center leading-relaxed">
-							Please enter your new secure password below.
-						</p>
-						<AuthInput
-							id="NewPassword"
-							label="New Password"
-							type="password"
-							value={newPassword}
-							onChange={makeChangeHandler(setNewPassword)}
-						/>
-						{error && <div className="text-red-800 mt-[-10px] text-[14px]">{error}</div>}
-						<button
-							type="submit"
-							disabled={loading}
-							className="bg-[#1E4FE0] h-[52px] rounded-[3px] text-[16px] font-bold text-white transition-all disabled:opacity-50 hover:bg-[#1f43ad] cursor-pointer"
-						>
-							{loading ? "Saving..." : "Save Password"}
-						</button>
-					</form>
-				)}
+					{step === "password" && (
+						<form onSubmit={handlePasswordSubmit} className="flex flex-col gap-[24px] items-center">
+							<p className="text-[14px] text-[#666666] text-center leading-relaxed">
+								Please enter your new secure password below.
+							</p>
+							<AuthInput
+								id="NewPassword"
+								label="New Password"
+								type="password"
+								value={newPassword}
+								onChange={makeChangeHandler(setNewPassword)}
+							/>
+							{error && (
+								<div className="text-red-800 mt-[-10px] text-[14px] text-center w-full">{error}</div>
+							)}
+							<button
+								type="submit"
+								disabled={loading}
+								className="bg-[#1E4FE0] w-full h-[52px] rounded-[3px] text-[16px] font-bold text-white transition-all disabled:opacity-50 hover:bg-[#1f43ad] cursor-pointer"
+							>
+								{loading ? "Saving..." : "Save Password"}
+							</button>
+						</form>
+					)}
 
-				{/* Шаг 3: Успешный сброс */}
-				{step === "success" && (
-					<div className="flex flex-col gap-[24px]">
-						<p className="text-[14px] text-green-700 bg-green-50 p-4 rounded-[4px] text-center leading-relaxed border border-green-200">
-							Your password has been successfully updated. You can now use your new credentials to log in.
-						</p>
-						<NavLink
-							to="/signin"
-							className="bg-[#1E4FE0] h-[52px] flex items-center justify-center rounded-[3px] text-[16px] font-bold text-white hover:bg-[#1f43ad] transition-all"
-						>
-							Go to Sign In
-						</NavLink>
-					</div>
-				)}
+					{step === "success" && (
+						<div className="flex flex-col gap-[24px] items-center">
+							<p className="text-[14px] text-green-700 bg-green-50 p-4 rounded-[4px] text-center leading-relaxed border border-green-200">
+								Your password has been successfully updated. You can now use your new credentials to log
+								in.
+							</p>
+							<NavLink
+								to="/signin"
+								className="bg-[#1E4FE0] w-full h-[52px] flex items-center justify-center rounded-[3px] text-[16px] font-bold text-white hover:bg-[#1f43ad] transition-all"
+							>
+								Go to Sign In
+							</NavLink>
+						</div>
+					)}
 
-				{step !== "success" && (
-					<div className="text-[#666666] text-[14px] mt-[-7px]">
-						Remember your password? &nbsp;
-						<NavLink to="/signin" className="text-[#1E4FE0] underline underline-offset-1px">
-							Sign In
-						</NavLink>
-					</div>
-				)}
+					{step !== "success" && (
+						<div className="text-[#666666] text-[14px] flex items-center justify-center mt-[-7px]">
+							Remember your password? &nbsp;
+							<NavLink to="/signin" className="text-[#1E4FE0] underline underline-offset-1px">
+								Sign In
+							</NavLink>
+						</div>
+					)}
+				</div>
 			</div>
 		</div>
 	);
