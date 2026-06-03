@@ -21,15 +21,17 @@ const GoogleCallbackPage = () => {
 				});
 
 				const csrfToken = response.data?.data?.csrf_token;
-				const redirect = response.data?.data?.redirect || "/chat";
 
 				if (csrfToken) {
 					sessionStorage.setItem("csrf_token", csrfToken);
 				}
 
-				navigate(redirect, { replace: true });
+				localStorage.setItem("isAuth", "true");
+
+				window.location.href = "/chat";
 			} catch (error) {
-				console.error("Google exchange error:", error);
+				console.error("Ошибка при обмене токена Google:", error);
+				localStorage.removeItem("isAuth");
 				navigate("/login", { replace: true });
 			}
 		};
@@ -37,7 +39,12 @@ const GoogleCallbackPage = () => {
 		exchangeGoogleSession();
 	}, [searchParams, navigate]);
 
-	return <div>Google authorization...</div>;
+	return (
+		<div className="flex flex-col items-center justify-center h-screen">
+			<div className="w-14 h-14 border-4 border-gray-200 border-t-[#1E4FE0] rounded-full animate-spin mb-4"></div>
+			<h2 className="text-[#1E1E2F] text-[24px] font-bold">Google authorization...</h2>
+		</div>
+	);
 };
 
 export default GoogleCallbackPage;

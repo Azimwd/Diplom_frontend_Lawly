@@ -49,8 +49,6 @@ export default function SignInForm({ path }: PropsSignIn) {
 
 				sessionStorage.setItem("showSplash", "true");
 
-				localStorage.setItem("isAuth", "true");
-
 				setShowSuccessScreen(true);
 				setTimeout(() => {
 					navigate("/chat");
