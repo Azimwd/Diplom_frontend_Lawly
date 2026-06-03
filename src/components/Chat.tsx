@@ -408,7 +408,7 @@ export default function Chat({ onChatCreated }: ChatProps) {
 
 				<div
 					className={`rounded-[20px] max-w-[24rem] md:max-w-[45rem] w-full 
-						absolute justify-between transition-all duration-350 bg-[#fff] dark:bg-[#1A1A1A] border-1 border-[#8294ca] dark:border-0
+						absolute justify-between transition-all duration-350 bg-[#fff] dark:bg-[#1A1A1A] border-1 border-[#a5b6e5] dark:border-0
 						${isMoved ? "mt-[750px] md:mt-[700px]" : "mt-0"}`}
 				>
 					{isTrialExpired && (
