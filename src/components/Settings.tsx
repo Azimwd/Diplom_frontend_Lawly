@@ -18,9 +18,9 @@ const LANGUAGES = [
 export default function Settings() {
 	const { user, loading, profile, setProfile } = useUser();
 
-	// Пытаемся получить язык из профиля или из localStorage, иначе используем "ru"
+	// ПРИОРИТЕТ ДЛЯ ЯЗЫКА: localStorage -> Серверный профиль -> По умолчанию "ru"
 	const savedLang = localStorage.getItem("language") as Language | null;
-	const langKey = (profile?.language as Language) || savedLang || "ru";
+	const langKey = savedLang || (profile?.language as Language) || "ru";
 	const t = translations[langKey].settings;
 
 	const THEMES = [
@@ -32,10 +32,10 @@ export default function Settings() {
 	const [langOpen, setLangOpen] = useState(false);
 	const [themeOpen, setThemeOpen] = useState(false);
 
-	// Текущий язык и тема с учетом резервного копирования в localStorage
+	// Текущий язык и тема с приоритетом локального хранилища
 	const savedTheme = localStorage.getItem("theme") || "dark";
-	const currentLang = LANGUAGES.find((l) => l.code === (profile?.language || langKey)) || LANGUAGES[0];
-	const currentTheme = THEMES.find((th) => th.code === (profile?.theme || savedTheme)) || THEMES[0];
+	const currentLang = LANGUAGES.find((l) => l.code === (savedLang || profile?.language)) || LANGUAGES[0];
+	const currentTheme = THEMES.find((th) => th.code === (savedTheme || profile?.theme)) || THEMES[0];
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const langContainerRef = useRef<HTMLDivElement>(null);
@@ -43,12 +43,12 @@ export default function Settings() {
 
 	const navigate = useNavigate();
 
-	// Синхронизируем localStorage при загрузке актуального профиля
+	// Синхронизируем localStorage при загрузке профиля ТОЛЬКО если локально еще нет записей
 	useEffect(() => {
-		if (profile?.language) {
+		if (profile?.language && !localStorage.getItem("language")) {
 			localStorage.setItem("language", profile.language);
 		}
-		if (profile?.theme) {
+		if (profile?.theme && !localStorage.getItem("theme")) {
 			localStorage.setItem("theme", profile.theme);
 		}
 	}, [profile?.language, profile?.theme]);
@@ -59,11 +59,12 @@ export default function Settings() {
 		if (!profile?.id) return;
 
 		try {
-			const updatedData = await switchLanguage(profile.id, lang.code);
-			if (updatedData) {
-				setProfile({ ...profile, language: lang.code });
-				localStorage.setItem("language", lang.code); // Сохраняем в localStorage
-			}
+			// Сначала сохраняем локально, чтобы интерфейс мгновенно отреагировал
+			localStorage.setItem("language", lang.code);
+			setProfile({ ...profile, language: lang.code });
+
+			// Затем отправляем запрос на сервер
+			await switchLanguage(profile.id, lang.code);
 		} catch (err) {
 			console.error("Ошибка при смене языка", err);
 		} finally {
@@ -75,17 +76,16 @@ export default function Settings() {
 		if (!profile?.id) return;
 
 		try {
-			const updatedData = await switchTheme(profile.id, theme.code);
-			if (updatedData) {
-				setProfile({ ...profile, theme: theme.code });
-				localStorage.setItem("theme", theme.code); // Сохраняем в localStorage
+			localStorage.setItem("theme", theme.code);
+			setProfile({ ...profile, theme: theme.code });
 
-				if (theme.code === "dark") {
-					document.documentElement.classList.add("dark");
-				} else {
-					document.documentElement.classList.remove("dark");
-				}
+			if (theme.code === "dark") {
+				document.documentElement.classList.add("dark");
+			} else {
+				document.documentElement.classList.remove("dark");
 			}
+
+			await switchTheme(profile.id, theme.code);
 		} catch (err) {
 			console.error("Ошибка при смене темы", err);
 		} finally {
@@ -133,7 +133,6 @@ export default function Settings() {
 	const handleLogout = () => {
 		Cookies.remove("access_token");
 		Cookies.remove("refresh_token");
-		// При выходе можно очистить локальные настройки, если это необходимо
 		localStorage.removeItem("theme");
 		localStorage.removeItem("language");
 		navigate("/login");
@@ -169,7 +168,6 @@ export default function Settings() {
 							<MenuItem icon={<CreditCard size={18} />} text={t.subscription} badge={subBadge} />
 						</Link>
 
-						{/* Меню Темы */}
 						<div className="relative" ref={themeContainerRef}>
 							<div
 								onClick={() => {
@@ -211,7 +209,6 @@ export default function Settings() {
 							)}
 						</div>
 
-						{/* Меню Языка */}
 						<div className="relative" ref={langContainerRef}>
 							<div
 								onClick={() => {
