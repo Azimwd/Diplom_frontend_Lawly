@@ -40,8 +40,8 @@ const GoogleCallbackPage = () => {
 	}, [searchParams, navigate]);
 
 	return (
-		<div className="flex flex-col items-center justify-center h-screen">
-			<div className="w-14 h-14 border-4 border-gray-200 border-t-[#1E4FE0] rounded-full animate-spin mb-4"></div>
+		<div className="flex flex-col items-center justify-center h-screen bg-white">
+			<div className="w-14 h-14 border-4 border-gray-400 border-t-[#1E4FE0] rounded-full animate-spin mb-4"></div>
 			<h2 className="text-[#1E1E2F] text-[24px] font-bold">Google authorization...</h2>
 		</div>
 	);
