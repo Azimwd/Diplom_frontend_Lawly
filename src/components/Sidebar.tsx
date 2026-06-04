@@ -117,14 +117,14 @@ export default function Sidebar({ refreshChats }: SidebarProps) {
 			)}
 		>
 			<div className="flex flex-col justify-between w-full h-full overflow-hidden transition-all min-w-[14vw]">
-				<div className={clsx("flex items-center px-3 h-[60px] transition-all duration-300 group")}>
+				<div className={clsx("flex items-center px-3 h-[60px] transition-all duration-300")}>
 					<button
 						onClick={!isOpen ? toggleSidebar : undefined}
 						title={!isOpen ? t.openSidebar : ""}
 						className={clsx(
 							"relative h-[36px] min-w-[36px] ml-[2px] rounded-[6px] flex items-center justify-center group transition-colors duration-300",
 							isCollapsed
-								? "hover:bg-gray-200 dark:hover:bg-[#424242] cursor-e-resize"
+								? "hover:bg-gray-200 dark:hover:bg-[#424242] cursor-pointer"
 								: "hover:bg-gray-200 dark:hover:bg-[#525252] cursor-pointer",
 						)}
 					>
@@ -132,15 +132,17 @@ export default function Sidebar({ refreshChats }: SidebarProps) {
 							src={logoIcon}
 							alt="logo"
 							className={clsx(
-								"h-[22px] w-[22px] transition-opacity duration-200 invert dark:invert-0 opacity-80 dark:opacity-100",
-								isCollapsed ? "opacity-100 group-hover:opacity-0" : "opacity-100",
+								"h-[22px] w-[22px] transition-opacity duration-200 invert dark:invert-0",
+								isCollapsed
+									? "opacity-80 dark:opacity-100 group-hover:opacity-0 dark:group-hover:opacity-0"
+									: "opacity-80 dark:opacity-100",
 							)}
 						/>
 						<PanelRightOpen
 							strokeWidth={1.5}
 							className={clsx(
-								"absolute h-[22px] w-[22px] text-gray-700 dark:text-white transition-opacity duration-200",
-								isCollapsed ? "opacity-0 group-hover:opacity-100 rotate-180" : "opacity-0",
+								"absolute h-[22px] w-[22px] text-gray-700 dark:text-white transition-opacity duration-200 rotate-180",
+								isCollapsed ? "opacity-0 group-hover:opacity-100" : "opacity-0",
 							)}
 						/>
 					</button>
@@ -149,7 +151,7 @@ export default function Sidebar({ refreshChats }: SidebarProps) {
 						<button
 							onClick={toggleSidebar}
 							title={t.closeSidebar}
-							className="h-[36px] min-w-[36px] bg-transparent hover:bg-gray-200 dark:hover:bg-[#424242] rounded-[6px] flex items-center justify-center cursor-e-resize ml-auto transition-colors"
+							className="h-[36px] min-w-[36px] bg-transparent hover:bg-gray-200 dark:hover:bg-[#424242] rounded-[6px] flex items-center justify-center cursor-pointer ml-auto transition-colors"
 						>
 							<PanelRightOpen
 								strokeWidth={1.5}

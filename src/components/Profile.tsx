@@ -200,12 +200,12 @@ function Profile({ onClose }: ProfileProps) {
 	if (isMobile) {
 		return (
 			<Portal>
-				<div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-					{/* Затемнение на фоне модалки (чуть светлее в светлой теме) */}
-					<div
-						className="absolute inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm cursor-pointer"
-						onClick={onClose}
-					/>
+				<div
+					className="fixed inset-0 z-[100] flex items-center justify-center p-4 cursor-pointer"
+					onClick={onClose}
+				>
+					<div className="absolute inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm" />
+
 					{formContent}
 				</div>
 			</Portal>
